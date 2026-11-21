@@ -1,0 +1,405 @@
+{
+  "thresholds": {
+    "Medium": 2.0,
+    "High": 7.0,
+    "Critical": 13.0
+  },
+  "horizons": {
+    "1": {
+      "winner": "blend_glm_lightgbm",
+      "validation_2024": {
+        "persistence (cases now)": {
+          "MAE": 1.361,
+          "RMSE": 2.7681,
+          "R2": 0.4619,
+          "PoissonDeviance": 4.6579
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.9022,
+          "RMSE": 4.0684,
+          "R2": -0.1624,
+          "PoissonDeviance": 4.2973
+        },
+        "poisson_glm": {
+          "MAE": 0.9438,
+          "RMSE": 1.772,
+          "R2": 0.7795,
+          "PoissonDeviance": 0.8773
+        },
+        "lightgbm_poisson": {
+          "MAE": 0.8697,
+          "RMSE": 1.7072,
+          "R2": 0.7953,
+          "PoissonDeviance": 0.7299
+        },
+        "blend_glm_lightgbm": {
+          "MAE": 0.8677,
+          "RMSE": 1.682,
+          "R2": 0.8013,
+          "PoissonDeviance": 0.7338
+        }
+      },
+      "test_2025": {
+        "MAE": 1.0006,
+        "RMSE": 2.0412,
+        "R2": 0.7322,
+        "PoissonDeviance": 0.787,
+        "tier_accuracy": 0.8423,
+        "tier_within_one": 0.9936,
+        "alert_recall": 0.7326,
+        "alert_precision": 0.7311,
+        "interval80_coverage": 0.8144
+      },
+      "test_2025_baselines": {
+        "persistence (cases now)": {
+          "MAE": 1.4587,
+          "RMSE": 2.896,
+          "R2": 0.461,
+          "PoissonDeviance": 5.0902
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.4804,
+          "RMSE": 3.0078,
+          "R2": 0.4185,
+          "PoissonDeviance": 5.2497
+        }
+      },
+      "hyperparameters": {
+        "lightgbm_weight": 0.7,
+        "glm_alpha": 0.0001,
+        "lightgbm": {
+          "objective": "poisson",
+          "metric": "rmse",
+          "bagging_freq": 1,
+          "verbose": -1,
+          "seed": 42,
+          "num_leaves": 7,
+          "min_child_samples": 160,
+          "learning_rate": 0.05,
+          "lambda_l2": 1,
+          "lambda_l1": 0.1,
+          "feature_fraction": 0.7,
+          "bagging_fraction": 0.7,
+          "rounds": 1631
+        }
+      },
+      "n_train": 21900,
+      "n_val": 3180,
+      "n_test": 3120,
+      "top_features": {
+        "rain_sum_4w": 0.1695,
+        "dew_point_c": 0.1312,
+        "hum_lag1": 0.0992,
+        "avg_temp_c": 0.0704,
+        "woy_cos": 0.0666,
+        "rain_lag2": 0.065,
+        "relative_humidity_pct": 0.0477,
+        "hum_mean_4w": 0.0405,
+        "rain_sum_lag2_4": 0.03,
+        "water_logging_risk_index": 0.0283,
+        "rain_lag3": 0.0278,
+        "temp_lag2": 0.0179,
+        "woy_sin": 0.0167,
+        "rainfall_mm": 0.0155,
+        "temp_lag1": 0.0154
+      }
+    },
+    "2": {
+      "winner": "blend_glm_lightgbm",
+      "validation_2024": {
+        "persistence (cases now)": {
+          "MAE": 1.5852,
+          "RMSE": 3.1557,
+          "R2": 0.3007,
+          "PoissonDeviance": 6.8202
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.9022,
+          "RMSE": 4.0684,
+          "R2": -0.1624,
+          "PoissonDeviance": 4.2973
+        },
+        "poisson_glm": {
+          "MAE": 0.9302,
+          "RMSE": 1.7532,
+          "R2": 0.7842,
+          "PoissonDeviance": 0.8692
+        },
+        "lightgbm_poisson": {
+          "MAE": 0.8999,
+          "RMSE": 1.7863,
+          "R2": 0.7759,
+          "PoissonDeviance": 0.7583
+        },
+        "blend_glm_lightgbm": {
+          "MAE": 0.8862,
+          "RMSE": 1.7022,
+          "R2": 0.7965,
+          "PoissonDeviance": 0.7774
+        }
+      },
+      "test_2025": {
+        "MAE": 1.0469,
+        "RMSE": 2.1817,
+        "R2": 0.6941,
+        "PoissonDeviance": 0.8243,
+        "tier_accuracy": 0.8372,
+        "tier_within_one": 0.9907,
+        "alert_recall": 0.6926,
+        "alert_precision": 0.7295,
+        "interval80_coverage": 0.75
+      },
+      "test_2025_baselines": {
+        "persistence (cases now)": {
+          "MAE": 1.7337,
+          "RMSE": 3.4336,
+          "R2": 0.2423,
+          "PoissonDeviance": 8.4233
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.4804,
+          "RMSE": 3.0078,
+          "R2": 0.4185,
+          "PoissonDeviance": 5.2497
+        }
+      },
+      "hyperparameters": {
+        "lightgbm_weight": 0.4,
+        "glm_alpha": 0.0001,
+        "lightgbm": {
+          "objective": "poisson",
+          "metric": "rmse",
+          "bagging_freq": 1,
+          "verbose": -1,
+          "seed": 42,
+          "num_leaves": 15,
+          "min_child_samples": 40,
+          "learning_rate": 0.02,
+          "lambda_l2": 20,
+          "lambda_l1": 1,
+          "feature_fraction": 0.9,
+          "bagging_fraction": 0.7,
+          "rounds": 996
+        }
+      },
+      "n_train": 21900,
+      "n_val": 3180,
+      "n_test": 3120,
+      "top_features": {
+        "dew_point_c": 0.3666,
+        "avg_temp_c": 0.2122,
+        "relative_humidity_pct": 0.0872,
+        "woy_cos": 0.0463,
+        "temp_mean_4w": 0.0425,
+        "rain_sum_4w": 0.0322,
+        "rain_lag1": 0.0244,
+        "temp_lag1": 0.018,
+        "woy_sin": 0.0163,
+        "temp_lag3": 0.0161,
+        "water_logging_risk_index": 0.0157,
+        "temp_lag2": 0.0133,
+        "aedes_optimal_weeks_4w": 0.0123,
+        "rain_lag2": 0.0119,
+        "hum_lag1": 0.0108
+      }
+    },
+    "3": {
+      "winner": "blend_glm_lightgbm",
+      "validation_2024": {
+        "persistence (cases now)": {
+          "MAE": 1.7553,
+          "RMSE": 3.3368,
+          "R2": 0.2181,
+          "PoissonDeviance": 8.0732
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.9022,
+          "RMSE": 4.0684,
+          "R2": -0.1624,
+          "PoissonDeviance": 4.2973
+        },
+        "poisson_glm": {
+          "MAE": 1.0216,
+          "RMSE": 1.9475,
+          "R2": 0.7337,
+          "PoissonDeviance": 1.0079
+        },
+        "lightgbm_poisson": {
+          "MAE": 0.8481,
+          "RMSE": 1.6581,
+          "R2": 0.8069,
+          "PoissonDeviance": 0.7663
+        },
+        "blend_glm_lightgbm": {
+          "MAE": 0.8486,
+          "RMSE": 1.6559,
+          "R2": 0.8074,
+          "PoissonDeviance": 0.7659
+        }
+      },
+      "test_2025": {
+        "MAE": 1.0667,
+        "RMSE": 2.1188,
+        "R2": 0.7115,
+        "PoissonDeviance": 0.9395,
+        "tier_accuracy": 0.8237,
+        "tier_within_one": 0.992,
+        "alert_recall": 0.7305,
+        "alert_precision": 0.6725,
+        "interval80_coverage": 0.7526
+      },
+      "test_2025_baselines": {
+        "persistence (cases now)": {
+          "MAE": 1.9856,
+          "RMSE": 3.8113,
+          "R2": 0.0664,
+          "PoissonDeviance": 11.7683
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.4804,
+          "RMSE": 3.0078,
+          "R2": 0.4185,
+          "PoissonDeviance": 5.2497
+        }
+      },
+      "hyperparameters": {
+        "lightgbm_weight": 0.9,
+        "glm_alpha": 0.0001,
+        "lightgbm": {
+          "objective": "poisson",
+          "metric": "rmse",
+          "bagging_freq": 1,
+          "verbose": -1,
+          "seed": 42,
+          "num_leaves": 63,
+          "min_child_samples": 40,
+          "learning_rate": 0.05,
+          "lambda_l2": 1,
+          "lambda_l1": 0,
+          "feature_fraction": 0.7,
+          "bagging_fraction": 0.85,
+          "rounds": 1135
+        }
+      },
+      "n_train": 21900,
+      "n_val": 3180,
+      "n_test": 3120,
+      "top_features": {
+        "woy_cos": 0.276,
+        "rainfall_mm": 0.1537,
+        "dew_point_c": 0.0825,
+        "rain_lag1": 0.0482,
+        "woy_sin": 0.0375,
+        "rain_sum_4w": 0.0294,
+        "temp_mean_4w": 0.0278,
+        "water_logging_risk_index": 0.025,
+        "rain_sum_8w": 0.0194,
+        "temp_lag2": 0.0191,
+        "vulnerability_index": 0.0159,
+        "avg_temp_c": 0.0153,
+        "rain_lag8": 0.0143,
+        "rain_lag3": 0.0138,
+        "temp_lag1": 0.0138
+      }
+    },
+    "4": {
+      "winner": "blend_glm_lightgbm",
+      "validation_2024": {
+        "persistence (cases now)": {
+          "MAE": 1.9509,
+          "RMSE": 3.6956,
+          "R2": 0.0409,
+          "PoissonDeviance": 10.7542
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.9022,
+          "RMSE": 4.0684,
+          "R2": -0.1624,
+          "PoissonDeviance": 4.2973
+        },
+        "poisson_glm": {
+          "MAE": 1.3378,
+          "RMSE": 2.6339,
+          "R2": 0.5128,
+          "PoissonDeviance": 1.4437
+        },
+        "lightgbm_poisson": {
+          "MAE": 1.2292,
+          "RMSE": 2.087,
+          "R2": 0.6941,
+          "PoissonDeviance": 1.3079
+        },
+        "blend_glm_lightgbm": {
+          "MAE": 1.2292,
+          "RMSE": 2.087,
+          "R2": 0.6941,
+          "PoissonDeviance": 1.3079
+        }
+      },
+      "test_2025": {
+        "MAE": 1.3018,
+        "RMSE": 2.2827,
+        "R2": 0.6651,
+        "PoissonDeviance": 1.2659,
+        "tier_accuracy": 0.8221,
+        "tier_within_one": 0.9891,
+        "alert_recall": 0.7579,
+        "alert_precision": 0.598,
+        "interval80_coverage": 0.8308
+      },
+      "test_2025_baselines": {
+        "persistence (cases now)": {
+          "MAE": 2.1628,
+          "RMSE": 3.9993,
+          "R2": -0.028,
+          "PoissonDeviance": 13.9984
+        },
+        "seasonal naive (last year)": {
+          "MAE": 1.4804,
+          "RMSE": 3.0078,
+          "R2": 0.4185,
+          "PoissonDeviance": 5.2497
+        }
+      },
+      "hyperparameters": {
+        "lightgbm_weight": 1.0,
+        "glm_alpha": 0.1,
+        "lightgbm": {
+          "objective": "poisson",
+          "metric": "rmse",
+          "bagging_freq": 1,
+          "verbose": -1,
+          "seed": 42,
+          "num_leaves": 7,
+          "min_child_samples": 160,
+          "learning_rate": 0.03,
+          "lambda_l2": 5,
+          "lambda_l1": 0.1,
+          "feature_fraction": 0.5,
+          "bagging_fraction": 1.0,
+          "rounds": 146
+        }
+      },
+      "n_train": 21900,
+      "n_val": 3180,
+      "n_test": 3120,
+      "top_features": {
+        "woy_cos": 0.361,
+        "dew_point_c": 0.1071,
+        "cases_last_year_target": 0.107,
+        "temp_lag4": 0.0703,
+        "woy_sin": 0.0633,
+        "temp_mean_4w": 0.0624,
+        "rain_sum_4w": 0.0572,
+        "rainfall_mm": 0.0278,
+        "rain_sum_8w": 0.022,
+        "water_logging_risk_index": 0.0172,
+        "temp_lag1": 0.0155,
+        "relative_humidity_pct": 0.0126,
+        "log_pop_density": 0.0103,
+        "vulnerability_index": 0.0102,
+        "temp_lag3": 0.0097
+      }
+    }
+  }
+}
