@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.piptmp/
+.streamlit/secrets.toml
+experiments/processed/
+experiments/results/
+*.pdf
+hackathon_preli_dataset*.csv
