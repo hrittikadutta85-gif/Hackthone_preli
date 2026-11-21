@@ -248,9 +248,9 @@ Hackathon_preli/
 
 | Member | Role |
 |---|---|
-| *(name)* | *(role)* |
-| *(name)* | *(role)* |
-| *(name)* | *(role)* |
+| *Hrittika Dutta* | *Backend* |
+| *Atanu Dewanjee* | *Backend* |
+| *Adrita Biswas* | *Frontend* |
 
 ---
 
