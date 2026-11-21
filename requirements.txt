@@ -1,0 +1,11 @@
+# Tested on Python 3.11-3.13. Versions pinned so the serialized models load identically.
+pandas==3.0.3
+numpy==2.5.1
+scikit-learn==1.9.0
+lightgbm==4.7.0
+joblib==1.5.3
+streamlit==1.67.0
+plotly==7.1.0
+pytest==9.2.0
+fastapi==0.165.0
+uvicorn==0.54.0

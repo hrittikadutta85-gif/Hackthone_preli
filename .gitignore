@@ -9,3 +9,7 @@ experiments/processed/
 experiments/results/
 *.pdf
 hackathon_preli_dataset*.csv
+
+# local dev servers
+.api.*.log
+frontend/.next-*.log
