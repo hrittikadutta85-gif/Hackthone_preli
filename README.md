@@ -6,7 +6,7 @@ Forecasts dengue outbreak risk for each city ward **2–4 weeks ahead** from wee
 humidity. Public health officers can then send larvicide and spraying teams to the right wards *before* hospital
 admissions peak.
 
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue) ![Streamlit](https://img.shields.io/badge/UI-Streamlit-red) ![LightGBM](https://img.shields.io/badge/Model-LightGBM%20%2B%20Poisson%20GLM-green) ![APIs](https://img.shields.io/badge/External%20APIs-none-lightgrey)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue) ![Next.js](https://img.shields.io/badge/Frontend-Next.js-black) ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688) ![LightGBM](https://img.shields.io/badge/Model-LightGBM%20%2B%20Poisson%20GLM-green) ![APIs](https://img.shields.io/badge/Paid%20APIs-none-lightgrey)
 
 ---
 
@@ -38,8 +38,8 @@ collection turn some wards into hotspots much faster than their neighbours.
 |---|---|
 | **Weather data processing** | Ingests `avg_temp_c`, `rainfall_mm` and `relative_humidity_pct`, then computes **1–8 week rainfall lags**, the **2–4 week breeding-window rainfall** and rolling totals, separately for each `ward_id` |
 | **Risk prediction engine** | Trained models forecast expected cases for **+1 to +4 weeks** with an 80% range, a 0–100 risk score and a **Low / Medium / High / Critical** tier for any ward and week |
-| **Cost efficiency** | Local inference on serialized models, cached results, no external API or LLM calls |
-| **User interface** | Web dashboard showing forecasts, risk tiers, **main weather drivers**, what-if scenarios, a ward risk heatmap and validation errors |
+| **Cost efficiency** | Local inference on serialized models loaded once, precomputed and cached forecasts, no paid API or LLM calls |
+| **User interface** | Next.js web app: city overview and 4-week outlook, **interactive risk map**, ward forecast with **main weather drivers**, what-if scenarios, a prediction portal for new data, and an accuracy report |
 
 ---
 
@@ -51,24 +51,26 @@ flowchart TB
         CSV["Weekly ward data (CSV)<br/>weather · cases · ward attributes"]
     end
 
-    subgraph BACKEND["Backend: Python package (dengue_ews)"]
+    subgraph BACKEND["Backend: FastAPI service + Python package (dengue_ews)"]
         ING["1 · Ingestion & cleaning<br/>schema + type checks · dedupe<br/>weekly grid per ward · range checks · gap filling"]
         FEAT["2 · Multi-week lag pipeline<br/>groupby(ward_id).shift(k)<br/>rain lags 1-8 wk · breeding window (lags 2-4)<br/>temp / humidity lags · dew point · recent cases"]
         TRAIN["3 · Training (offline)<br/>chronological split<br/>Poisson GLM + LightGBM blend<br/>quantile models for intervals"]
         STORE[("Serialized models<br/>joblib · metrics · backtests")]
-        INF["4 · Inference engine<br/>expected cases · 80% interval<br/>risk score & tier · driver contributions"]
+        INF["4 · Inference engine<br/>expected cases · 80% interval<br/>risk score & tier · driver effects"]
+        API["5 · REST API (FastAPI)<br/>city · map · outlook · ward · what-if<br/>prediction portal · accuracy<br/>plain-language explanations"]
     end
 
-    subgraph FRONTEND["Frontend: Streamlit dashboard"]
-        UI["Ward forecast · What-if weather<br/>City risk heatmap · Model performance<br/>Data & lag pipeline"]
+    subgraph FRONTEND["Frontend: Next.js web app"]
+        UI["City overview & outlook · Risk map · Action plan<br/>Ward forecast & what-if · Prediction portal<br/>Can I trust it? · How it works"]
     end
 
     CSV --> ING --> FEAT
     FEAT --> TRAIN --> STORE
     STORE -->|loaded once, cached| INF
     FEAT -->|cached per data version| INF
-    INF --> UI
-    UI -->|user selects ward, week, horizon<br/>or edits weather| INF
+    INF --> API
+    API -->|JSON over /api| UI
+    UI -->|user picks ward, week, horizon,<br/>edits weather or enters new weeks| API
 ```
 
 ### Components
@@ -79,16 +81,21 @@ flowchart TB
 | Backend | `dengue_ews/features.py` | Ward-level multi-week weather lag pipeline; uses only data available on the forecast date |
 | Backend | `train.py` | Trains one model per horizon, validates chronologically and serializes the models |
 | Backend | `dengue_ews/model.py` | Loads the models once; returns predictions, intervals, risk tiers and driver breakdowns |
-| Frontend | `app.py` | Interactive Streamlit dashboard: inputs, forecasts, drivers, heatmap, validation |
+| Backend | `backend/main.py`, `backend/service.py` | FastAPI app: loads data and models once at startup, precomputes forecasts, serves the REST API |
+| Backend | `backend/narrative.py` | Turns model output into plain-language headlines, reasons and suggested actions |
+| Frontend | `frontend/` | Next.js 16 + React 19 + TypeScript + Tailwind; charts with Recharts, map with Leaflet |
+| Frontend (alt.) | `app.py` | The original Streamlit dashboard, kept as a lightweight alternative |
 
 ### Request flow
 
-1. The user picks a **ward**, a **forecast week** and an **early-warning window** (1–4 weeks).
-2. The backend gets that ward's lag features (computed once and cached).
+1. The user picks a **ward**, a **forecast week** and an **early-warning window** (1–4 weeks) in the web app.
+   The browser talks only to Next.js, which forwards `/api/*` requests to FastAPI.
+2. The backend gets that ward's lag features (computed once at startup).
 3. The models for the four horizons return expected cases, an 80% range and a tier.
-4. Contributions from each feature are grouped into **drivers** (rainfall lags, temperature, humidity, recent cases,
-   ward vulnerability, seasonality) and shown on the dashboard.
-5. In **what-if** mode, edited weather rebuilds the features for that single ward and re-scores it instantly.
+4. **Drivers:** the ward is re-scored with each factor group (rainfall, temperature, humidity, recent cases, ward
+   vulnerability) set to a typical value for that week of the year; the difference is shown as cases added or removed.
+5. In **what-if** mode or the **prediction portal**, edited or new weather rebuilds the features for that single ward
+   and re-scores it instantly.
 
 Full design notes are in [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -96,7 +103,7 @@ Full design notes are in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Quick start
 
-Requires **Python 3.11 or newer** and git. Setup takes about 2–3 minutes.
+Requires **Python 3.11+**, **Node.js 20+** and git. Setup takes about 3–5 minutes.
 
 ```bash
 git clone https://github.com/MLproject551/Hackathon_preli.git
@@ -105,10 +112,16 @@ python -m venv .venv
 # Windows:      .venv\Scripts\activate
 # macOS/Linux:  source .venv/bin/activate
 pip install -r requirements.txt
-streamlit run app.py
+uvicorn backend.main:app --port 8000        # terminal 1: API (loads models once, ~15 s)
 ```
 
-Open **http://localhost:8501**. The trained models are included in the repository, so no training step is needed.
+```bash
+cd frontend && npm install && npm run dev    # terminal 2: web app
+```
+
+Open **http://localhost:3000**. The trained models are included in the repository, so no training step is needed.
+
+The original Streamlit dashboard still works as a lightweight alternative: `streamlit run app.py` → http://localhost:8501.
 
 | Optional command | Purpose |
 |---|---|
@@ -117,10 +130,26 @@ Open **http://localhost:8501**. The trained models are included in the repositor
 
 ---
 
-## Using the dashboard
+## Using the web app
 
-| Tab | What it shows |
+The **week slider** and the **"Warn me 1–4 weeks ahead"** switch at the top apply to every page.
+
+| Page | What it shows |
 |---|---|
+| **City overview** | One-sentence summary, risk-level counts, a **4-week outlook per city**, ward cards ranked by risk, a week-by-week heatmap, CSV export |
+| **Risk map** | Real OpenStreetMap map with every ward as a bubble coloured by risk (Critical wards pulse); hover, click, fly to a city, filter by level, **time-lapse** through the weeks. An **offline honeycomb view** works without internet |
+| **Action plan** | Set how many field teams you have and get a ranked list of which wards each team should cover, with the suggested action; shows what changed since last week (new alerts, improvements, fastest risers); CSV and print |
+| **Ward forecast** | Plain-language story, forecast cards for +1…+4 weeks, history and forecast chart, **driver breakdown**, weather with the breeding window, an action checklist, **what-if weather**, print / save as PDF |
+| **Prediction portal** | The way to forecast **new weeks** beyond the dataset: enter (or upload as CSV) the latest weeks of rainfall, temperature, humidity and cases for a ward and get the next 4 weeks |
+| **Can I trust it?** | Results on the unseen 2025 year in plain language, forecast-vs-actual chart for any ward, risk-level confusion matrix |
+| **How it works** | The 2–4 week delay, the pipeline, the data split, the model, the architecture and the tech stack |
+
+**Ward positions on the map are approximate:** the dataset has ward IDs but no boundaries or coordinates, so each
+ward's bubble is placed inside a circle at its city corporation's real location.
+
+**Prediction portal CSV columns:** `date, rainfall, temperature, humidity, cases` (one row per week; cases optional).
+
+---|---|
 | **Ward forecast** | Risk tier, expected cases and 80% range for +1…+4 weeks; history and forecast chart; **driver breakdown**; weather chart with the breeding window highlighted |
 | **What-if weather** | Edit recent rainfall, temperature or humidity, or apply a scenario (e.g. +50% rain), and see how the risk changes |
 | **City risk heatmap** | All wards ranked by risk for the chosen week, plus a ward × week heatmap; CSV export |
@@ -173,11 +202,13 @@ with the weight tuned for each horizon. **LightGBM quantile models** provide the
 
 ## Cost and resource efficiency
 
-- **No external APIs or LLM calls.** There are no per-request costs and no API keys.
+- **No paid APIs or LLM calls.** There are no per-request costs and no API keys. The only outside request is the
+  street-map background (OpenStreetMap tiles); the offline map view and every forecast work without internet.
 - **Serialized models** (joblib, ~8 MB) are loaded once per server.
-- **Caching:** cleaning and lag features run once per dataset; predictions run only for the weeks on screen.
+- **Precompute and cache:** cleaning, lag features and forecasts for 2024–2025 run once at startup; the map data is
+  built once per window and gzip-compressed (~160 KB). Most requests are lookups.
 - **What-if scenarios** recompute a single ward rather than the whole city.
-- **CPU only:** changing an input in the dashboard takes about 1–2 seconds.
+- **CPU only:** a what-if or portal prediction returns in about a second.
 
 ---
 
@@ -185,8 +216,16 @@ with the weight tuned for each horizon. **LightGBM quantile models** provide the
 
 ```
 Hackathon_preli/
-├── app.py                  # Frontend: Streamlit dashboard
-├── train.py                # Backend: training, validation, model export
+├── frontend/               # Frontend: Next.js web app
+│   ├── app/                #   pages: overview, map, plan, ward/[id], predict, accuracy, how-it-works
+│   ├── components/         #   charts, map (street + offline), what-if, outlook, UI parts
+│   └── lib/                #   API client and shared controls
+├── backend/                # Backend: FastAPI service
+│   ├── main.py             #   REST endpoints
+│   ├── service.py          #   data + model service (loaded once)
+│   └── narrative.py        #   plain-language explanations and actions
+├── app.py                  # Alternative frontend: Streamlit dashboard
+├── train.py                # Training, validation, model export
 ├── dengue_ews/             # Backend: core package
 │   ├── config.py           #   settings, schema, split dates, risk tiers
 │   ├── data.py             #   ingestion and cleaning
@@ -221,8 +260,9 @@ As required by the hackathon rules:
 
 | Tool | Usage |
 |---|---|
-| Claude Code (Anthropic) | AI coding assistant used for data analysis, pipeline and model code, the dashboard, tests and documentation drafts. The team reviewed and tested all output. |
+| Claude Code (Anthropic) | AI coding assistant used for data analysis, pipeline and model code, the backend API, the web app, tests and documentation drafts. The team reviewed and tested all output. |
 | *(add any other AI tools used)* | |
 
-**External APIs used at runtime:** none.
-**Open-source libraries:** pandas, NumPy, scikit-learn, LightGBM, joblib, Streamlit, Plotly, pytest.
+**External services used at runtime:** OpenStreetMap map tiles for the street-map background only. No paid APIs, no AI services.
+**Open-source libraries:** pandas, NumPy, scikit-learn, LightGBM, joblib, FastAPI, Uvicorn, Pydantic, Next.js, React,
+Tailwind CSS, Recharts, SWR, Leaflet, Streamlit, Plotly, pytest.
