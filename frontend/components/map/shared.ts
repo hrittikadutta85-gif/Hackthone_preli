@@ -18,9 +18,29 @@ export interface CanvasProps {
 
 export const CITY_ORDER = ["Gazipur", "Dhaka North", "Dhaka South", "Narayanganj", "Chattogram"];
 
+type LabelSide = "top" | "left" | "right";
+/** Real city-corporation locations (latitude, longitude) and the approximate size of each area. */
+export const CITY_GEO: Record<string, { center: [number, number]; radiusKm: number; label: LabelSide }> = {
+  Gazipur: { center: [23.99, 90.415], radiusKm: 4.2, label: "top" },
+  "Dhaka North": { center: [23.808, 90.4], radiusKm: 5.0, label: "left" },
+  "Dhaka South": { center: [23.722, 90.41], radiusKm: 4.0, label: "left" },
+  Narayanganj: { center: [23.623, 90.5], radiusKm: 2.6, label: "right" },
+  Chattogram: { center: [22.345, 91.825], radiusKm: 5.0, label: "top" },
+};
+
+/** Lines drawn between neighbouring regions, for orientation only. They do not describe how dengue spreads. */
+export const CITY_LINKS: [string, string][] = [
+  ["Gazipur", "Dhaka North"],
+  ["Dhaka North", "Dhaka South"],
+  ["Dhaka South", "Narayanganj"],
+  ["Dhaka South", "Chattogram"],
+];
+
+export const NO_DATA_COLOR = "#3c5470";
+
 export const colorAt = (data: MapData, i: number, k: number) => {
   const t = data.tier[i][k];
-  return t == null ? "#c9d3cf" : TIER_COLOR[TIERS[t]];
+  return t == null ? NO_DATA_COLOR : TIER_COLOR[TIERS[t]];
 };
 
 /** Ward indices per city, ordered by ward number. */
@@ -34,9 +54,9 @@ export function cityGroups(data: MapData) {
   }));
 }
 
+/** How many wards a city has at each level, and its most serious level. */
 export function citySummary(data: MapData, idx: number[], k: number) {
-  const c = TIERS.map((_, t) => idx.filter((i) => data.tier[i][k] === t).length);
-  const text = [c[3] && `${c[3]} critical`, c[2] && `${c[2]} high`].filter(Boolean).join(" · ") || "no high-risk wards";
-  const worst = c[3] ? 3 : c[2] ? 2 : c[1] ? 1 : 0;
-  return { counts: c, text, worst };
+  const counts = TIERS.map((_, t) => idx.filter((i) => data.tier[i][k] === t).length);
+  const worst = counts[3] ? 3 : counts[2] ? 2 : counts[1] ? 1 : 0;
+  return { counts, worst, critical: counts[3], high: counts[2] };
 }

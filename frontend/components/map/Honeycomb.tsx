@@ -1,8 +1,9 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from "react";
 import { TIERS, TIER_COLOR, type MapData } from "@/lib/api";
-import { TierPill } from "../ui";
-import { colorAt, cityGroups, citySummary, type CanvasProps } from "./shared";
+import { useI18n } from "@/lib/i18n";
+import { TierPill, useMedia } from "../ui";
+import { CITY_LINKS, colorAt, cityGroups, citySummary, type CanvasProps } from "./shared";
 
 /*
  * Offline view: a schematic "honeycomb". Needs no internet. Each city corporation sits in its real direction from the
@@ -11,12 +12,12 @@ import { colorAt, cityGroups, citySummary, type CanvasProps } from "./shared";
 const S = 22; // hexagon corner radius, SVG units
 const FULL = { x: 0, y: 0, w: 1000, h: 930 };
 type Side = "left" | "right" | "below" | "above";
-const CITIES: Record<string, { at: [number, number]; label: Side; note?: string }> = {
+const CITIES: Record<string, { at: [number, number]; label: Side; far?: boolean }> = {
   Gazipur: { at: [400, 110], label: "right" },
   "Dhaka North": { at: [390, 345], label: "left" },
   "Dhaka South": { at: [380, 655], label: "left" },
   Narayanganj: { at: [640, 700], label: "below" },
-  Chattogram: { at: [860, 800], label: "above", note: "≈220 km south-east of Dhaka" },
+  Chattogram: { at: [860, 800], label: "above", far: true },
 };
 const HEX_POINTS = Array.from({ length: 6 }, (_, i) => {
   const a = ((60 * i - 30) * Math.PI) / 180;
@@ -75,6 +76,8 @@ function fit(cx: number, cy: number, r: number, label: Side): Box {
 }
 
 export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus }: CanvasProps) {
+  const { t, f, b } = useI18n();
+  const narrow = useMedia("(max-width: 39.99rem)");
   const { pos, cities } = useMemo(() => layout(data), [data]);
   const [vb, setVb] = useState<Box>(FULL);
   const vbRef = useRef<Box>(FULL);
@@ -157,7 +160,7 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
     if (!d) return;
     const dx = e.clientX - d.x;
     const dy = e.clientY - d.y;
-    if (!d.moved && Math.abs(dx) + Math.abs(dy) > 4) {
+    if (!d.moved && Math.abs(dx) + Math.abs(dy) > (e.pointerType === "touch" ? 10 : 4)) {
       d.moved = true;
       cancelAnimationFrame(raf.current);
       svgRef.current!.setPointerCapture(e.pointerId); // only once it is really a drag, so clicks still reach hexagons
@@ -180,16 +183,28 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
       return;
     }
     onSelect(i);
+    // on a phone the full view is too small to read, so a tap also flies to that city
+    if (narrow && vbRef.current.w > FULL.w * 0.8) zoomCity(data.wards[i].city);
   };
 
+  // Text is drawn in map units, so it is enlarged on small screens (less so once zoomed in).
+  const textScale = narrow ? Math.max(1, Math.min(1.9, (vb.w / FULL.w) * 1.9)) : 1;
   const hoverWard = hover ? data.wards[hover.i] : null;
+  const displayFont = { fontFamily: "var(--font-space), var(--font-bengali), system-ui, sans-serif" };
 
   return (
-    <div ref={wrapRef} className="relative overflow-hidden rounded-2xl border border-line bg-[#f3eee4] shadow-sm">
+    <div
+      ref={wrapRef}
+      className="relative overflow-hidden rounded-2xl border border-accent/25 bg-[#08111f] shadow-[0_0_48px_-24px_rgb(45_212_191/0.6)]"
+      style={{
+        backgroundImage: "linear-gradient(rgb(140 188 212 / 0.06) 1px, transparent 1px), linear-gradient(90deg, rgb(140 188 212 / 0.06) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }}
+    >
       <svg
         ref={svgRef}
         viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
-        className="block h-auto w-full cursor-grab touch-none select-none active:cursor-grabbing"
+        className="block h-auto w-full cursor-grab touch-none select-none active:cursor-grabbing max-sm:min-h-[420px]"
         style={{ aspectRatio: `${FULL.w} / ${FULL.h}` }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -203,35 +218,59 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
           zoomBy(0.6, p.x, p.y);
         }}
         role="group"
-        aria-label="Map of wards coloured by dengue risk"
+        aria-label={t.map.honeycombLabel}
       >
         <g transform="translate(955 48)" aria-hidden>
-          <circle r="20" fill="#fff" stroke="#e8e0d2" />
-          <path d="M0 -13 L6 6 L0 2 L-6 6 Z" fill="#1d2a26" />
-          <text y="-25" textAnchor="middle" fontSize="12" fontWeight="600" fill="#1d2a26">N</text>
+          <circle r="20" fill="#0e1a2b" stroke="#2dd4bf" strokeOpacity="0.45" />
+          <path d="M0 -13 L6 6 L0 2 L-6 6 Z" fill="#2dd4bf" />
+          <text y="-25" textAnchor="middle" fontSize="12" fontWeight="600" fill="#e6eef7">{t.map.north}</text>
         </g>
+
+        {/* orientation links between neighbouring regions, drawn from outline to outline */}
+        {CITY_LINKS.map(([from, to]) => {
+          const a = cities.find((c) => c.name === from)!;
+          const b = cities.find((c) => c.name === to)!;
+          const d = Math.hypot(b.cx - a.cx, b.cy - a.cy);
+          // neighbouring circles may overlap; there is then no gap to bridge
+          if (d <= a.radius + b.radius) return null;
+          const ux = (b.cx - a.cx) / d;
+          const uy = (b.cy - a.cy) / d;
+          const line = { x1: a.cx + ux * a.radius, y1: a.cy + uy * a.radius, x2: b.cx - ux * b.radius, y2: b.cy - uy * b.radius };
+          return (
+            <g key={`${from}-${to}`} aria-hidden>
+              <line {...line} stroke="#2dd4bf" strokeOpacity={0.25} />
+              <line {...line} className="flow" stroke="#2dd4bf" strokeWidth={2} />
+              <circle className="map-node" cx={line.x1} cy={line.y1} r={3.5} fill="#a8fff0" />
+              <circle className="map-node" cx={line.x2} cy={line.y2} r={3.5} fill="#a8fff0" />
+            </g>
+          );
+        })}
 
         {cities.map((c) => {
           const sum = citySummary(data, c.idx, k);
           const conf = CITIES[c.name];
+          const note = conf.far && !narrow ? `${t.map.farNote} · ${t.map.notToScale}` : null;
           const side = conf.label === "left" || conf.label === "right";
-          const lx = conf.label === "left" ? c.cx - c.radius - 12 : conf.label === "right" ? c.cx + c.radius + 12 : c.cx;
-          const ly = side ? c.cy - 8 : conf.label === "below" ? c.cy + c.radius + 22 : c.cy - c.radius - (conf.note ? 40 : 26);
-          const anchor = conf.label === "left" ? "end" : conf.label === "right" ? "start" : "middle";
+          // on a phone the far-corner label is anchored to the right edge so it cannot run off the map
+          const edge = narrow && conf.far;
+          const lx = edge ? 995 : conf.label === "left" ? c.cx - c.radius - 12 : conf.label === "right" ? c.cx + c.radius + 12 : c.cx;
+          const ly = side ? c.cy - 8 : conf.label === "below" ? c.cy + c.radius + 22 * textScale : c.cy - c.radius - (note ? 40 : 26 * textScale);
+          const anchor = edge || conf.label === "left" ? "end" : conf.label === "right" ? "start" : "middle";
           return (
             <g key={c.name}>
-              <circle cx={c.cx} cy={c.cy} r={c.radius} fill="#fffdf9" stroke="#e1d8c7" strokeWidth={1.5} />
+              <circle className="city-ring" cx={c.cx} cy={c.cy} r={c.radius} fill="#0d2233" stroke="#2dd4bf" strokeOpacity={0.65} strokeWidth={1.3} />
+              <circle cx={c.cx} cy={c.cy} r={c.radius - 7} fill="none" stroke="#2dd4bf" strokeOpacity={0.2} strokeDasharray="2 6" />
               <g className="cursor-pointer" onClick={() => zoomCity(c.name)}>
-                <text x={lx} y={ly} textAnchor={anchor} fontSize="17" fontWeight="650" fill="#1d2a26" style={{ fontFamily: "var(--font-fraunces), Georgia, serif" }}>
-                  {c.name}
+                <text x={lx} y={ly} textAnchor={anchor} fontSize={17 * textScale} fontWeight="600" fill="#e6eef7" style={displayFont}>
+                  {b(c.name)}
                 </text>
-                {conf.note && (
-                  <text x={lx} y={ly + 16} textAnchor={anchor} fontSize="11" fill="#5f6f69">
-                    {conf.note} · not to scale
+                {note && (
+                  <text x={lx} y={ly + 16} textAnchor={anchor} fontSize="11" fill="#8ea3ba">
+                    {note}
                   </text>
                 )}
-                <text x={lx} y={ly + (conf.note ? 32 : 18)} textAnchor={anchor} fontSize="12" fontWeight="600" fill={sum.worst >= 2 ? TIER_COLOR[TIERS[sum.worst]] : "#5f6f69"}>
-                  {sum.text}
+                <text x={lx} y={ly + (note ? 32 : 18 * textScale)} textAnchor={anchor} fontSize={12 * textScale} fontWeight="600" fill={sum.worst >= 2 ? TIER_COLOR[TIERS[sum.worst]] : "#8ea3ba"}>
+                  {t.map.summary(sum.critical, sum.high)}
                 </text>
               </g>
             </g>
@@ -248,8 +287,8 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
         )}
 
         {data.wards.map((w, i) => {
-          const t = tierAt(i);
-          const on = t != null && tiersOn[t];
+          const level = tierAt(i);
+          const on = level != null && tiersOn[level];
           const isSel = selected === i;
           const pred = data.predicted[i][k];
           return (
@@ -260,7 +299,7 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
               opacity={on ? 1 : 0.13}
               role="button"
               tabIndex={0}
-              aria-label={`${w.label}: ${t == null ? "no forecast" : `${TIERS[t]} risk, about ${pred?.toFixed(0)} cases`}`}
+              aria-label={level == null ? t.map.hexNone(b(w.label)) : t.map.hex(b(w.label), TIERS[level], f.n(pred, 0))}
               aria-pressed={isSel}
               onClick={() => click(i)}
               onKeyDown={(e) => {
@@ -270,43 +309,45 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
                 }
               }}
               onPointerEnter={(e) => {
-                if (drag.current?.moved) return;
+                if (e.pointerType === "touch" || drag.current?.moved) return; // touch screens use the ward sheet instead
                 const r = wrapRef.current!.getBoundingClientRect();
                 setHover({ i, x: e.clientX - r.left, y: e.clientY - r.top });
               }}
               onPointerLeave={() => setHover((h) => (h?.i === i ? null : h))}
             >
-              <polygon points={HEX_POINTS} fill={colorAt(data, i, k)} stroke={isSel ? "#1d2a26" : "#fff"} strokeWidth={isSel ? 3.5 : 1.5} style={{ transition: "fill 0.35s ease" }} />
-              <text textAnchor="middle" dy="4" fontSize="11" fontWeight="600" fill={t === 1 ? "#1d2a26" : "#fff"} pointerEvents="none">
-                {w.num}
+              <polygon points={HEX_POINTS} fill={colorAt(data, i, k)} stroke={isSel ? "#fff" : "#06101c"} strokeWidth={isSel ? 3.5 : 1.5} />
+              <text textAnchor="middle" dy="4" fontSize="11" fontWeight="700" fill={level === 3 || level == null ? "#fff" : "#06101c"} pointerEvents="none">
+                {f.digits(w.num)}
               </text>
             </g>
           );
         })}
       </svg>
 
-      <div className="absolute right-3 bottom-3 flex flex-col overflow-hidden rounded-xl border border-line bg-card shadow-sm">
-        <ZoomBtn label="Zoom in" onClick={() => zoomBy(0.7)}>+</ZoomBtn>
-        <ZoomBtn label="Zoom out" onClick={() => zoomBy(1.4)}>−</ZoomBtn>
-        <ZoomBtn label="Show everything" onClick={() => animateTo(FULL)}>⤢</ZoomBtn>
+      <div className="absolute right-3 bottom-3 z-[860] flex flex-col overflow-hidden rounded-xl border border-line bg-card/95">
+        <ZoomBtn label={t.map.zoomIn} onClick={() => zoomBy(0.7)}>+</ZoomBtn>
+        <ZoomBtn label={t.map.zoomOut} onClick={() => zoomBy(1.4)}>−</ZoomBtn>
+        <ZoomBtn label={t.map.showEverything} onClick={() => animateTo(FULL)}>⤢</ZoomBtn>
       </div>
 
       {hover && hoverWard && (
         <div
-          className="pointer-events-none absolute z-10 w-56 rounded-xl border border-line bg-card px-3 py-2 text-sm shadow-lg"
-          style={{ left: Math.min(hover.x + 14, (wrapRef.current?.clientWidth ?? 600) - 236), top: Math.max(hover.y - 90, 8) }}
+          className="pointer-events-none absolute z-[880] w-56 rounded-xl border border-accent/40 bg-card/95 px-3 py-2 text-sm shadow-[0_12px_32px_rgb(0_0_0/0.55)]"
+          style={{ left: Math.max(8, Math.min(hover.x + 14, (wrapRef.current?.clientWidth ?? 600) - 236)), top: Math.max(hover.y - 90, 8) }}
         >
           <div className="flex items-center justify-between gap-2">
-            <span className="font-semibold">{hoverWard.label}</span>
+            <span className="font-semibold">{b(hoverWard.label)}</span>
             {tierAt(hover.i) != null && <TierPill tier={TIERS[tierAt(hover.i)!]} />}
           </div>
           <div className="mt-1">
-            About <b>{data.predicted[hover.i][k]?.toFixed(0)}</b> cases expected
+            {t.map.about[0]}
+            <b>{f.n(data.predicted[hover.i][k], 0)}</b>
+            {t.map.about[1]}
           </div>
           <div className="text-xs text-muted">
-            likely {data.lower[hover.i][k]}–{data.upper[hover.i][k]} · {data.cases_now[hover.i][k] ?? "?"} reported now
+            {t.map.tipLikely(f.n(data.lower[hover.i][k]), f.n(data.upper[hover.i][k]), f.n(data.cases_now[hover.i][k]))}
           </div>
-          <div className="mt-1 text-xs text-accent">Click for details</div>
+          <div className="mt-1 text-xs text-accent">{t.map.details}</div>
         </div>
       )}
     </div>
@@ -315,7 +356,7 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
 
 function ZoomBtn({ children, label, onClick }: { children: React.ReactNode; label: string; onClick: () => void }) {
   return (
-    <button onClick={onClick} aria-label={label} title={label} className="grid h-9 w-9 place-items-center border-b border-line text-lg font-semibold transition last:border-b-0 hover:bg-paper">
+    <button onClick={onClick} aria-label={label} title={label} className="grid h-11 w-11 cursor-pointer place-items-center border-b border-line text-lg font-semibold transition last:border-b-0 hover:bg-accent-soft hover:text-accent lg:h-9 lg:w-9">
       {children}
     </button>
   );

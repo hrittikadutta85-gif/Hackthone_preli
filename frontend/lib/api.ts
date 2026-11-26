@@ -4,11 +4,12 @@ import useSWR from "swr";
 export const TIERS = ["Low", "Medium", "High", "Critical"] as const;
 export type Tier = (typeof TIERS)[number];
 
+// One meaning per colour everywhere: green, amber, orange, red.
 export const TIER_COLOR: Record<Tier, string> = {
-  Low: "#2e9e5b",
-  Medium: "#d9a400",
-  High: "#e8711a",
-  Critical: "#c62828",
+  Low: "#34bd72",
+  Medium: "#f4ce45",
+  High: "#f8871c",
+  Critical: "#e02a3c",
 };
 
 export interface Meta {
@@ -170,11 +171,6 @@ export const useWhatIf = (id: string, body: WhatIfBody | null) =>
     opts,
   );
 
-export const fmtDate = (d: string, long = false) =>
-  new Date(`${d}T00:00:00`).toLocaleDateString("en-GB", long ? { day: "numeric", month: "long", year: "numeric" } : { day: "numeric", month: "short" });
-
-export const weeksPhrase = (h: number) => (h === 1 ? "next week" : `in ${h} weeks`);
-
 export interface Observation {
   date: string;
   rain: number | null;
@@ -255,8 +251,11 @@ export function downloadCsv(filename: string, rows: Record<string, string | numb
   const cols = Object.keys(rows[0]);
   const esc = (v: string | number | null) => (v == null ? "" : /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v));
   const csv = [cols.join(","), ...rows.map((r) => cols.map((c) => esc(r[c])).join(","))].join("\n");
-  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  // the byte-order mark lets spreadsheet apps read Bangla text correctly
+  const url = URL.createObjectURL(new Blob(["﻿", csv], { type: "text/csv;charset=utf-8" }));
   const a = Object.assign(document.createElement("a"), { href: url, download: filename });
+  document.body.appendChild(a); // some mobile browsers ignore clicks on detached links
   a.click();
-  URL.revokeObjectURL(url);
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
