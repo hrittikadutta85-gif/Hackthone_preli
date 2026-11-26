@@ -38,7 +38,7 @@ class Store:
         self.city_median = train.groupby("city")[cols].median().to_dict("index")
         self.dates = sorted(self.df["date"].unique())
         self.origins = [pd.Timestamp(d) for d in self.dates if d >= np.datetime64(PRECOMPUTE_FROM)]
-        self.preds = self.predictor.predict(self.feat[self.feat["date"] >= PRECOMPUTE_FROM])
+        self.preds = self.score(self.feat)
         self.metrics = json.load(open(METRICS_PATH))
         self._map_cache: dict[int, dict] = {}
         self.backtest = pd.read_csv(BACKTEST_PATH, parse_dates=["origin_date", "target_date"])
@@ -47,6 +47,14 @@ class Store:
             ["population_density_sqkm", "water_logging_risk_index", "sanitation_score"]]
 
     # ------------------------------------------------------------------ helpers
+    def score(self, feat: pd.DataFrame) -> pd.DataFrame:
+        """Forecasts for every origin week in `feat` from PRECOMPUTE_FROM on.
+
+        Pass whole ward histories, not single rows: the horizon step looks back along the rows it is given to find last
+        year's cases. The stored forecasts and what-if scenarios both come through here so they see the same inputs.
+        """
+        return self.predictor.predict(feat[feat["date"] >= PRECOMPUTE_FROM])
+
     def snap(self, origin: str | None) -> pd.Timestamp:
         """Nearest forecast-origin week that exists (the UI sends week-start dates, but be forgiving)."""
         if not origin:
@@ -155,7 +163,13 @@ class Store:
         idx = hist.index[hist["date"] > o - pd.Timedelta(weeks=WHATIF_WEEKS)]
         recorded = hist.loc[idx, ["date", "rainfall_mm", "avg_temp_c", "relative_humidity_pct"]]
 
-        rain = np.array(rain_mm if rain_mm and len(rain_mm) == len(idx) else recorded["rainfall_mm"].values, float)
+        rain, rain_edited = recorded["rainfall_mm"].to_numpy(float), False
+        if rain_mm and len(rain_mm) == len(idx):
+            # The app shows rainfall to 0.1 mm and sends all weeks back once one is edited. A week that still matches
+            # its displayed value is untouched, so it keeps the exact recorded figure.
+            typed = np.array(rain_mm, float)
+            changed = np.abs(typed - rain) > 0.05 + 1e-9
+            rain, rain_edited = np.where(changed, typed, rain), bool(changed.any())
         hist.loc[idx, "rainfall_mm"] = np.clip(rain * (1 + rain_pct / 100), 0, None)
         hist.loc[idx, "avg_temp_c"] += temp_shift
         hist.loc[idx, ["max_temp_c", "min_temp_c"]] += temp_shift  # keep the day-night swing
@@ -165,12 +179,12 @@ class Store:
         # A single-ward rebuild cannot see other wards; reuse the recorded city-wide signal.
         city_sig = self.feat[self.feat["ward_id"] == ward].set_index("date")["city_cases_now"]
         sf["city_cases_now"] = sf["date"].map(city_sig)
-        row = sf[sf["date"] == o]
-        scen = self.horizon_rows(self.predictor.predict(row))
+        p = self.score(sf)
+        scen = self.horizon_rows(p[p["origin_date"] == o])
         base = self.horizon_rows(self.preds[(self.preds["ward_id"] == ward) & (self.preds["origin_date"] == o)])
 
         parts = []
-        if rain_mm is not None and not np.allclose(rain_mm, recorded["rainfall_mm"].values, atol=0.05):
+        if rain_edited:
             parts.append("Your edited rainfall")
         if rain_pct:
             parts.append(f"{abs(rain_pct):.0f}% {'more' if rain_pct > 0 else 'less'} rain")
