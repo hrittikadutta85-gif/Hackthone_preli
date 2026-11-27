@@ -1,0 +1,1151 @@
+# Forecast made 2025-07-07 for the week of 2025-07-21 (2 weeks ahead) · regional stock 70% · 20 spraying crews · planned for the upper 80% bound
+
+----- DSCC_Ward_04 -----
+🦟 *Dengue dispatch · Ward 04, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *CRITICAL* (score 78/100) · priority #1
+Expected cases: *15* (likely 9–22)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 49 / 52 ⚠️ short 3
+🧪 Test kits: 25 / 26 ⚠️ short 1
+🛏️ Beds: 7 / 7 (own ward 5, elsewhere 2) ✅
+
+*Vector control:* 1 crew assigned (needs 4)
+🚑 Send 1 patient → Ward 09, Dhaka South
+🚑 Send 1 patient → Ward 15, Dhaka South
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Send emergency vector-control teams now.
+• Prepare beds, NS1 kits and IV fluids for a surge.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_12 -----
+🦟 *Dengue dispatch · Ward 12, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *CRITICAL* (score 76/100) · priority #2
+Expected cases: *13* (likely 8–20)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 46 / 49 ⚠️ short 3
+🧪 Test kits: 22 / 24 ⚠️ short 2
+🛏️ Beds: 6 / 6 (own ward 6, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Send emergency vector-control teams now.
+• Prepare beds, NS1 kits and IV fluids for a surge.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_03 -----
+🦟 *Dengue dispatch · Ward 03, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 74/100) · priority #3
+Expected cases: *13* (likely 8–21)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 45 / 50 ⚠️ short 5
+🧪 Test kits: 22 / 24 ⚠️ short 2
+🛏️ Beds: 6 / 6 (own ward 6, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- GCC_Ward_03 -----
+🦟 *Dengue dispatch · Ward 03, Gazipur*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *CRITICAL* (score 76/100) · priority #4
+Expected cases: *14* (likely 8–19)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 40 / 45 ⚠️ short 5
+🧪 Test kits: 20 / 22 ⚠️ short 2
+🛏️ Beds: 5 / 6 (own ward 5, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Send emergency vector-control teams now.
+• Prepare beds, NS1 kits and IV fluids for a surge.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_18 -----
+🦟 *Dengue dispatch · Ward 18, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 72/100) · priority #5
+Expected cases: *12* (likely 8–19)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 40 / 45 ⚠️ short 5
+🧪 Test kits: 19 / 22 ⚠️ short 3
+🛏️ Beds: 5 / 6 (own ward 4, elsewhere 1) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 3)
+🚑 Send 1 patient → Ward 09, Dhaka North
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_01 -----
+🦟 *Dengue dispatch · Ward 01, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 70/100) · priority #6
+Expected cases: *12* (likely 8–20)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 41 / 47 ⚠️ short 6
+🧪 Test kits: 20 / 23 ⚠️ short 3
+🛏️ Beds: 6 / 6 (own ward 5, elsewhere 1) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚑 Send 1 patient → Ward 02, Chattogram
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_06 -----
+🦟 *Dengue dispatch · Ward 06, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 70/100) · priority #7
+Expected cases: *12* (likely 9–21)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 43 / 50 ⚠️ short 7
+🧪 Test kits: 21 / 24 ⚠️ short 3
+🛏️ Beds: 5 / 6 (own ward 5, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_19 -----
+🦟 *Dengue dispatch · Ward 19, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *CRITICAL* (score 77/100) · priority #8
+Expected cases: *14* (likely 8–20)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 40 / 47 ⚠️ short 7
+🧪 Test kits: 20 / 23 ⚠️ short 3
+🛏️ Beds: 6 / 6 (own ward 6, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Send emergency vector-control teams now.
+• Prepare beds, NS1 kits and IV fluids for a surge.
+_Dengue Watch · automated dispatch_
+
+----- GCC_Ward_01 -----
+🦟 *Dengue dispatch · Ward 01, Gazipur*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 60/100) · priority #9
+Expected cases: *10* (likely 6–17)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 33 / 40 ⚠️ short 7
+🧪 Test kits: 16 / 19 ⚠️ short 3
+🛏️ Beds: 5 / 5 (own ward 5, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- NCC_Ward_01 -----
+🦟 *Dengue dispatch · Ward 01, Narayanganj*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 58/100) · priority #10
+Expected cases: *9* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 32 / 39 ⚠️ short 7
+🧪 Test kits: 15 / 19 ⚠️ short 4
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_19 -----
+🦟 *Dengue dispatch · Ward 19, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 68/100) · priority #11
+Expected cases: *11* (likely 7–17)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 34 / 42 ⚠️ short 8
+🧪 Test kits: 16 / 20 ⚠️ short 4
+🛏️ Beds: 5 / 5 (own ward 5, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- GCC_Ward_02 -----
+🦟 *Dengue dispatch · Ward 02, Gazipur*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 73/100) · priority #12
+Expected cases: *13* (likely 8–19)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 35 / 44 ⚠️ short 9
+🧪 Test kits: 18 / 22 ⚠️ short 4
+🛏️ Beds: 6 / 6 (own ward 6, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 3)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_10 -----
+🦟 *Dengue dispatch · Ward 10, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 64/100) · priority #13
+Expected cases: *10* (likely 8–18)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 35 / 44 ⚠️ short 9
+🧪 Test kits: 17 / 21 ⚠️ short 4
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_05 -----
+🦟 *Dengue dispatch · Ward 05, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 56/100) · priority #14
+Expected cases: *8* (likely 6–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 31 / 39 ⚠️ short 8
+🧪 Test kits: 15 / 19 ⚠️ short 4
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- GCC_Ward_05 -----
+🦟 *Dengue dispatch · Ward 05, Gazipur*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 58/100) · priority #15
+Expected cases: *9* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 30 / 39 ⚠️ short 9
+🧪 Test kits: 14 / 19 ⚠️ short 5
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_09 -----
+🦟 *Dengue dispatch · Ward 09, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 67/100) · priority #16
+Expected cases: *11* (likely 7–18)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 33 / 44 ⚠️ short 11
+🧪 Test kits: 16 / 21 ⚠️ short 5
+🛏️ Beds: 5 / 5 (own ward 5, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 2)
+🏥 Expect 1 patient ← Ward 18, Dhaka North
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- GCC_Ward_04 -----
+🦟 *Dengue dispatch · Ward 04, Gazipur*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 52/100) · priority #17
+Expected cases: *8* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 26 / 35 ⚠️ short 9
+🧪 Test kits: 13 / 17 ⚠️ short 4
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- NCC_Ward_05 -----
+🦟 *Dengue dispatch · Ward 05, Narayanganj*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 68/100) · priority #18
+Expected cases: *11* (likely 8–18)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 32 / 43 ⚠️ short 11
+🧪 Test kits: 16 / 21 ⚠️ short 5
+🛏️ Beds: 5 / 5 (own ward 5, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_10 -----
+🦟 *Dengue dispatch · Ward 10, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 62/100) · priority #19
+Expected cases: *10* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 28 / 38 ⚠️ short 10
+🧪 Test kits: 13 / 18 ⚠️ short 5
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_12 -----
+🦟 *Dengue dispatch · Ward 12, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 60/100) · priority #20
+Expected cases: *9* (likely 7–18)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 33 / 44 ⚠️ short 11
+🧪 Test kits: 16 / 21 ⚠️ short 5
+🛏️ Beds: 5 / 5 (own ward 5, elsewhere 0) ✅
+
+*Vector control:* 1 crew assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_13 -----
+🦟 *Dengue dispatch · Ward 13, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 61/100) · priority #21
+Expected cases: *10* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 29 / 39 ⚠️ short 10
+🧪 Test kits: 14 / 19 ⚠️ short 5
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_08 -----
+🦟 *Dengue dispatch · Ward 08, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 57/100) · priority #22
+Expected cases: *9* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 27 / 36 ⚠️ short 9
+🧪 Test kits: 13 / 17 ⚠️ short 4
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_01 -----
+🦟 *Dengue dispatch · Ward 01, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 66/100) · priority #23
+Expected cases: *11* (likely 6–17)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 30 / 42 ⚠️ short 12
+🧪 Test kits: 14 / 20 ⚠️ short 6
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_16 -----
+🦟 *Dengue dispatch · Ward 16, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 50/100) · priority #24
+Expected cases: *7* (likely 5–13)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 23 / 32 ⚠️ short 9
+🧪 Test kits: 12 / 16 ⚠️ short 4
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_02 -----
+🦟 *Dengue dispatch · Ward 02, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 54/100) · priority #25
+Expected cases: *8* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 25 / 35 ⚠️ short 10
+🧪 Test kits: 12 / 17 ⚠️ short 5
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- NCC_Ward_04 -----
+🦟 *Dengue dispatch · Ward 04, Narayanganj*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 50/100) · priority #26
+Expected cases: *7* (likely 5–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 21 / 29 ⚠️ short 8
+🧪 Test kits: 10 / 14 ⚠️ short 4
+🛏️ Beds: 3 / 4 (own ward 3, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_07 -----
+🦟 *Dengue dispatch · Ward 07, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 64/100) · priority #27
+Expected cases: *10* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 27 / 38 ⚠️ short 11
+🧪 Test kits: 13 / 19 ⚠️ short 6
+🛏️ Beds: 5 / 5 (own ward 4, elsewhere 1) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚑 Send 1 patient → Ward 04, Chattogram
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_11 -----
+🦟 *Dengue dispatch · Ward 11, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 51/100) · priority #28
+Expected cases: *7* (likely 5–14)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 23 / 33 ⚠️ short 10
+🧪 Test kits: 11 / 16 ⚠️ short 5
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_04 -----
+🦟 *Dengue dispatch · Ward 04, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 52/100) · priority #29
+Expected cases: *7* (likely 5–14)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 23 / 34 ⚠️ short 11
+🧪 Test kits: 11 / 16 ⚠️ short 5
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🏥 Expect 1 patient ← Ward 07, Chattogram
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_04 -----
+🦟 *Dengue dispatch · Ward 04, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 40/100) · priority #30
+Expected cases: *5* (likely 2–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 17 / 26 ⚠️ short 9
+🧪 Test kits: 8 / 12 ⚠️ short 4
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_07 -----
+🦟 *Dengue dispatch · Ward 07, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 53/100) · priority #31
+Expected cases: *8* (likely 6–13)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 20 / 31 ⚠️ short 11
+🧪 Test kits: 10 / 15 ⚠️ short 5
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_17 -----
+🦟 *Dengue dispatch · Ward 17, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 45/100) · priority #32
+Expected cases: *6* (likely 2–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 17 / 26 ⚠️ short 9
+🧪 Test kits: 8 / 13 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_03 -----
+🦟 *Dengue dispatch · Ward 03, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 64/100) · priority #33
+Expected cases: *10* (likely 7–17)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 26 / 41 ⚠️ short 15
+🧪 Test kits: 13 / 20 ⚠️ short 7
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_10 -----
+🦟 *Dengue dispatch · Ward 10, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 46/100) · priority #34
+Expected cases: *6* (likely 4–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 17 / 27 ⚠️ short 10
+🧪 Test kits: 8 / 13 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_06 -----
+🦟 *Dengue dispatch · Ward 06, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 53/100) · priority #35
+Expected cases: *8* (likely 6–13)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 19 / 31 ⚠️ short 12
+🧪 Test kits: 9 / 15 ⚠️ short 6
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_20 -----
+🦟 *Dengue dispatch · Ward 20, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 59/100) · priority #36
+Expected cases: *9* (likely 7–16)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 24 / 38 ⚠️ short 14
+🧪 Test kits: 12 / 19 ⚠️ short 7
+🛏️ Beds: 4 / 5 (own ward 4, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_18 -----
+🦟 *Dengue dispatch · Ward 18, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 60/100) · priority #37
+Expected cases: *9* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 22 / 35 ⚠️ short 13
+🧪 Test kits: 11 / 17 ⚠️ short 6
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_14 -----
+🦟 *Dengue dispatch · Ward 14, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 45/100) · priority #38
+Expected cases: *6* (likely 4–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 16 / 26 ⚠️ short 10
+🧪 Test kits: 8 / 13 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_01 -----
+🦟 *Dengue dispatch · Ward 01, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 46/100) · priority #39
+Expected cases: *6* (likely 3–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 17 / 29 ⚠️ short 12
+🧪 Test kits: 8 / 14 ⚠️ short 6
+🛏️ Beds: 3 / 4 (own ward 3, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_08 -----
+🦟 *Dengue dispatch · Ward 08, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 52/100) · priority #40
+Expected cases: *8* (likely 6–13)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 18 / 31 ⚠️ short 13
+🧪 Test kits: 9 / 15 ⚠️ short 6
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_02 -----
+🦟 *Dengue dispatch · Ward 02, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 47/100) · priority #41
+Expected cases: *6* (likely 4–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 16 / 27 ⚠️ short 11
+🧪 Test kits: 8 / 13 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 2)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_07 -----
+🦟 *Dengue dispatch · Ward 07, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 43/100) · priority #42
+Expected cases: *6* (likely 3–10)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 13 / 23 ⚠️ short 10
+🧪 Test kits: 6 / 11 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_15 -----
+🦟 *Dengue dispatch · Ward 15, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 45/100) · priority #43
+Expected cases: *6* (likely 4–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 15 / 26 ⚠️ short 11
+🧪 Test kits: 7 / 13 ⚠️ short 6
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🏥 Expect 1 patient ← Ward 04, Dhaka South
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_09 -----
+🦟 *Dengue dispatch · Ward 09, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 44/100) · priority #44
+Expected cases: *6* (likely 4–11)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 15 / 26 ⚠️ short 11
+🧪 Test kits: 7 / 13 ⚠️ short 6
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🏥 Expect 1 patient ← Ward 04, Dhaka South
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_17 -----
+🦟 *Dengue dispatch · Ward 17, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 48/100) · priority #45
+Expected cases: *7* (likely 4–10)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 13 / 24 ⚠️ short 11
+🧪 Test kits: 7 / 12 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_03 -----
+🦟 *Dengue dispatch · Ward 03, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 54/100) · priority #46
+Expected cases: *8* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 20 / 36 ⚠️ short 16
+🧪 Test kits: 10 / 18 ⚠️ short 8
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_11 -----
+🦟 *Dengue dispatch · Ward 11, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 51/100) · priority #47
+Expected cases: *7* (likely 5–14)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 18 / 34 ⚠️ short 16
+🧪 Test kits: 9 / 17 ⚠️ short 8
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_13 -----
+🦟 *Dengue dispatch · Ward 13, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 41/100) · priority #48
+Expected cases: *5* (likely 3–9)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 12 / 22 ⚠️ short 10
+🧪 Test kits: 6 / 11 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_06 -----
+🦟 *Dengue dispatch · Ward 06, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 45/100) · priority #49
+Expected cases: *6* (likely 4–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 15 / 28 ⚠️ short 13
+🧪 Test kits: 7 / 14 ⚠️ short 7
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_09 -----
+🦟 *Dengue dispatch · Ward 09, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 40/100) · priority #50
+Expected cases: *5* (likely 3–10)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 12 / 23 ⚠️ short 11
+🧪 Test kits: 6 / 11 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_15 -----
+🦟 *Dengue dispatch · Ward 15, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 51/100) · priority #51
+Expected cases: *7* (likely 6–15)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 19 / 36 ⚠️ short 17
+🧪 Test kits: 9 / 18 ⚠️ short 9
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_08 -----
+🦟 *Dengue dispatch · Ward 08, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 46/100) · priority #52
+Expected cases: *6* (likely 4–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 15 / 29 ⚠️ short 14
+🧪 Test kits: 7 / 14 ⚠️ short 7
+🛏️ Beds: 3 / 4 (own ward 3, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- NCC_Ward_02 -----
+🦟 *Dengue dispatch · Ward 02, Narayanganj*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 49/100) · priority #53
+Expected cases: *7* (likely 5–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 14 / 28 ⚠️ short 14
+🧪 Test kits: 7 / 14 ⚠️ short 7
+🛏️ Beds: 3 / 4 (own ward 3, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_16 -----
+🦟 *Dengue dispatch · Ward 16, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 40/100) · priority #54
+Expected cases: *5* (likely 3–9)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 11 / 22 ⚠️ short 11
+🧪 Test kits: 6 / 11 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- NCC_Ward_03 -----
+🦟 *Dengue dispatch · Ward 03, Narayanganj*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 50/100) · priority #55
+Expected cases: *7* (likely 6–13)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 15 / 30 ⚠️ short 15
+🧪 Test kits: 8 / 15 ⚠️ short 7
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_05 -----
+🦟 *Dengue dispatch · Ward 05, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *HIGH* (score 50/100) · priority #56
+Expected cases: *7* (likely 6–14)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 18 / 35 ⚠️ short 17
+🧪 Test kits: 9 / 17 ⚠️ short 8
+🛏️ Beds: 4 / 4 (own ward 4, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Larvicide and spray this ward before the window opens.
+• Warn clinics and hospitals to expect more fever cases.
+_Dengue Watch · automated dispatch_
+
+----- DNCC_Ward_20 -----
+🦟 *Dengue dispatch · Ward 20, Dhaka North*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 40/100) · priority #57
+Expected cases: *5* (likely 4–9)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 11 / 22 ⚠️ short 11
+🧪 Test kits: 6 / 11 ⚠️ short 5
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_02 -----
+🦟 *Dengue dispatch · Ward 02, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 44/100) · priority #58
+Expected cases: *6* (likely 4–12)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 13 / 27 ⚠️ short 14
+🧪 Test kits: 6 / 13 ⚠️ short 7
+🛏️ Beds: 3 / 3 (own ward 3, elsewhere 0) ✅
+
+*Vector control:* 0 crews assigned (needs 1)
+🏥 Expect 1 patient ← Ward 01, Chattogram
+🚨 *Deficit alert:* saline, kits — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- CCC_Ward_05 -----
+🦟 *Dengue dispatch · Ward 05, Chattogram*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 42/100) · priority #59
+Expected cases: *5* (likely 2–9)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 11 / 22 ⚠️ short 11
+🧪 Test kits: 5 / 11 ⚠️ short 6
+🛏️ Beds: 2 / 3 (own ward 2, elsewhere 0) ⚠️ 1 without a bed
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_
+
+----- DSCC_Ward_14 -----
+🦟 *Dengue dispatch · Ward 14, Dhaka South*
+Week of 21 Jul 2025 · forecast made 7 Jul (2 wk ahead)
+Risk: *MEDIUM* (score 38/100) · priority #60
+Expected cases: *5* (likely 2–9)
+
+*Supplies (allocated / required)*
+💧 Saline bags: 10 / 21 ⚠️ short 11
+🧪 Test kits: 4 / 10 ⚠️ short 6
+🛏️ Beds: 1 / 3 (own ward 1, elsewhere 0) ⚠️ 2 without a bed
+
+*Vector control:* 0 crews assigned (needs 1)
+🚨 *Deficit alert:* saline, kits, beds — request emergency resupply.
+
+*Actions*
+• Inspect breeding spots: drains, tanks, containers.
+• Send a community message on emptying standing water.
+_Dengue Watch · automated dispatch_

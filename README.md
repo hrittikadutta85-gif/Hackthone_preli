@@ -1,10 +1,13 @@
 # 🦟 Dengue Early-Warning System
 
-**Team CodeNova** · EDU AI Engineering Hackathon 2026 · Preliminary Round: *AI for Urban Dengue Outbreak*
+**Team CodeNova** · EDU AI Engineering Hackathon 2026 · Phase 1: *AI for Urban Dengue Outbreak* · Phase 2 (onsite
+final): *operational resource optimization, intervention simulation and dispatch*
 
 Forecasts dengue outbreak risk for each city ward **2–4 weeks ahead** from weekly rainfall, temperature and
-humidity. Public health officers can then send larvicide and spraying teams to the right wards *before* hospital
-admissions peak.
+humidity, and turns each forecast into an operational plan for ward commissioners and health-centre managers: how
+many saline bags, test kits and hospital beds each ward needs, who gets scarce stock first, where overflow patients
+go, where spraying crews prevent the most cases, and the SMS / WhatsApp / printed orders to send. Everything runs
+offline.
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue) ![Next.js](https://img.shields.io/badge/Frontend-Next.js-black) ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688) ![LightGBM](https://img.shields.io/badge/Model-LightGBM%20%2B%20Poisson%20GLM-green) ![APIs](https://img.shields.io/badge/Paid%20APIs-none-lightgrey)
 
@@ -41,6 +44,16 @@ collection turn some wards into hotspots much faster than their neighbours.
 | **Cost efficiency** | Local inference on serialized models loaded once, precomputed and cached forecasts, no paid API or LLM calls |
 | **User interface** | Next.js web app: city overview and 4-week outlook, **interactive risk map**, ward forecast with **main weather drivers**, what-if scenarios, a prediction portal for new data, and an accuracy report |
 
+### Phase 2: operations command (`/ops` in the web app)
+
+| Phase 2 requirement | How we meet it |
+|---|---|
+| **1 · Constrained resource allocation** | Forecast cases → `saline_bags_needed`, `diagnostic_kits_needed`, `hospital_beds_required` using the rule found in the onsite dataset (it reproduces all 31,320 rows exactly). An **Available regional stock slider (30–100%)**, optionally set per supply, and a **Total spraying crews** slider share out scarce stock by priority = 70% model risk score + 30% `population_density_sqkm` percentile (priority-weighted water-filling, whole units, deterministic). **Critical supply deficit** warnings update live. |
+| **2 · Hospital surge & overflow routing** | Each ward's dengue bed capacity comes from its own history. Patients beyond capacity are moved, one at a time, to the least-loaded ward **of the same city** (Dhaka North, Dhaka South, Chattogram, Gazipur, Narayanganj). Shows net ward deficits, transfers, patients without a bed, and city-wide occupancy before and after routing, plus spare beds. |
+| **3 · Vector-control simulator** | Deploy crews automatically (best return) or ward by ward. The **ML model is re-run** with each ward's breeding-habitat inputs reduced by the crews' coverage, giving counterfactual cases, beds and saline for **weeks 2–4**, with wards ranked by **cases prevented per crew**. |
+| **4 · Multi-channel dispatch** | Ward notices as **SMS** (one 160-character GSM-7 segment in English; Bangla in UCS-2), **WhatsApp** and a **printable HTML/PDF commissioner brief**, in English or Bangla. Each lists predicted cases, allocated vs required supplies, deficit alerts, transfers and assigned crews. Samples are in [`exports/`](exports/). |
+| **5 · Offline resilience** | No LLM or external API anywhere; all messages come from fixed templates. The **Offline check** tab runs every module on the server with outbound network access switched off (`/api/ops/selftest`), and `tests/test_operations.py` does the same. |
+
 ---
 
 ## System architecture
@@ -58,10 +71,11 @@ flowchart TB
         STORE[("Serialized models<br/>joblib · metrics · backtests")]
         INF["4 · Inference engine<br/>expected cases · 80% interval<br/>risk score & tier · driver effects"]
         API["5 · REST API (FastAPI)<br/>city · map · outlook · ward · what-if<br/>prediction portal · accuracy<br/>plain-language explanations"]
+        OPS["6 · Operations (Phase 2)<br/>supply rule · priority water-filling<br/>intra-city bed routing · crew simulator<br/>SMS / WhatsApp / brief templates"]
     end
 
     subgraph FRONTEND["Frontend: Next.js web app"]
-        UI["City overview & outlook · Risk map · Action plan<br/>Ward forecast & what-if · Prediction portal<br/>Can I trust it? · How it works"]
+        UI["City overview & outlook · Risk map · Action plan<br/>Operations: supplies · beds · vector control · dispatch · offline<br/>Ward forecast & what-if · Prediction portal<br/>Can I trust it? · How it works"]
     end
 
     CSV --> ING --> FEAT
@@ -69,6 +83,7 @@ flowchart TB
     STORE -->|loaded once, cached| INF
     FEAT -->|cached per data version| INF
     INF --> API
+    INF --> OPS --> API
     API -->|JSON over /api| UI
     UI -->|user picks ward, week, horizon,<br/>edits weather or enters new weeks| API
 ```
@@ -83,6 +98,11 @@ flowchart TB
 | Backend | `dengue_ews/model.py` | Loads the models once; returns predictions, intervals, risk tiers and driver breakdowns |
 | Backend | `backend/main.py`, `backend/service.py` | FastAPI app: loads data and models once at startup, precomputes forecasts, serves the REST API |
 | Backend | `backend/narrative.py` | Turns model output into plain-language headlines, reasons and suggested actions |
+| Backend | `dengue_ews/operations.py` | Phase 2 arithmetic: supply rule, bed capacity, priority, water-filling allocation, crews needed, overflow routing, crew efficacy |
+| Backend | `backend/planner.py` | Phase 2 service: constrained plan for a forecast week, model-driven vector-control simulator |
+| Backend | `backend/dispatch.py` | SMS, WhatsApp and printable-brief templates in English and Bangla |
+| Backend | `backend/offline.py` | Network kill-switch and the offline self-test |
+| Backend | `backend/export_samples.py` | Writes the sample exports in `exports/` |
 | Frontend | `frontend/` | Next.js 16 + React 19 + TypeScript + Tailwind; charts with Recharts, map with Leaflet |
 | Frontend (alt.) | `app.py` | The original Streamlit dashboard, kept as a lightweight alternative |
 
@@ -125,8 +145,13 @@ The original Streamlit dashboard still works as a lightweight alternative: `stre
 
 | Optional command | Purpose |
 |---|---|
-| `python -m pytest -q` | Verifies the lag pipeline, guards against future-data leakage and checks inference |
+| `python -m pytest -q` | Verifies the lag pipeline, guards against future-data leakage, checks inference, and tests the Phase 2 allocation, routing, simulator, dispatch and offline behaviour |
+| `python -m backend.export_samples` | Regenerates the sample SMS / WhatsApp / brief exports in `exports/` (runs with the network switched off) |
 | `python train.py` | Retrains and re-validates all models from the raw data (~10 min on a laptop CPU) |
+
+**For live judging or any offline demo**, run the production build: `cd frontend && npm run build && npm start`.
+The build downloads and bundles the web fonts once, so after that the app needs no internet at all. (`npm run dev`
+also works offline, but it falls back to system fonts.)
 
 ---
 
@@ -139,6 +164,11 @@ The **week slider** and the **"Warn me 1–4 weeks ahead"** switch at the top ap
 | **City overview** | One-sentence summary, risk-level counts, a **4-week outlook per city**, ward cards ranked by risk, a week-by-week heatmap, CSV export |
 | **Risk map** | Real OpenStreetMap map with every ward as a bubble coloured by risk (Critical wards pulse); hover, click, fly to a city, filter by level, **time-lapse** through the weeks. An **offline honeycomb view** works without internet |
 | **Action plan** | Set how many field teams you have and get a ranked list of which wards each team should cover, with the suggested action; shows what changed since last week (new alerts, improvements, fastest risers); CSV and print |
+| **Operations → Supplies & crews** | Stock (30–100%, optionally per supply), crews, planning basis (expected or likely-high) and area. Allocated vs required saline, kits and beds per ward in priority order, crew assignments, a live critical-deficit alert, CSV |
+| **Operations → Hospital beds** | Bed pools per city (load before and after routing, moved, without a bed, spare), patient transfers and each ward's net bed balance |
+| **Operations → Vector control** | Automatic or hand-picked crew deployment; model-driven cases, bed-weeks and saline prevented over weeks 2–4; ranking by cases prevented per crew; where the next crew helps most |
+| **Operations → Dispatch** | SMS and WhatsApp notices per ward in English or Bangla, copy buttons, downloads, and the printable commissioner brief |
+| **Operations → Offline check** | Browser and server status, and a one-click self-test that runs every module with the server's internet switched off |
 | **Ward forecast** | Plain-language story, forecast cards for +1…+4 weeks, history and forecast chart, **driver breakdown**, weather with the breeding window, an action checklist, **what-if weather**, print / save as PDF |
 | **Prediction portal** | The way to forecast **new weeks** beyond the dataset: enter (or upload as CSV) the latest weeks of rainfall, temperature, humidity and cases for a ward and get the next 4 weeks |
 | **Can I trust it?** | Results on the unseen 2025 year in plain language, forecast-vs-actual chart for any ward, risk-level confusion matrix |
@@ -149,18 +179,10 @@ ward's bubble is placed inside a circle at its city corporation's real location.
 
 **Prediction portal CSV columns:** `date, rainfall, temperature, humidity, cases` (one row per week; cases optional).
 
----|---|
-| **Ward forecast** | Risk tier, expected cases and 80% range for +1…+4 weeks; history and forecast chart; **driver breakdown**; weather chart with the breeding window highlighted |
-| **What-if weather** | Edit recent rainfall, temperature or humidity, or apply a scenario (e.g. +50% rain), and see how the risk changes |
-| **City risk heatmap** | All wards ranked by risk for the chosen week, plus a ward × week heatmap; CSV export |
-| **Model performance** | MAE, RMSE and R² by horizon against baselines on unseen data; interval coverage; tier confusion matrix |
-| **Data & lag pipeline** | Data-quality report and the per-ward lag feature table, to check the lag computation |
-
-**Using new data:** upload a CSV with the same columns in the sidebar. It is cleaned, featurized and scored
-automatically.
-
-Required columns: `date, city, ward_id, population_density_sqkm, water_logging_risk_index, sanitation_score,
-avg_temp_c, max_temp_c, min_temp_c, rainfall_mm, relative_humidity_pct, dengue_cases`
+**Dataset columns** (`data/dengue_weekly.csv`, or an upload in the Streamlit app): `date, city, ward_id,
+population_density_sqkm, water_logging_risk_index, sanitation_score, avg_temp_c, max_temp_c, min_temp_c, rainfall_mm,
+relative_humidity_pct, dengue_cases`, plus the optional onsite columns `saline_bags_needed, diagnostic_kits_needed,
+hospital_beds_required`. If those are missing, they are filled in from the per-case rule.
 
 ---
 
@@ -217,23 +239,29 @@ with the weight tuned for each horizon. **LightGBM quantile models** provide the
 ```
 Hackathon_preli/
 ├── frontend/               # Frontend: Next.js web app
-│   ├── app/                #   pages: overview, map, plan, ward/[id], predict, accuracy, how-it-works
+│   ├── app/                #   pages: overview, map, plan, ops/*, ward/[id], predict, accuracy, how-it-works
 │   ├── components/         #   charts, map (street + offline), what-if, outlook, UI parts
 │   └── lib/                #   API client and shared controls
 ├── backend/                # Backend: FastAPI service
 │   ├── main.py             #   REST endpoints
 │   ├── service.py          #   data + model service (loaded once)
-│   └── narrative.py        #   plain-language explanations and actions
+│   ├── narrative.py        #   plain-language explanations and actions
+│   ├── planner.py          #   Phase 2: allocation, bed routing, vector-control simulator
+│   ├── dispatch.py         #   Phase 2: SMS / WhatsApp / printable brief templates (EN + BN)
+│   ├── offline.py          #   Phase 2: network kill-switch and self-test
+│   └── export_samples.py   #   Phase 2: writes exports/
 ├── app.py                  # Alternative frontend: Streamlit dashboard
 ├── train.py                # Training, validation, model export
 ├── dengue_ews/             # Backend: core package
 │   ├── config.py           #   settings, schema, split dates, risk tiers
 │   ├── data.py             #   ingestion and cleaning
 │   ├── features.py         #   ward-level multi-week lag pipeline
-│   └── model.py            #   inference, risk tiers, driver contributions
+│   ├── model.py            #   inference, risk tiers, driver contributions
+│   └── operations.py       #   Phase 2 arithmetic (supplies, priority, water-filling, routing, crew efficacy)
 ├── models/                 # Serialized models, metrics, backtests
-├── data/                   # Weekly ward dataset (2016–2025, 60 wards)
-├── tests/                  # Pipeline and inference tests
+├── data/                   # Weekly ward dataset (onsite version with supply columns; 2016–2025, 60 wards)
+├── exports/                # Sample SMS, WhatsApp and printable commissioner briefs
+├── tests/                  # Pipeline, inference, what-if, translation and Phase 2 operations tests
 ├── experiments/            # Exploratory analysis scripts
 ├── requirements.txt
 ├── ARCHITECTURE.md
@@ -260,9 +288,10 @@ As required by the hackathon rules:
 
 | Tool | Usage |
 |---|---|
-| Claude Code (Anthropic) | AI coding assistant used for data analysis, pipeline and model code, the backend API, the web app, tests and documentation drafts. The team reviewed and tested all output. |
+| Claude Code (Anthropic) | AI coding assistant used for data analysis, pipeline and model code, the backend API, the web app, tests and documentation drafts. In Phase 2 it also helped derive the supply rule from the onsite dataset and write the allocation, routing, simulator, dispatch and offline modules, their tests and these documents. The team reviewed and tested all output. |
 | *(add any other AI tools used)* | |
 
-**External services used at runtime:** OpenStreetMap map tiles for the street-map background only. No paid APIs, no AI services.
+**External services used at runtime:** OpenStreetMap map tiles for the street-map background only. No paid APIs, no AI
+services: Phase 2 dispatch notices come from fixed templates, not a language model.
 **Open-source libraries:** pandas, NumPy, scikit-learn, LightGBM, joblib, FastAPI, Uvicorn, Pydantic, Next.js, React,
 Tailwind CSS, Recharts, SWR, Leaflet, Streamlit, Plotly, pytest.

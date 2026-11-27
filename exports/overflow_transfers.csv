@@ -1,0 +1,6 @@
+﻿city,from_ward,to_ward,patients
+Chattogram,CCC_Ward_01,CCC_Ward_02,1
+Chattogram,CCC_Ward_07,CCC_Ward_04,1
+Dhaka North,DNCC_Ward_18,DNCC_Ward_09,1
+Dhaka South,DSCC_Ward_04,DSCC_Ward_09,1
+Dhaka South,DSCC_Ward_04,DSCC_Ward_15,1

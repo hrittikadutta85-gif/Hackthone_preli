@@ -1,0 +1,182 @@
+# Forecast made 2025-07-07 for the week of 2025-07-21 (2 weeks ahead) · regional stock 70% · 20 spraying crews · planned for the upper 80% bound
+# 60 ward notices, most urgent first
+
+[DSCC_Ward_04] 144 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-04 wk 21 Jul: 15 cases exp (CRITICAL). Saline 49/52 Kits 25/26 Beds 7/7. Crews 1. SHORT: saline,kits. Send 2 pts to DSCC-09,DSCC-15.
+
+[DNCC_Ward_12] 113 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-12 wk 21 Jul: 13 cases exp (CRITICAL). Saline 46/49 Kits 22/24 Beds 6/6. Crews 1. SHORT: saline,kits.
+
+[CCC_Ward_03] 108 chars · GSM-7 · 1 part(s)
+DENGUE CCC-03 wk 21 Jul: 13 cases exp (HIGH). Saline 45/50 Kits 22/24 Beds 6/6. Crews 1. SHORT: saline,kits.
+
+[GCC_Ward_03] 130 chars · GSM-7 · 1 part(s)
+DENGUE GCC-03 wk 21 Jul: 14 cases exp (CRITICAL). Saline 40/45 Kits 20/22 Beds 5/6. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DNCC_Ward_18] 149 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-18 wk 21 Jul: 12 cases exp (HIGH). Saline 40/45 Kits 19/22 Beds 5/6. Crews 1. SHORT: saline,kits,beds. Send 1 pt to DNCC-09. 1 pt NO BED.
+
+[CCC_Ward_01] 129 chars · GSM-7 · 1 part(s)
+DENGUE CCC-01 wk 21 Jul: 12 cases exp (HIGH). Saline 41/47 Kits 20/23 Beds 6/6. Crews 1. SHORT: saline,kits. Send 1 pt to CCC-02.
+
+[DSCC_Ward_06] 127 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-06 wk 21 Jul: 12 cases exp (HIGH). Saline 43/50 Kits 21/24 Beds 5/6. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DNCC_Ward_19] 113 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-19 wk 21 Jul: 14 cases exp (CRITICAL). Saline 40/47 Kits 20/23 Beds 6/6. Crews 1. SHORT: saline,kits.
+
+[GCC_Ward_01] 108 chars · GSM-7 · 1 part(s)
+DENGUE GCC-01 wk 21 Jul: 10 cases exp (HIGH). Saline 33/40 Kits 16/19 Beds 5/5. Crews 1. SHORT: saline,kits.
+
+[NCC_Ward_01] 125 chars · GSM-7 · 1 part(s)
+DENGUE NCC-01 wk 21 Jul: 9 cases exp (HIGH). Saline 32/39 Kits 15/19 Beds 4/5. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_19] 109 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-19 wk 21 Jul: 11 cases exp (HIGH). Saline 34/42 Kits 16/20 Beds 5/5. Crews 1. SHORT: saline,kits.
+
+[GCC_Ward_02] 108 chars · GSM-7 · 1 part(s)
+DENGUE GCC-02 wk 21 Jul: 13 cases exp (HIGH). Saline 35/44 Kits 18/22 Beds 6/6. Crews 1. SHORT: saline,kits.
+
+[DSCC_Ward_10] 127 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-10 wk 21 Jul: 10 cases exp (HIGH). Saline 35/44 Kits 17/21 Beds 4/5. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DNCC_Ward_05] 126 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-05 wk 21 Jul: 8 cases exp (HIGH). Saline 31/39 Kits 15/19 Beds 4/5. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[GCC_Ward_05] 125 chars · GSM-7 · 1 part(s)
+DENGUE GCC-05 wk 21 Jul: 9 cases exp (HIGH). Saline 30/39 Kits 14/19 Beds 4/5. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DNCC_Ward_09] 136 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-09 wk 21 Jul: 11 cases exp (HIGH). Saline 33/44 Kits 16/21 Beds 5/5. Crews 1. SHORT: saline,kits. Receive 1 pt from DNCC-18.
+
+[GCC_Ward_04] 107 chars · GSM-7 · 1 part(s)
+DENGUE GCC-04 wk 21 Jul: 8 cases exp (HIGH). Saline 26/35 Kits 13/17 Beds 4/4. Crews 1. SHORT: saline,kits.
+
+[NCC_Ward_05] 108 chars · GSM-7 · 1 part(s)
+DENGUE NCC-05 wk 21 Jul: 11 cases exp (HIGH). Saline 32/43 Kits 16/21 Beds 5/5. Crews 1. SHORT: saline,kits.
+
+[DNCC_Ward_10] 127 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-10 wk 21 Jul: 10 cases exp (HIGH). Saline 28/38 Kits 13/18 Beds 4/5. Crews 1. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_12] 108 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-12 wk 21 Jul: 9 cases exp (HIGH). Saline 33/44 Kits 16/21 Beds 5/5. Crews 1. SHORT: saline,kits.
+
+[DSCC_Ward_13] 127 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-13 wk 21 Jul: 10 cases exp (HIGH). Saline 29/39 Kits 14/19 Beds 4/5. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_08] 108 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-08 wk 21 Jul: 9 cases exp (HIGH). Saline 27/36 Kits 13/17 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_01] 127 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-01 wk 21 Jul: 11 cases exp (HIGH). Saline 30/42 Kits 14/20 Beds 4/5. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DNCC_Ward_16] 108 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-16 wk 21 Jul: 7 cases exp (HIGH). Saline 23/32 Kits 12/16 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_02] 108 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-02 wk 21 Jul: 8 cases exp (HIGH). Saline 25/35 Kits 12/17 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[NCC_Ward_04] 127 chars · GSM-7 · 1 part(s)
+DENGUE NCC-04 wk 21 Jul: 7 cases exp (MEDIUM). Saline 21/29 Kits 10/14 Beds 3/4. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[CCC_Ward_07] 129 chars · GSM-7 · 1 part(s)
+DENGUE CCC-07 wk 21 Jul: 10 cases exp (HIGH). Saline 27/38 Kits 13/19 Beds 5/5. Crews 0. SHORT: saline,kits. Send 1 pt to CCC-04.
+
+[DNCC_Ward_11] 108 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-11 wk 21 Jul: 7 cases exp (HIGH). Saline 23/33 Kits 11/16 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[CCC_Ward_04] 133 chars · GSM-7 · 1 part(s)
+DENGUE CCC-04 wk 21 Jul: 7 cases exp (HIGH). Saline 23/34 Kits 11/16 Beds 4/4. Crews 0. SHORT: saline,kits. Receive 1 pt from CCC-07.
+
+[DNCC_Ward_04] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-04 wk 21 Jul: 5 cases exp (MEDIUM). Saline 17/26 Kits 8/12 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_07] 108 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-07 wk 21 Jul: 8 cases exp (HIGH). Saline 20/31 Kits 10/15 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_17] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-17 wk 21 Jul: 6 cases exp (MEDIUM). Saline 17/26 Kits 8/13 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_03] 127 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-03 wk 21 Jul: 10 cases exp (HIGH). Saline 26/41 Kits 13/20 Beds 4/5. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[CCC_Ward_10] 108 chars · GSM-7 · 1 part(s)
+DENGUE CCC-10 wk 21 Jul: 6 cases exp (MEDIUM). Saline 17/27 Kits 8/13 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[CCC_Ward_06] 106 chars · GSM-7 · 1 part(s)
+DENGUE CCC-06 wk 21 Jul: 8 cases exp (HIGH). Saline 19/31 Kits 9/15 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_20] 126 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-20 wk 21 Jul: 9 cases exp (HIGH). Saline 24/38 Kits 12/19 Beds 4/5. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_18] 108 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-18 wk 21 Jul: 9 cases exp (HIGH). Saline 22/35 Kits 11/17 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_14] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-14 wk 21 Jul: 6 cases exp (MEDIUM). Saline 16/26 Kits 8/13 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_01] 127 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-01 wk 21 Jul: 6 cases exp (MEDIUM). Saline 17/29 Kits 8/14 Beds 3/4. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[CCC_Ward_08] 106 chars · GSM-7 · 1 part(s)
+DENGUE CCC-08 wk 21 Jul: 8 cases exp (HIGH). Saline 18/31 Kits 9/15 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_02] 109 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-02 wk 21 Jul: 6 cases exp (MEDIUM). Saline 16/27 Kits 8/13 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_07] 109 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-07 wk 21 Jul: 6 cases exp (MEDIUM). Saline 13/23 Kits 6/11 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_15] 136 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-15 wk 21 Jul: 6 cases exp (MEDIUM). Saline 15/26 Kits 7/13 Beds 3/3. Crews 0. SHORT: saline,kits. Receive 1 pt from DSCC-04.
+
+[DSCC_Ward_09] 136 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-09 wk 21 Jul: 6 cases exp (MEDIUM). Saline 15/26 Kits 7/13 Beds 3/3. Crews 0. SHORT: saline,kits. Receive 1 pt from DSCC-04.
+
+[DSCC_Ward_17] 109 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-17 wk 21 Jul: 7 cases exp (MEDIUM). Saline 13/24 Kits 7/12 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_03] 108 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-03 wk 21 Jul: 8 cases exp (HIGH). Saline 20/36 Kits 10/18 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_11] 107 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-11 wk 21 Jul: 7 cases exp (HIGH). Saline 18/34 Kits 9/17 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_13] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-13 wk 21 Jul: 5 cases exp (MEDIUM). Saline 12/22 Kits 6/11 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_06] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-06 wk 21 Jul: 6 cases exp (MEDIUM). Saline 15/28 Kits 7/14 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[CCC_Ward_09] 108 chars · GSM-7 · 1 part(s)
+DENGUE CCC-09 wk 21 Jul: 5 cases exp (MEDIUM). Saline 12/23 Kits 6/11 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_15] 107 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-15 wk 21 Jul: 7 cases exp (HIGH). Saline 19/36 Kits 9/18 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_08] 127 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-08 wk 21 Jul: 6 cases exp (MEDIUM). Saline 15/29 Kits 7/14 Beds 3/4. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[NCC_Ward_02] 126 chars · GSM-7 · 1 part(s)
+DENGUE NCC-02 wk 21 Jul: 7 cases exp (MEDIUM). Saline 14/28 Kits 7/14 Beds 3/4. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_16] 109 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-16 wk 21 Jul: 5 cases exp (MEDIUM). Saline 11/22 Kits 6/11 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[NCC_Ward_03] 106 chars · GSM-7 · 1 part(s)
+DENGUE NCC-03 wk 21 Jul: 7 cases exp (HIGH). Saline 15/30 Kits 8/15 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DSCC_Ward_05] 107 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-05 wk 21 Jul: 7 cases exp (HIGH). Saline 18/35 Kits 9/17 Beds 4/4. Crews 0. SHORT: saline,kits.
+
+[DNCC_Ward_20] 109 chars · GSM-7 · 1 part(s)
+DENGUE DNCC-20 wk 21 Jul: 5 cases exp (MEDIUM). Saline 11/22 Kits 6/11 Beds 3/3. Crews 0. SHORT: saline,kits.
+
+[CCC_Ward_02] 134 chars · GSM-7 · 1 part(s)
+DENGUE CCC-02 wk 21 Jul: 6 cases exp (MEDIUM). Saline 13/27 Kits 6/13 Beds 3/3. Crews 0. SHORT: saline,kits. Receive 1 pt from CCC-01.
+
+[CCC_Ward_05] 126 chars · GSM-7 · 1 part(s)
+DENGUE CCC-05 wk 21 Jul: 5 cases exp (MEDIUM). Saline 11/22 Kits 5/11 Beds 2/3. Crews 0. SHORT: saline,kits,beds. 1 pt NO BED.
+
+[DSCC_Ward_14] 128 chars · GSM-7 · 1 part(s)
+DENGUE DSCC-14 wk 21 Jul: 5 cases exp (MEDIUM). Saline 10/21 Kits 4/10 Beds 1/3. Crews 0. SHORT: saline,kits,beds. 2 pts NO BED.

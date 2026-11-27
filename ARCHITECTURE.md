@@ -80,9 +80,8 @@ points.
 ## 5. Compute and API cost controls
 
 * **Zero external API and LLM calls.** All inference is local; there are no per-request costs, no API keys, and no
-  LLM tokens are spent. If an LLM-written situation summary is added in the final round, it will be
-  (a) generated only on a button press, (b) cached per ward-week-horizon, (c) given only the compact driver table
-  (≈300 tokens) rather than raw data, and (d) limited by a `max_tokens` cap and a daily budget counter.
+  LLM tokens are spent. The final round did not add an LLM: the Phase 2 dispatch notices are deterministic
+  templates (section 6.5), so they work with no internet and always give the same text for the same plan.
 * **Serialized models** (`joblib`, compressed, 8 MB) are loaded once per server process with
   `st.cache_resource`. No training happens at app start.
 * **Caching:** cleaning and the lag features are computed once per data version (`st.cache_data`, keyed by an MD5
@@ -95,3 +94,139 @@ points.
   ≈ 2 s. Laptop CPU; no GPU needed.
 * **Ingestion:** new weeks arrive as a CSV upload or by appending to `data/dengue_weekly.csv`. A live weather feed
   would be pulled once per day in a batch job and cached locally, never on each page view.
+
+## 6. Phase 2: operations command
+
+Phase 2 extends the forecaster into a resource-optimization, intervention-simulation and dispatch system. All of it
+sits on top of the stored forecasts (section 1), so the operations pages, the dispatch notices and the rest of the app
+always describe the same forecast.
+
+```mermaid
+flowchart LR
+    F["Stored forecasts<br/>expected cases · 80% range<br/>risk score & tier (per ward, week, horizon)"] --> N["Supply rule<br/>⌊rate × cases + offset⌋<br/>saline · kits · beds"]
+    F --> P["Priority<br/>70% risk score<br/>+ 30% density percentile"]
+    N --> A["Water-filling allocation<br/>stock = slider % of need<br/>whole units · deterministic"]
+    P --> A
+    N --> R["Bed routing per city<br/>capacity = median annual peak × slider %<br/>overflow → least-loaded ward, same city"]
+    P --> R
+    F --> C["Crews needed<br/>⌈cases × √(density/median) ÷ 6⌉"] --> A
+    M[("ML models")] --> S["Vector-control simulator<br/>re-score weeks 2-4 with breeding inputs<br/>reduced by crew coverage"]
+    A --> D["Dispatch templates<br/>SMS · WhatsApp · HTML/PDF brief<br/>English + Bangla"]
+    R --> D
+    A & R & S & D --> UI["/ops in the web app<br/>/api/ops/* · exports/"]
+```
+
+### 6.1 Supplies from forecasts
+
+The onsite dataset adds `saline_bags_needed`, `diagnostic_kits_needed` and `hospital_beds_required`. Each one is an
+exact step function of the week's case count. We searched for `floor(rate × cases + offset)` and found constants that
+reproduce **all 31,320 rows**:
+
+| Supply | Rule |
+|---|---|
+| Saline bags | ⌊2.385 × cases + 0.49⌋ |
+| Diagnostic kits | ⌊1.165 × cases + 0.445⌋ |
+| Hospital beds | ⌊0.30 × cases + 0.45⌋ |
+
+`tests/test_operations.py` checks the match row by row. The same rule is applied to the forecast, using either the
+expected cases or the top of the 80% range ("likely-high case", the default, which is safer for ordering stock and
+for beds). If an uploaded file lacks the supply columns, `data.clean()` fills them in from the rule.
+
+### 6.2 Constrained allocation (requirement 1)
+
+* **Stock:** the regional store holds *s*% (30–100%, one slider or one per supply) of the forecast need in the
+  selected area.
+* **Priority** (0–100) = 0.7 × model risk score + 0.3 × the ward's `population_density_sqkm` percentile. Dense
+  wards spread dengue faster, and risk alone would ignore that.
+* **Water-filling:** ward *i* gets `need_i × min(1, λ × (20 + priority_i))`, with λ found by bisection so the total
+  equals the stock. The riskiest, densest wards are filled to 100% first; the rest share what is left in proportion
+  to priority, and no ward drops to zero while stock remains. Whole units are handed out by largest remainder
+  (ties: higher priority, then ward order), so the result is deterministic and sums exactly to the stock.
+* **Crews:** need = ⌈expected cases × √(density ÷ median density) ÷ 6⌉ for Medium risk and above (1–6 per ward). The
+  *Total spraying crews* slider is shared out by the same water-filling.
+* **Deficit warnings:** any shortfall marks a ward *Short*. It becomes a **critical shortage** if the ward is High
+  or Critical risk, or gets under half of any item. The alert strip and tables update on every slider move (the plan
+  takes about 0.1 s).
+
+### 6.3 Hospital surge and overflow routing (requirement 2)
+
+* **Capacity:** the data has no bed counts, so each ward's dengue beds = the beds it needed in the busiest week of
+  a typical year (the median of its 2016–2023 annual peaks; at least 2). A normal season fits; a sharp one overflows.
+  The stock slider opens that share of beds.
+* **Routing** (`operations.route_overflow`): each ward first fills its own beds. Overflow from the highest-priority
+  ward is placed first, **one patient at a time**, in the ward of the **same city** with the lowest current occupancy
+  (ties: lower priority, then ward id). Placing one at a time spreads the load instead of swamping one neighbour.
+  Patients who fit nowhere in the city are the net deficit. Patients never cross city pools.
+* **Outputs:** per ward: beds open, needed, net balance, sent, received, without a bed, occupancy. Per city: load
+  before and after routing, transfers, without a bed, spare beds (headroom). A ward's *allocated beds* in the supply
+  table = beds secured anywhere in its city, so modules 1 and 2 always agree.
+* **Tested:** patients are conserved (local + sent + unplaced = demand), no ward goes over capacity, every transfer
+  stays inside one city, and a sending ward picks the emptiest receiver.
+
+### 6.4 Vector-control simulator (requirement 3)
+
+* **Coverage:** *k* larvicide/fogging crews remove a share of a ward's breeding habitat:
+  `0.6 × (1 − exp(−k ÷ (2 × √(density ÷ median))))`. Returns diminish, and dense wards need more crews.
+* **Model-driven counterfactual:** the trained models for horizons 2, 3 and 4 are re-run with the ward's
+  standing-water inputs (this week's and the last four weeks' rain, rain sums, heavy-rain weeks,
+  `water_logging_risk_index`, `vulnerability_index`) scaled by (1 − coverage). Temperature, humidity, recent cases and
+  season stay as recorded. Only weeks 2–4 count, because larvae need 1–2 weeks to become biting adults.
+* We tested the obvious alternative of lowering the recent-case features (as a stand-in for fogging killing
+  infected adults). The model's response there was weak and changed sign between wards, so we did not use it. The
+  breeding-habitat inputs gave consistent reductions in every week we checked.
+* For speed, the forecasts for 0–8 crews in every ward are computed once per forecast week (≈0.2 s) and cached. A
+  running minimum makes sure an extra crew never raises the forecast.
+* **ROI:** cases prevented over weeks 2–4 ÷ crews. Beds and saline saved come from the supply rule applied to the
+  baseline and scenario cases. **Automatic placement** gives each crew to the ward with the largest marginal gain,
+  which is optimal with diminishing returns. Tests check that it beats putting every crew in any single ward, that
+  more crews never prevent fewer cases, and that zero crews reproduces the stored forecast.
+
+### 6.5 Dispatch notices (requirement 4)
+
+`backend/dispatch.py` fills fixed templates from the plan:
+
+* **SMS:** English in GSM-7 within 160 characters (shorter forms replace longer ones until it fits); Bangla in UCS-2
+  with the part count shown.
+* **WhatsApp:** *bold* markup with risk, expected cases and range, allocated / required supplies, bed transfers,
+  crews, a deficit alert and two actions.
+* **Commissioner brief:** a self-contained, A4-printable HTML page (KPIs, city bed pools, transfers, deficit cards,
+  the full ward table) that can be printed to PDF. `/api/ops/brief` serves it; `python -m backend.export_samples` also
+  prints a PDF with headless Edge or Chrome if one is installed.
+
+Samples for one scenario are in [`exports/`](exports/).
+
+### 6.6 Offline resilience (requirement 5)
+
+* There is **no LLM or external API in any code path**. Forecasting, allocation, routing, simulation and dispatch
+  are local Python, and the notices are templates, so there is nothing that needs a fallback.
+* `backend/offline.py` has a kill-switch that makes every outbound connection and DNS lookup fail.
+  `/api/ops/selftest` (the **Offline check** tab) runs all five modules under it and reports timings.
+  `tests/test_operations.py` also starts the whole backend under it.
+* The browser talks only to the local Next.js server. The production build bundles its fonts. The only internet
+  resource is the OpenStreetMap background, and when it fails the map offers its offline view. A banner appears
+  whenever the browser goes offline.
+
+### 6.7 Phase 2 API
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/ops/plan` | Allocation, crews, bed routing and deficits. Parameters: `origin, horizon, stock, crews, basis, city`, optional `saline_pct, kits_pct, beds_pct` |
+| `POST /api/ops/simulate` | Vector-control counterfactual: `{origin, city, crews}` for automatic placement or `{deployments: {ward: crews}}` |
+| `GET /api/ops/dispatch` | SMS and WhatsApp notices (`lang=en|bn`) for the same plan parameters |
+| `GET /api/ops/brief` | Printable HTML commissioner brief |
+| `GET /api/ops/selftest` | Offline self-test with outbound network blocked |
+
+### 6.8 Assumptions to state at judging
+
+* Bed capacity is inferred from history (section 6.3). With real bed counts, only `operations.bed_capacity` changes.
+* Crew coverage (60% maximum, scale 2 crews at median density) is a planning assumption, not a measured efficacy.
+  The model then decides how much that coverage changes cases.
+* There are no ward coordinates, so routing prefers the least-loaded ward rather than the nearest. A distance
+  matrix would slot into the receiver choice in `route_overflow`.
+
+## 7. AI disclosure
+
+We used **Claude Code** (Anthropic), an AI coding assistant, in both phases. It helped with data analysis, deriving
+the supply rule from the onsite dataset, the pipeline and model code, the FastAPI backend, the Next.js app, the
+Phase 2 allocation, routing, simulator, dispatch and offline modules, the tests, and these documents. The team
+reviewed, ran and tested everything. The running system makes **no** AI or LLM calls.
