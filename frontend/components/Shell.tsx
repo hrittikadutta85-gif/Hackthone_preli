@@ -15,6 +15,7 @@ const NAV: { href: string; key: keyof Dict["shell"]["nav"]; icon: IconName; matc
   { href: "/", key: "overview", icon: "overview" },
   { href: "/map", key: "map", icon: "map" },
   { href: "/plan", key: "plan", icon: "plan" },
+  { href: "/ops", key: "ops", icon: "ops", match: "/ops" },
   { href: "/ward/DSCC_Ward_05", key: "ward", icon: "ward", match: "/ward" },
   { href: "/predict", key: "predict", icon: "predict" },
   { href: "/accuracy", key: "accuracy", icon: "shield" },
@@ -34,6 +35,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   // Ward pages name themselves after the ward; every other page takes its menu label.
   const page = NAV.find((n) => isActive(n, path));
   useTitle(path.startsWith("/ward") ? null : page ? t.shell.nav[page.key] : t.shell.notFoundTitle);
+  const online = useOnline();
 
   return (
     <>
@@ -106,6 +108,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 {t.shell.inSample}
               </p>
             )}
+            {!online && (
+              <p role="status" className="flex items-start gap-2 px-4 pb-2.5 text-xs font-medium text-accent">
+                <Icon name="wifiOff" className="mt-0.5 h-3.5 w-3.5" />
+                {t.shell.offlineBanner}
+              </p>
+            )}
           </div>
         </div>
       </header>
@@ -123,6 +131,22 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </footer>
     </>
   );
+}
+
+/** False while the browser reports no network. Starts true so the server render and first paint agree. */
+export function useOnline() {
+  const [online, setOnline] = useState(true);
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
+  return online;
 }
 
 /** Main navigation on wide screens, with a teal highlight that glides to the active page. */
