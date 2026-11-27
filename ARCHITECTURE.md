@@ -224,9 +224,43 @@ Samples for one scenario are in [`exports/`](exports/).
 * There are no ward coordinates, so routing prefers the least-loaded ward rather than the nearest. A distance
   matrix would slot into the receiver choice in `route_overflow`.
 
-## 7. AI disclosure
+## 7. Smart early warning and notifications
+
+```mermaid
+flowchart LR
+    F["Stored forecasts<br/>(every ward × week × horizon)"] --> D["detect()<br/>4 rules · start-of-event only<br/>cooldown unless level rises"]
+    W["Recorded weather<br/>4-week rain vs ward/month norm"] --> D
+    D --> S[("SQLite<br/>alerts · alert_status · push_subscriptions")]
+    T["Background scanner<br/>startup + every 15 min<br/>reload if data file changed"] --> D
+    S -->|new, after the first scan| P["Web Push (VAPID)<br/>pywebpush → browser push service"]
+    S --> API["/api/alerts · /api/alerts/summary<br/>status · acknowledge · scan · config"]
+    API --> UI["Bell (top bar) · Alerts & Warnings page<br/>anonymous browser id in localStorage"]
+    P --> SW["Service worker (sw.js)<br/>notification → /alerts?week=…&id=…"]
+```
+
+* **Rules** (thresholds in `config.ALERTS`, each overridable by environment variable): risk-level increase against
+  last week's forecast for the same horizon; sudden increase against the last-4-week average of reported cases (a % and
+  an absolute floor, so 1 → 2 cases is not a "100% surge"); heavy rain against the ward's own 90th percentile for that
+  month, an absolute 450 mm or a 100 mm floor, and only together with forecast risk of Medium or above; High or
+  Critical expected within 4 weeks while reported cases are below it.
+* **Active period:** an alert is active from the week it is raised until its expected week passes, unless that
+  browser resolved it. History keeps everything.
+* **Duplicate prevention:** fire only when the condition starts (or its level rises), a per-ward and per-type
+  cooldown, and a unique `dedup_key` with `INSERT OR IGNORE`. Detection is deterministic, so rescans are no-ops.
+  Dashboard refreshes only read.
+* **Push without flooding:** the first scan backfills history with `backfill = 1` and pushes nothing. Later scans
+  push only rows they inserted. The `replay` command removes recent alerts so a scan raises them again, which tests the
+  real "new week of data" path.
+* **Anonymous acknowledgement:** a random id in localStorage is the only identity. Status, acknowledged and resolved
+  times are stored per (alert, browser). There is no login and no personal data.
+* **Offline:** detection, storage and in-app alerts are local. Only push delivery needs the internet, and it fails
+  quietly.
+* **The prediction portal** reuses the same rules (`alerts.evaluate`) on a typed-in forecast, and the supply rule and
+  bed capacity (`Planner.resource_outlook`) to show the saline, kits, beds and crews it implies.
+
+## 8. AI disclosure
 
 We used **Claude Code** (Anthropic), an AI coding assistant, in both phases. It helped with data analysis, deriving
 the supply rule from the onsite dataset, the pipeline and model code, the FastAPI backend, the Next.js app, the
-Phase 2 allocation, routing, simulator, dispatch and offline modules, the tests, and these documents. The team
+Phase 2 allocation, routing, simulator, dispatch and offline modules, the early-warning and push notification system, the prediction-portal upgrade, the tests, and these documents. The team
 reviewed, ran and tested everything. The running system makes **no** AI or LLM calls.

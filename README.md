@@ -19,12 +19,13 @@ offline.
 2. [What the system does](#what-the-system-does)
 3. [System architecture](#system-architecture)
 4. [Quick start](#quick-start)
-5. [Using the dashboard](#using-the-dashboard)
-6. [Model and validation](#model-and-validation)
-7. [Cost and resource efficiency](#cost-and-resource-efficiency)
-8. [Project structure](#project-structure)
-9. [Team](#team)
-10. [AI assistance and external services](#ai-assistance-and-external-services)
+5. [Using the web app](#using-the-web-app)
+6. [Alerts and notifications](#alerts-and-notifications)
+7. [Model and validation](#model-and-validation)
+8. [Cost and resource efficiency](#cost-and-resource-efficiency)
+9. [Project structure](#project-structure)
+10. [Team](#team)
+11. [AI assistance and external services](#ai-assistance-and-external-services)
 
 ---
 
@@ -52,6 +53,7 @@ collection turn some wards into hotspots much faster than their neighbours.
 | **2 · Hospital surge & overflow routing** | Each ward's dengue bed capacity comes from its own history. Patients beyond capacity are moved, one at a time, to the least-loaded ward **of the same city** (Dhaka North, Dhaka South, Chattogram, Gazipur, Narayanganj). Shows net ward deficits, transfers, patients without a bed, and city-wide occupancy before and after routing, plus spare beds. |
 | **3 · Vector-control simulator** | Deploy crews automatically (best return) or ward by ward. The **ML model is re-run** with each ward's breeding-habitat inputs reduced by the crews' coverage, giving counterfactual cases, beds and saline for **weeks 2–4**, with wards ranked by **cases prevented per crew**. |
 | **4 · Multi-channel dispatch** | Ward notices as **SMS** (one 160-character GSM-7 segment in English; Bangla in UCS-2), **WhatsApp** and a **printable HTML/PDF commissioner brief**, in English or Bangla. Each lists predicted cases, allocated vs required supplies, deficit alerts, transfers and assigned crews. Samples are in [`exports/`](exports/). |
+| **+ Smart early warning** | A notification bell and an **Alerts & Warnings** page. Alerts are raised automatically from the real forecasts: risk-level increases, sudden case increases, heavy rain combined with forecast risk, and wards heading for High or Critical within 4 weeks. Anonymous acknowledgement (New / Acknowledged / Resolved) per browser, and optional **browser push notifications** (Web Push, VAPID). See [Alerts and notifications](#alerts-and-notifications). |
 | **5 · Offline resilience** | No LLM or external API anywhere; all messages come from fixed templates. The **Offline check** tab runs every module on the server with outbound network access switched off (`/api/ops/selftest`), and `tests/test_operations.py` does the same. |
 
 ---
@@ -103,6 +105,9 @@ flowchart TB
 | Backend | `backend/dispatch.py` | SMS, WhatsApp and printable-brief templates in English and Bangla |
 | Backend | `backend/offline.py` | Network kill-switch and the offline self-test |
 | Backend | `backend/export_samples.py` | Writes the sample exports in `exports/` |
+| Backend | `backend/alerts.py` | Alert detection rules, SQLite storage, per-browser statuses, background scan, replay command |
+| Backend | `backend/push.py` | Web Push sending with VAPID keys from the environment; key generator |
+| Frontend | `frontend/components/alerts/`, `frontend/app/alerts/`, `frontend/public/sw.js` | Notification bell, Alerts & Warnings page, service worker for push |
 | Frontend | `frontend/` | Next.js 16 + React 19 + TypeScript + Tailwind; charts with Recharts, map with Leaflet |
 | Frontend (alt.) | `app.py` | The original Streamlit dashboard, kept as a lightweight alternative |
 
@@ -170,7 +175,8 @@ The **week slider** and the **"Warn me 1–4 weeks ahead"** switch at the top ap
 | **Operations → Dispatch** | SMS and WhatsApp notices per ward in English or Bangla, copy buttons, downloads, and the printable commissioner brief |
 | **Operations → Offline check** | Browser and server status, and a one-click self-test that runs every module with the server's internet switched off |
 | **Ward forecast** | Plain-language story, forecast cards for +1…+4 weeks, history and forecast chart, **driver breakdown**, weather with the breeding window, an action checklist, **what-if weather**, print / save as PDF |
-| **Prediction portal** | The way to forecast **new weeks** beyond the dataset: enter (or upload as CSV) the latest weeks of rainfall, temperature, humidity and cases for a ward and get the next 4 weeks |
+| **Prediction portal** | The way to forecast **new weeks** beyond the dataset: enter the latest weeks of rainfall, temperature, humidity and cases for a ward (or upload a CSV, including rows copied straight from the official dataset), and get the next 4 weeks with the **saline, kits, beds and crews** they imply, a bed-capacity check, the **warnings** the alert rules would raise, and a CSV download |
+| **Alerts & Warnings** (bell in the top bar) | Active alerts, critical warnings, high-risk warnings, weather-based warnings, sudden case increases and alert history, filtered by city, ward, risk level and date; acknowledge or resolve each alert; turn on browser notifications |
 | **Can I trust it?** | Results on the unseen 2025 year in plain language, forecast-vs-actual chart for any ward, risk-level confusion matrix |
 | **How it works** | The 2–4 week delay, the pipeline, the data split, the model, the architecture and the tech stack |
 
@@ -183,6 +189,60 @@ ward's bubble is placed inside a circle at its city corporation's real location.
 population_density_sqkm, water_logging_risk_index, sanitation_score, avg_temp_c, max_temp_c, min_temp_c, rainfall_mm,
 relative_humidity_pct, dengue_cases`, plus the optional onsite columns `saline_bags_needed, diagnostic_kits_needed,
 hospital_beds_required`. If those are missing, they are filled in from the per-case rule.
+
+---
+
+## Alerts and notifications
+
+**How alerts are raised.** `backend/alerts.py` goes through the stored forecasts week by week and raises an alert when:
+
+| Type | Rule (defaults; every value is configurable) |
+|---|---|
+| Risk rising | This week's 2-week forecast is a higher level than last week's 2-week forecast (Low → Medium → High → Critical) |
+| Sudden case increase | The 2-week forecast is ≥ 50% **and** ≥ 3 cases a week above the ward's average reported cases over the last 4 weeks |
+| Heavy-rain warning | The last 4 weeks' rain is above the ward's usual for that month (90th percentile, 2016–2023) or above 450 mm, is at least 100 mm, **and** the model forecasts Medium or worse within 2–4 weeks. Rain alone never raises an alert. |
+| High risk ahead | A forecast within the next 4 weeks reaches High or Critical while this week's reported cases are below that level; the alert names the expected week |
+
+**No repeats.** An alert fires when its condition *starts*, or when its level rises. The same ward and type then stay
+quiet for 3 weeks unless the level rises further. Every alert has a unique key, so rescanning stores nothing twice, and
+refreshing the dashboard never creates alerts: only the server's scanner does. It runs at startup, then every 15
+minutes, and reloads the forecasts when `data/dengue_weekly.csv` changes.
+
+**Storage.** SQLite (`data/alerts.sqlite3`, git-ignored; set `ALERTS_DB` to move it) with the tables `alerts`,
+`alert_status` (status per alert per anonymous browser id, with acknowledged and resolved times),
+`push_subscriptions` and `meta`. It needs no database server and is created automatically.
+
+**Browser push.** Make a key pair once and put it in `.env` (git-ignored) or your host's environment settings:
+
+```bash
+python -m backend.push keygen      # prints VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT
+```
+
+Only the public key ever reaches the browser. Then click **Enable notifications** on the Alerts page. Push uses the
+browser vendor's push service, so it needs the internet. Without keys or without internet, in-app alerts keep working.
+Alerts found in the first scan of history are stored but never pushed. Only alerts raised by later scans (new data)
+are pushed.
+
+**Environment variables:** `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (push), `ALERTS_DB` (optional), and
+any threshold such as `ALERT_SURGE_PCT=80` or `ALERT_COOLDOWN_WEEKS=4`. See [`.env.example`](.env.example).
+
+**Testing each alert type**
+
+1. Open **Alerts & Warnings** (or the bell) and move the week slider to the 2025 monsoon (June to September).
+   *Active alerts* lists every type; the tabs separate critical, high-risk, weather and sudden-increase alerts.
+   Weather alerts appear in the wettest weeks (for example 2024 and 2025 monsoon peaks).
+2. Acknowledge or resolve an alert, reload the page: the status persists for this browser. A different browser
+   (or a private window) still sees it as New.
+3. Push: click **Enable notifications**, then **Send a test**. You get the most urgent real alert of the week, marked [Test].
+4. Replay new data arriving: `python -m backend.alerts replay 2025-08-01` forgets alerts raised from that week on.
+   Then `curl -X POST localhost:8000/api/alerts/scan` (or wait for the background scan) raises them again as new and
+   pushes them to every subscribed browser.
+5. `python -m pytest -q tests/test_alerts.py tests/test_portal.py` checks each rule against the stored forecasts,
+   the no-repeat logic, per-browser statuses, configurable thresholds and the push no-op without keys.
+
+**Deployment.** Browsers allow push only on `https://` (or `localhost`). The backend needs a writable disk for SQLite,
+the VAPID variables, and outbound internet for push services. Run a single backend process (the scanner lives in it),
+or point several at one `ALERTS_DB` on shared disk.
 
 ---
 
@@ -249,7 +309,9 @@ Hackathon_preli/
 │   ├── planner.py          #   Phase 2: allocation, bed routing, vector-control simulator
 │   ├── dispatch.py         #   Phase 2: SMS / WhatsApp / printable brief templates (EN + BN)
 │   ├── offline.py          #   Phase 2: network kill-switch and self-test
-│   └── export_samples.py   #   Phase 2: writes exports/
+│   ├── export_samples.py   #   Phase 2: writes exports/
+│   ├── alerts.py           #   early warning: detection rules, SQLite store, statuses, scan / replay
+│   └── push.py             #   browser push (Web Push + VAPID)
 ├── app.py                  # Alternative frontend: Streamlit dashboard
 ├── train.py                # Training, validation, model export
 ├── dengue_ews/             # Backend: core package
