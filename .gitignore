@@ -16,6 +16,9 @@ frontend/.next-*.log
 bangladesh_dengue_large_dataset_onsite*.csv
 !exports/*.pdf
 
-# alerts database and secrets
+# alerts and accounts databases, and secrets
 data/alerts.sqlite3*
+data/auth.sqlite3*
+data/area.sqlite3*
+data/.auth_secret
 .env
