@@ -190,10 +190,45 @@ export interface PredictResult {
   actions: string[];
   cases_now: number | null;
   warnings: string[];
+  resources: ResourceOutlook;
+  alerts: PortalAlert[];
+}
+
+export type Supplies = Record<"saline" | "kits" | "beds", number>;
+
+export interface ResourceOutlook {
+  bed_capacity: number;
+  peak_beds: number;
+  weeks: { h: number; target_date: string; tier: Tier; expected: Supplies; upper: Supplies; crews: number; over_capacity: boolean; over_capacity_expected: boolean }[];
+  totals: { expected: Supplies; upper: Supplies };
+}
+
+/** An alert the portal's forecast would raise (same rules as the alert system; not stored). */
+export interface PortalAlert {
+  alert_type: "risk_increase" | "case_surge" | "rainfall" | "upcoming_high";
+  level: "Medium" | "High" | "Critical";
+  prev_tier: Tier | null;
+  new_tier: Tier;
+  horizon: number;
+  predicted_cases: number;
+  baseline: number | null;
+  change_pct: number | null;
+  rain_mm: number | null;
+  rain_threshold: number | null;
+  target_week: string;
+  action: string;
+}
+
+export interface Template {
+  label: string;
+  city: string;
+  profile: { density: number; waterlogging: number; sanitation: number };
+  rules: Record<"saline" | "kits" | "beds", { per_case: number; offset: number }>;
+  weeks: Observation[];
 }
 
 export const useTemplate = (ward: string) =>
-  useSWR<{ label: string; weeks: Observation[] }>(`/api/predict/template?ward=${ward}&weeks=8`, get, { revalidateOnFocus: false });
+  useSWR<Template>(`/api/predict/template?ward=${ward}&weeks=8`, get, { revalidateOnFocus: false });
 
 export async function runPrediction(ward: string, horizon: number, weeks: Observation[]): Promise<PredictResult> {
   const r = await fetch(`/api/predict/${ward}`, {
