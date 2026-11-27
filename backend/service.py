@@ -5,7 +5,8 @@ from functools import cached_property
 import numpy as np
 import pandas as pd
 
-from dengue_ews.config import BACKTEST_PATH, DATA_PATH, HORIZONS, METRICS_PATH, MODEL_PATH, TIER_COLORS, TIERS, VAL_END
+from dengue_ews.config import (BACKTEST_PATH, DATA_PATH, HORIZONS, METRICS_PATH, MODEL_PATH, SUPPLY_RULES, TIER_COLORS,
+                               TIERS, VAL_END)
 from dengue_ews.data import clean, load_raw
 from dengue_ews.features import FEATURE_GROUPS, FEATURE_TO_GROUP, FEATURES, WEATHER_GROUPS, add_horizon, build_features
 from dengue_ews.model import load_predictor, tier_of
@@ -202,7 +203,13 @@ class Store:
     def template(self, ward: str, weeks: int) -> dict:
         """The latest recorded weeks for a ward, used to pre-fill the prediction portal."""
         w = self.df[self.df["ward_id"] == ward].tail(weeks)
-        return {"ward": ward, "label": self.label(ward), "weeks": [
+        st = self.static.loc[ward]
+        return {"ward": ward, "label": self.label(ward), "city": self.city_of[ward],
+                "profile": {"density": int(st.population_density_sqkm), "waterlogging": num(st.water_logging_risk_index),
+                            "sanitation": num(st.sanitation_score)},
+                "rules": {k: {"per_case": r[0], "offset": r[1]} for k, r in
+                          zip(("saline", "kits", "beds"), SUPPLY_RULES.values())},
+                "weeks": [
             {"date": day(r.date), "rain": num(r.rainfall_mm, 1), "temp": num(r.avg_temp_c, 1),
              "humidity": num(r.relative_humidity_pct, 0), "cases": num(r.dengue_cases, 0)} for r in w.itertuples()]}
 

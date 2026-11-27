@@ -131,6 +131,25 @@ class Planner:
                 "rules": {k: {"per_case": SUPPLY_RULES[v][0], "offset": SUPPLY_RULES[v][1]} for k, v in RES.items()},
                 "in_sample": bool(o + pd.Timedelta(weeks=horizon) <= pd.Timestamp(VAL_END))}
 
+    # ------------------------------------------------------------------ prediction portal
+    def resource_outlook(self, ward: str, horizons: list[dict]) -> dict:
+        """Supplies, beds and crews a forecast implies for one ward: per week, for expected cases and the upper 80%
+        bound, against the ward's normal dengue bed capacity."""
+        cap = int(self.capacity[ward])
+        dens = float(self.density[ward])
+        weeks = []
+        for r in horizons:
+            exp, up = ops.supply_need([r["predicted"]]), ops.supply_need([r["upper"]])
+            crews = int(ops.crews_needed([r["predicted"]], [dens], self.median_density, [r["tier"]])[0])
+            weeks.append({"h": r["h"], "target_date": r["target_date"], "tier": r["tier"],
+                          "expected": {k: int(exp[v][0]) for k, v in RES.items()},
+                          "upper": {k: int(up[v][0]) for k, v in RES.items()},
+                          "crews": crews, "over_capacity": int(up[ops.BEDS][0]) > cap,
+                          "over_capacity_expected": int(exp[ops.BEDS][0]) > cap})
+        totals = {basis: {k: sum(w[basis][k] for w in weeks) for k in RES} for basis in ("expected", "upper")}
+        return {"bed_capacity": cap, "weeks": weeks, "totals": totals,
+                "peak_beds": max(w["upper"]["beds"] for w in weeks) if weeks else 0}
+
     # ------------------------------------------------------------------ module 3: vector-control simulator
     def curves(self, origin: pd.Timestamp) -> dict:
         """Model forecasts for every ward with 0..SIM_MAX_CREWS crews, for weeks 2-4 ahead. Cached per origin week.

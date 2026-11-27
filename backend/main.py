@@ -5,6 +5,7 @@
 Models and data are loaded once at startup, so requests are cheap lookups (or a single-ward re-score for what-if).
 No external API or LLM calls: forecasting, allocation, routing, simulation and dispatch all run in this process.
 """
+import threading
 from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 
@@ -14,19 +15,50 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
 
-from . import dispatch
+from dengue_ews.config import ALERTS, DATA_PATH
+
+from . import alerts as al
+from . import dispatch, push
 from .offline import self_test
 from .planner import Planner
 from .service import Store
 
 state: dict = {}
+scan_lock = threading.Lock()
+
+
+def run_scan() -> dict:
+    """One alert scan; reloads the forecasts first if the data file changed (new weeks appended)."""
+    with scan_lock:
+        mtime = DATA_PATH.stat().st_mtime
+        if state.get("data_mtime") not in (None, mtime):
+            fresh = Store()
+            state["store"], state["planner"] = fresh, Planner(fresh)
+        state["data_mtime"] = mtime
+        result = al.scan(state["store"], state["db"], notify=lambda new: push.send_in_background(state["db"], new))
+        state["last_scan"] = result
+        return result
+
+
+def scanner(stop: threading.Event):
+    """Background job: scan at startup, then every ALERT_SCAN_MINUTES. Rescans are idempotent."""
+    while not stop.is_set():
+        try:
+            run_scan()
+        except Exception as e:  # never take the API down; report on /api/alerts/config
+            state["last_scan"] = {"error": f"{type(e).__name__}: {e}"}
+        stop.wait(ALERTS["ALERT_SCAN_MINUTES"] * 60)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     state["store"] = Store()
     state["planner"] = Planner(state["store"])
+    state["db"] = al.AlertDB()
+    stop = threading.Event()
+    threading.Thread(target=scanner, args=(stop,), name="alert-scanner", daemon=True).start()
     yield
+    stop.set()
 
 
 app = FastAPI(title="Dengue Early-Warning API", version="2.0", lifespan=lifespan)
@@ -131,10 +163,14 @@ def predict_template(ward: str, weeks: Annotated[int, Query(ge=4, le=26)] = 8):
 
 @app.post("/api/predict/{ward}")
 def predict(ward: str, body: PredictBody):
+    weeks = [w.model_dump() for w in body.weeks]
     try:
-        return store().predict_custom(known_ward(ward), [w.model_dump() for w in body.weeks], body.horizon)
+        res = store().predict_custom(known_ward(ward), weeks, body.horizon)
     except ValueError as e:
         raise HTTPException(422, str(e))
+    res["resources"] = planner().resource_outlook(ward, res["horizons"])
+    res["alerts"] = al.evaluate(store(), ward, res["origin"], res["horizons"], weeks)
+    return res
 
 
 # ---------------------------------------------------------------------------- Phase 2: operations
@@ -196,3 +232,135 @@ def ops_brief(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 70, 
 def ops_selftest(origin: str | None = None):
     """Offline kill-switch: run every module with all outbound network access blocked."""
     return self_test(store(), planner(), origin)
+
+
+# ---------------------------------------------------------------------------- Smart early warning
+Client = Annotated[str, Query(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$", description="Anonymous browser id")]
+Level = Literal["Medium", "High", "Critical"]
+AlertType = Literal["risk_increase", "case_surge", "rainfall", "upcoming_high"]
+
+
+def db() -> al.AlertDB:
+    return state["db"]
+
+
+def as_of_week(as_of: str | None) -> str:
+    return str(store().snap(as_of).date())
+
+
+def counts(rows: list[dict]) -> dict:
+    return {"total": len(rows), "new": sum(r["status"] == "new" for r in rows),
+            "by_level": {lv: sum(r["level"] == lv for r in rows) for lv in ("Critical", "High", "Medium")},
+            "by_type": {t: sum(r["alert_type"] == t for r in rows) for t in al.TYPES}}
+
+
+@app.get("/api/alerts")
+def alerts_list(client: Client, as_of: str | None = None, scope: Literal["active", "history"] = "active",
+                city: str | None = None, ward: str | None = None, level: Level | None = None,
+                type: AlertType | None = None, date_from: str | None = None, date_to: str | None = None):
+    """Alerts as of a forecast week: `active` (still in their expected period, not resolved) or the full `history`."""
+    week = as_of_week(as_of)
+    rows = db().query(client, week, scope, known_city(city), ward, level, type, date_from, date_to)
+    return {"as_of": week, "scope": scope, "alerts": [al.view(r, store()) for r in rows], "counts": counts(rows),
+            "scanning": db().meta("backfill_done") is None}
+
+
+@app.get("/api/alerts/summary")
+def alerts_summary(client: Client, as_of: str | None = None, limit: Annotated[int, Query(ge=1, le=50)] = 8):
+    """What the notification bell shows: active alerts as of the week, unread first."""
+    week = as_of_week(as_of)
+    rows = db().query(client, week, "active")
+    rank = {"Critical": 0, "High": 1, "Medium": 2}
+    rows.sort(key=lambda r: (r["status"] != "new", rank[r["level"]], r["alert_week"] < week, r["ward_id"]))
+    return {"as_of": week, "counts": counts(rows), "latest": [al.view(r, store()) for r in rows[:limit]],
+            "scanning": db().meta("backfill_done") is None}
+
+
+class StatusBody(BaseModel):
+    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    status: Literal["new", "acknowledged", "resolved"]
+
+
+@app.post("/api/alerts/{alert_id}/status")
+def alert_status(alert_id: int, body: StatusBody):
+    try:
+        return db().set_status(alert_id, body.client, body.status)
+    except KeyError:
+        raise HTTPException(404, "No such alert.")
+
+
+class AckAll(BaseModel):
+    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    ids: list[int] = Field(max_length=1000)
+
+
+@app.post("/api/alerts/acknowledge")
+def alerts_ack_all(body: AckAll):
+    return {"acknowledged": db().acknowledge_all(body.ids, body.client)}
+
+
+@app.post("/api/alerts/scan")
+def alerts_scan():
+    """Run the detector now (it also runs in the background). Safe to repeat: nothing is stored twice."""
+    return run_scan()
+
+
+@app.get("/api/alerts/config")
+def alerts_config():
+    return {"thresholds": ALERTS, "last_scan": state.get("last_scan"), "last_scan_at": db().meta("last_scan"),
+            "last_data_week": db().meta("last_data_week"), "push_enabled": push.keys() is not None}
+
+
+# ---------------------------------------------------------------------------- browser push
+class Subscription(BaseModel):
+    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    lang: Literal["en", "bn"] = "en"
+    subscription: dict
+
+
+@app.get("/api/push/key")
+def push_key():
+    k = push.keys()
+    return {"public_key": k["public"] if k else None}
+
+
+@app.post("/api/push/subscribe")
+def push_subscribe(body: Subscription):
+    sub = body.subscription
+    if not isinstance(sub.get("endpoint"), str) or not sub["endpoint"].startswith("https://") \
+            or not isinstance(sub.get("keys"), dict) or not {"p256dh", "auth"} <= set(sub["keys"]):
+        raise HTTPException(422, "That is not a valid push subscription.")
+    db().add_subscription(body.client, sub, body.lang)
+    return {"ok": True}
+
+
+class Unsubscribe(BaseModel):
+    endpoint: str
+
+
+@app.post("/api/push/unsubscribe")
+def push_unsubscribe(body: Unsubscribe):
+    db().remove_subscription(body.endpoint)
+    return {"ok": True}
+
+
+class PushTest(BaseModel):
+    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    as_of: str | None = None
+
+
+@app.post("/api/push/test")
+def push_test(body: PushTest):
+    """Send this browser the most urgent real alert of the week, marked [Test], to check notifications work."""
+    if push.keys() is None:
+        raise HTTPException(503, "Push is not configured on the server (VAPID keys missing).")
+    if not db().subscriptions(body.client):
+        raise HTTPException(409, "This browser has not enabled notifications yet.")
+    rows = db().query(body.client, as_of_week(body.as_of), "active")
+    if not rows:
+        rows = db().query(body.client, as_of_week(body.as_of), "history", limit=1)
+    if not rows:
+        raise HTTPException(404, "There is no alert to send yet.")
+    rank = {"Critical": 0, "High": 1, "Medium": 2}
+    top = min(rows, key=lambda r: rank[r["level"]])
+    return {"delivered": push.send(db(), [top], client=body.client, test=True)}
