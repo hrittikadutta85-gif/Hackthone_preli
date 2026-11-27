@@ -21,11 +21,13 @@ offline.
 4. [Quick start](#quick-start)
 5. [Using the web app](#using-the-web-app)
 6. [Alerts and notifications](#alerts-and-notifications)
-7. [Model and validation](#model-and-validation)
-8. [Cost and resource efficiency](#cost-and-resource-efficiency)
-9. [Project structure](#project-structure)
-10. [Team](#team)
-11. [AI assistance and external services](#ai-assistance-and-external-services)
+7. [Accounts and sign-in](#accounts-and-sign-in)
+8. [Area Intelligence](#area-intelligence)
+9. [Model and validation](#model-and-validation)
+10. [Cost and resource efficiency](#cost-and-resource-efficiency)
+11. [Project structure](#project-structure)
+12. [Team](#team)
+13. [AI assistance and external services](#ai-assistance-and-external-services)
 
 ---
 
@@ -107,6 +109,11 @@ flowchart TB
 | Backend | `backend/export_samples.py` | Writes the sample exports in `exports/` |
 | Backend | `backend/alerts.py` | Alert detection rules, SQLite storage, per-browser statuses, background scan, replay command |
 | Backend | `backend/push.py` | Web Push sending with VAPID keys from the environment; key generator |
+| Backend | `backend/auth/` | Accounts, sessions, roles, one-time codes, SMS/WhatsApp/email providers, audit log (`python -m backend.auth`) |
+| Backend | `backend/area/` | Area Intelligence: gazetteer and search, coverage rules, hospital directory, optional geocoder |
+| Frontend | `frontend/proxy.ts`, `frontend/lib/auth.tsx`, `frontend/components/auth/` | Sign-in gate, session context, sign-in and account UI |
+| Frontend | `frontend/app/{login,register,verify,forgot-password,reset-password,invite,account,admin}/` | Sign-in, account and administration pages |
+| Frontend | `frontend/app/area-intelligence/`, `frontend/components/area/` | Area search, dashboard and map |
 | Frontend | `frontend/components/alerts/`, `frontend/app/alerts/`, `frontend/public/sw.js` | Notification bell, Alerts & Warnings page, service worker for push |
 | Frontend | `frontend/` | Next.js 16 + React 19 + TypeScript + Tailwind; charts with Recharts, map with Leaflet |
 | Frontend (alt.) | `app.py` | The original Streamlit dashboard, kept as a lightweight alternative |
@@ -144,7 +151,15 @@ uvicorn backend.main:app --port 8000        # terminal 1: API (loads models once
 cd frontend && npm install && npm run dev    # terminal 2: web app
 ```
 
-Open **http://localhost:3000**. The trained models are included in the repository, so no training step is needed.
+Create the first administrator once (it asks for a password and never prints it), then open **http://localhost:3000**
+and sign in:
+
+```bash
+python -m backend.auth create-admin --email you@example.org --name "Your Name"
+```
+
+The trained models are included in the repository, so no training step is needed. **Area Intelligence**
+(http://localhost:3000/area-intelligence) is open to everyone without signing in.
 
 The original Streamlit dashboard still works as a lightweight alternative: `streamlit run app.py` → http://localhost:8501.
 
@@ -243,6 +258,136 @@ any threshold such as `ALERT_SURGE_PCT=80` or `ALERT_COOLDOWN_WEEKS=4`. See [`.e
 **Deployment.** Browsers allow push only on `https://` (or `localhost`). The backend needs a writable disk for SQLite,
 the VAPID variables, and outbound internet for push services. Run a single backend process (the scanner lives in it),
 or point several at one `ALERTS_DB` on shared disk.
+
+---
+
+## Accounts and sign-in
+
+Every page except sign-in and Area Intelligence needs an account, and **every API route checks the caller's role on
+the server** (`backend/auth/rbac.py`); hiding menu items in the browser is only a convenience.
+
+| Role | Can use |
+|---|---|
+| Administrator | Everything, plus user management (approve, roles, wards, deactivate), security & audit log, hospital directory |
+| Public Health Officer | City overview, risk map, ward forecasts, action plan, operations (allocation, beds, simulator, notices, brief, offline test), prediction portal, model evaluation, alert acknowledgement |
+| Analyst | Overview, map, ward forecasts with what-if, model evaluation, prediction portal (CSV upload) |
+| Field Officer | Overview, map, action plan, **assigned wards only** for ward forecasts and alert acknowledgement |
+| Viewer | Read-only overview, map, ward forecasts and alerts |
+
+**Getting an account.** Sign-up asks only for a **mobile number and a password**; the account can sign in at once as a *Public Health Officer* (every dashboard page, no administration; change with `AUTH_DEFAULT_ROLE`, which can never be `admin`). Administrators can restrict anyone to Viewer, Analyst or Field Officer. Name, email and phone verification can be added later from the profile. Set `AUTH_REQUIRE_APPROVAL=true` to make new accounts wait for an administrator, or `AUTH_PUBLIC_REGISTRATION=false` to allow accounts only by invitation: an administrator creates the account and the person sets their password at `/invite` with a one-time **invitation code**. Sign-in is the same two fields; staff accounts without a phone use the small *Use email instead* link. An email address must be verified only if the account has one **and** the server can send email codes, so no account is ever stuck at a step that cannot be completed.
+
+**How sign-in works**
+
+1. `POST /api/auth/login` takes the mobile number (any format: 01…, 8801…, +8801…) or email and the password
+   (Argon2id), then checks the account state.
+2. If two-step sign-in is on (per user, or for every user of the roles in `AUTH_REQUIRE_OTP_ROLES`), a 6-digit code goes
+   to the verified phone by SMS or WhatsApp; `POST /api/auth/login/otp/verify` checks it. If no code can be sent, sign-in
+   is refused: a required second step is never skipped. Passwordless sign-in with a code is also available.
+3. The server creates a session: a random 256-bit token in an **HttpOnly, SameSite=Lax** cookie (Secure over https;
+   only its SHA-256 is stored). It expires after 60 idle minutes (or 12 hours in total; 30 days with "Remember me").
+4. A login alert is queued on a background worker for the user's enabled channels. A provider failure is recorded as
+   *Failed* and never affects the login.
+5. The browser lands on the role's start page. Every state-changing request carries a per-session CSRF token
+   (`X-CSRF-Token`), and requests from other sites are refused by an Origin/`Sec-Fetch-Site` check.
+6. Logout revokes the session on the server and clears the cookie; `proxy.ts` and the client guard send anyone without
+   a valid session back to `/login`, and account pages are served `no-store` so the back button cannot show them.
+
+**Protection in numbers:** passwords need 8+ characters and must not be a common password or the phone
+number (length and a block-list, as NIST SP 800-63B recommends, instead of character-mix rules); 5 wrong passwords lock the account for 15 minutes, doubling each time (max 24 h); 30 failures
+from one IP in 15 minutes block that IP for 15 minutes; codes expire after 5 minutes, allow 5 attempts, are single-use,
+stored only as an HMAC, with a 60-second resend cooldown and at most 5 per number and 20 per IP an hour. Sensitive
+changes (phone, two-step sign-in, role or status changes, new users) need the password again if it was last entered more
+than 10 minutes ago. Passwords, codes and tokens are never logged.
+
+**Security alerts.** Login, new device, unusual sign-in (a new device on a network this account has not used in 90 days,
+or after 3+ failures), password change and account changes, by SMS or WhatsApp in English or Bangla. Users choose
+channels and alerts under *Notification settings*; password-change and unusual-sign-in alerts cannot be turned off
+(`AUTH_ESSENTIAL_EVENTS`). WhatsApp needs explicit consent, which is stored with its date. Every message is listed with
+its status: **Pending**, **Sent** (the provider accepted it), **Delivered** (only when the provider's callback confirms
+delivery), **Failed** or **Not sent** (with the reason, e.g. no provider or phone not verified).
+
+### SMS setup
+
+* **Twilio:** `SMS_PROVIDER=twilio`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and either `TWILIO_SMS_FROM` (a Twilio
+  number) or `TWILIO_MESSAGING_SERVICE_SID`. For delivery confirmations set `PUBLIC_BASE_URL=https://your-domain`; the
+  server then asks Twilio to call `/api/auth/hooks/twilio` (requests are checked against the Twilio signature).
+* **SSL Wireless (Bangladesh):** `SMS_PROVIDER=sslwireless`, `SSLWIRELESS_API_TOKEN`, `SSLWIRELESS_SID` (approved
+  sender id). Written against the ISMS API v3 `send-sms` call; check field names against your account's API document.
+  Messages show as *Sent*; this gateway's delivery reports are not connected.
+
+### WhatsApp setup (official Business Platform only)
+
+* **Meta WhatsApp Cloud API:** `WHATSAPP_PROVIDER=meta`, `WHATSAPP_ACCESS_TOKEN` (system-user token),
+  `WHATSAPP_PHONE_NUMBER_ID`, and two **approved templates** in English (`en`) and Bangla (`bn`):
+  * `WHATSAPP_TEMPLATE_OTP`: category *Authentication*, one body variable (the code) and a copy-code button.
+  * `WHATSAPP_TEMPLATE_SECURITY`: category *Utility*, body text
+    `Dengue Watch Security Notification. Hello {{1}}, {{2}} Date: {{3}} Time: {{4}} Device: {{5}} If this was not you,
+    please contact your system administrator or secure your account.`
+  For delivery status, subscribe the webhook `https://your-domain/api/auth/hooks/whatsapp` to *messages* in the Meta
+  app, with `WHATSAPP_VERIFY_TOKEN` (any random string) and `WHATSAPP_APP_SECRET` (signatures are checked).
+* **Twilio WhatsApp:** `WHATSAPP_PROVIDER=twilio`, the Twilio account variables, `TWILIO_WHATSAPP_FROM`, and approved
+  Content templates `TWILIO_WHATSAPP_CONTENT_SID_OTP` (variable 1 = code) and `TWILIO_WHATSAPP_CONTENT_SID_SECURITY`
+  (variables 1–5 as above). Without templates Twilio only accepts sandbox or in-session messages.
+
+**Email codes** (verification and password reset) use any SMTP server: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`,
+`SMTP_PASSWORD`, `SMTP_FROM`.
+
+**With no provider configured** the app still works: channels show as *Not set up*, nothing is ever reported as sent,
+codes cannot be requested, and an administrator confirms emails when approving accounts. `python -m backend.auth
+providers` shows what is configured. All variables, with placeholders only, are in [`.env.example`](.env.example).
+
+**Storage.** `data/auth.sqlite3` (git-ignored; `AUTH_DB` to move it), created and migrated automatically: users, roles
+and permissions, notification preferences, one-time codes, sign-in challenges, sessions, known devices, login history,
+notification deliveries, password resets, invitations and the audit log.
+
+---
+
+## Area Intelligence
+
+`/area-intelligence` lets anyone search a division, district, city corporation, neighbourhood or dataset ward and see
+one dashboard for it. Search is forgiving (partial names, romanisations like Chittagong/Comilla/Jessore, Bangla
+script, spelling variants); when only part of a query is known (for example *"Mojjafor Nogor, Chattogram"*, which is
+in neither the gazetteer nor OpenStreetMap) it says which words were not found and offers the places that match the
+rest, plus an optional OpenStreetMap search.
+
+**Three separate data sources**
+
+| Source | What it gives | Where |
+|---|---|---|
+| Dengue dataset + existing models | Cases, 1–4 week forecasts, risk levels, drivers, sanitation and waterlogging indices, weather, density | `data/dengue_weekly.csv`, `models/` (unchanged) |
+| Hospital directory (administrator-managed) | Hospitals, type, address, position, phones, registered and ICU beds, reported availability | `data/area.sqlite3` (git-ignored; `AREA_DB`) |
+| Geography | 8 divisions, 64 districts, 12 city corporations, 32 neighbourhoods with Bangla names and coordinates | `backend/area/gazetteer.json` (coordinates © OpenStreetMap contributors, ODbL); localities added by administrators |
+
+**Honesty rules built into the code**
+
+* The dataset covers 60 wards in 5 city corporations, with no ward boundaries. A dataset ward shows its own figures; a
+  city corporation shows totals over its wards; a neighbourhood or map point inside a covered city shows the *city's*
+  totals, clearly labelled as such; a district or division shows only the covered city corporations in it; anywhere
+  else shows **"Dengue forecasting data is not available for this location."** No place ever shows another ward's
+  forecast as its own.
+* Sanitation score and waterlogging risk are labelled as normalised indices, never counts. Counts of toilets, waste
+  points or drains show "Data unavailable" because no source is connected. The vulnerability index is labelled as a
+  Dengue Watch composite.
+* Population shows "Data unavailable": no verified source is connected.
+* Hospitals: no names or numbers are bundled or generated. Registered capacity is never shown as availability.
+  Availability counts only from **verified** reports; a manual report is "Last reported" with its time, older than 24 h
+  it is "Out of date" and not counted, and "Live" is reserved for API updates under 30 minutes old. Without any of
+  these the page says **"Live bed availability unavailable"**.
+
+**Hospital data sources investigated.** The DGHS Shared Health Record *Facility Registry* exposes a FRED-style
+`facilities/list` API, but it needs DGHS-issued credentials and we could not confirm it carries bed counts; the DGHS
+dengue dashboard publishes admissions and deaths, not bed occupancy. So the directory is filled by administrators
+(`/admin/hospitals`: add, edit, verify against a stated reference, record bed reports, import CSV, add localities).
+With credentials, `python -m backend.area sync-registry` pulls facilities from a FRED-compatible registry
+(`FACILITY_REGISTRY_URL`, `FACILITY_REGISTRY_TOKEN`); it follows the published spec and is untested against the live
+server. Imported rows arrive unverified.
+
+**API:** `GET /api/locations/search?q=`, `/api/locations/geocode?q=` (OpenStreetMap, on request only, 1 request/s,
+cached), `/api/locations/{id}` (whole dashboard) and `/{id}/overview|dengue|environment|hospitals`,
+`/api/hospitals/nearby?lat=&lon=&radius_km=&type=&emergency=&available=`, `/api/hospitals/{id}`. Administrator only:
+`POST /api/hospitals`, `PATCH /api/hospitals/{id}`, `POST /api/hospitals/{id}/verify`, `POST /api/hospitals/{id}/beds`,
+`POST /api/hospitals/import`, `POST /api/locations`. `AREA_PUBLIC=false` makes reading need a sign-in;
+`GEOCODER=off` disables the online search.
 
 ---
 

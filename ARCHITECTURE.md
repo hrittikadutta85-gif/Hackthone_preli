@@ -258,9 +258,53 @@ flowchart LR
 * **The prediction portal** reuses the same rules (`alerts.evaluate`) on a typed-in forecast, and the supply rule and
   bed capacity (`Planner.resource_outlook`) to show the saline, kits, beds and crews it implies.
 
-## 8. AI disclosure
+## 8. Accounts, roles and security notifications
+
+```mermaid
+flowchart LR
+    B["Browser"] -->|"same origin /api/*"| N["Next.js<br/>proxy.ts: no cookie -> /login"]
+    N --> M["FastAPI middleware<br/>Origin / Sec-Fetch-Site check<br/>no-store on account routes"]
+    M --> D["Dependencies<br/>session cookie -> Principal<br/>CSRF on POST/PUT/PATCH/DELETE<br/>require(permission)"]
+    D --> R["Existing routes<br/>(forecasts, ops, alerts, push)"]
+    D --> A["/api/auth, /api/account, /api/admin"]
+    A --> S[("data/auth.sqlite3<br/>users · sessions · codes · logins<br/>deliveries · audit · migrations")]
+    A --> Q["Notifier<br/>worker pool for alerts, synchronous for codes"]
+    Q --> P1["SMS: Twilio / SSL Wireless"]
+    Q --> P2["WhatsApp: Meta Cloud API / Twilio<br/>approved templates, consent"]
+    Q --> P3["Email: SMTP"]
+    P1 & P2 -->|"signed status callbacks"| A
+```
+
+* **Sessions, not JWTs:** an opaque random token whose SHA-256 is stored, so logout and "sign out everywhere" take
+  effect immediately. The CSRF token is an HMAC of the session, so every tab agrees on it.
+* **Authorisation is server-side:** every API route depends on `require(permission)`; field officers are additionally
+  limited to their assigned wards (`ward_allowed`, `check_alert_wards`). Roles always come from the database.
+* **Codes:** `secrets.randbelow`, HMAC-SHA256 keyed with `AUTH_SECRET_KEY`, purpose- and target-bound, expiry, attempts,
+  cooldown and hourly limits enforced inside one SQLite `BEGIN IMMEDIATE` transaction; a failed attempt is committed
+  before the error is raised.
+* **Delivery status** never moves backwards and *Delivered* comes only from a verified provider callback.
+* Alert acknowledgements and push subscriptions now belong to the signed-in user instead of an anonymous browser id.
+
+## 9. Area Intelligence
+
+```mermaid
+flowchart LR
+    Q["Search box"] --> SR["search.py<br/>gazetteer + dataset wards + admin localities<br/>prefix · romanisation skeleton · Bangla"]
+    SR -.->|"only on request"| G["geocode.py<br/>OpenStreetMap Nominatim<br/>1 req/s, cached"]
+    SR --> C["intel.coverage()<br/>ward · city · city_context<br/>district_partial · none"]
+    C --> F["Existing forecasts<br/>Store.preds / forecast()"]
+    C --> E["Dataset indicators<br/>sanitation · waterlogging · weather"]
+    SR --> H[("data/area.sqlite3<br/>hospitals · bed_updates · localities<br/>data_sources · geocode cache")]
+    H --> Y["hospitals.summary()<br/>capacity vs verified availability"]
+```
+
+The hospital directory is a separate database, so hospital information changes without touching the dengue data or
+retraining the models. Coverage is decided once, in `coverage()`, and the dengue and environment sections only ever
+read the wards it returns.
+
+## 10. AI disclosure
 
 We used **Claude Code** (Anthropic), an AI coding assistant, in both phases. It helped with data analysis, deriving
 the supply rule from the onsite dataset, the pipeline and model code, the FastAPI backend, the Next.js app, the
-Phase 2 allocation, routing, simulator, dispatch and offline modules, the early-warning and push notification system, the prediction-portal upgrade, the tests, and these documents. The team
+Phase 2 allocation, routing, simulator, dispatch and offline modules, the early-warning and push notification system, the prediction-portal upgrade, the accounts and sign-in system, Area Intelligence, the tests, and these documents. The team
 reviewed, ran and tested everything. The running system makes **no** AI or LLM calls.
