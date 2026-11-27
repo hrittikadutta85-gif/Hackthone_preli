@@ -6,7 +6,7 @@ without code changes. Every repair is counted and returned in a report.
 import numpy as np
 import pandas as pd
 
-from .config import BOUNDS, CITY_PREFIX, KEY, REQUIRED, STATIC, TARGET, WEATHER
+from .config import BOUNDS, CITY_PREFIX, KEY, REQUIRED, STATIC, SUPPLIES, SUPPLY_RULES, TARGET, WEATHER
 
 NA_TOKENS = ["", "na", "n/a", "null", "none", "nan", "?", "-"]
 
@@ -24,14 +24,15 @@ def clean(raw: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     missing = [c for c in REQUIRED if c not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
-    df = df[REQUIRED]
+    supplies = [c for c in SUPPLIES if c in df.columns]  # optional: present in the onsite dataset
+    df = df[REQUIRED + supplies]
     for c in df.columns:
         df[c] = df[c].astype(str).str.strip()
         df.loc[df[c].str.lower().isin(NA_TOKENS), c] = np.nan
 
     df["ward_id"] = df["ward_id"].str.upper().str.replace("WARD", "Ward")
     df["date"] = pd.to_datetime(df["date"], errors="coerce", format="mixed")
-    for c in STATIC + WEATHER + [TARGET]:
+    for c in STATIC + WEATHER + [TARGET] + supplies:
         df[c] = pd.to_numeric(df[c].str.replace(",", ""), errors="coerce")
 
     n = len(df)
@@ -77,6 +78,16 @@ def clean(raw: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     # Case counts: only bridge 1-2 week reporting gaps; longer gaps stay NaN (never fabricated).
     df[TARGET] = g[TARGET].transform(lambda s: s.interpolate(limit=2, limit_area="inside")).round()
     rep["case_weeks_missing"] = int(df[TARGET].isna().sum())
+
+    # Supply needs: keep the recorded figures; fill any gap (or a file without the columns) from the case rule.
+    rep["supply_cells_filled"] = 0
+    for c, (rate, offset) in SUPPLY_RULES.items():
+        rule = np.floor(rate * df[TARGET] + offset)
+        if c not in df.columns:
+            df[c] = np.nan
+        gap = df[c].isna() & rule.notna()
+        rep["supply_cells_filled"] += int(gap.sum())
+        df.loc[gap, c] = rule[gap]
 
     rep["rows_out"] = len(df)
     rep["wards"] = int(df["ward_id"].nunique())

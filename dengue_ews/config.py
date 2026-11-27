@@ -38,3 +38,39 @@ TIERS = ["Low", "Medium", "High", "Critical"]
 TIER_COLORS = {"Low": "#2e9e5b", "Medium": "#e0b000", "High": "#e8711a", "Critical": "#c62828"}
 
 SEED = 42
+
+# ---------------------------------------------------------------- Phase 2: operations
+# Supply columns added in the onsite dataset. Each is an exact step function of the week's case count:
+#   need = floor(rate * cases + offset)
+# These constants reproduce every one of the 31,320 rows (tests/test_operations.py checks this), so the same rule
+# turns *forecast* cases into tomorrow's supply demand.
+SUPPLIES = ["saline_bags_needed", "diagnostic_kits_needed", "hospital_beds_required"]
+SUPPLY_RULES = {"saline_bags_needed": (2.385, 0.49),
+                "diagnostic_kits_needed": (1.165, 0.445),
+                "hospital_beds_required": (0.30, 0.45)}
+
+# Dengue bed capacity per ward is not in the data. We size it from what each ward's hospitals already handled:
+# the beds it needed in the busiest week of a typical year (median of its 2016-2023 annual peaks), at least 2.
+BED_CAPACITY_MIN = 2
+
+# Priority for scarce stock: 70% the model's risk score (0-100), 30% the ward's population-density percentile.
+# Under scarcity a ward's fill rate is proportional to (PRIORITY_FLOOR + priority), capped at 100%: the top wards are
+# filled completely first, and no ward drops to zero while stock remains.
+PRIORITY_RISK_WEIGHT = 0.70
+PRIORITY_FLOOR = 20
+
+# Vector-control crews needed by a ward: one crew per this many expected cases at median density, more in denser
+# wards (scaled by sqrt(density / median)); Medium-risk and above only; capped per ward.
+CASES_PER_CREW = 6
+MAX_CREWS_PER_WARD = 6
+
+# Vector-control simulator. A larvicide/fogging crew removes breeding habitat. Coverage with k crews:
+#   efficacy(k) = MAX_EFFICACY * (1 - exp(-k / (CREW_SCALE * sqrt(density / median density))))
+# so denser wards need more crews for the same coverage and returns diminish. The model is then re-run with the
+# ward's standing-water inputs (recent rain, water-logging) reduced by that fraction.
+MAX_EFFICACY = 0.60
+CREW_SCALE = 2.0
+SIM_MAX_CREWS = 8          # most crews the simulator will put in one ward
+SIM_HORIZONS = [2, 3, 4]   # larvae take 1-2 weeks to become biting adults, so the payoff lands 2-4 weeks out
+BREEDING_FEATURES = ["rainfall_mm", "rain_lag1", "rain_lag2", "rain_lag3", "rain_lag4", "rain_sum_lag2_4",
+                     "rain_sum_4w", "heavy_rain_weeks_4w", "water_logging_risk_index", "vulnerability_index"]
