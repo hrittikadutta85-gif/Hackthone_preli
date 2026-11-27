@@ -74,3 +74,38 @@ SIM_MAX_CREWS = 8          # most crews the simulator will put in one ward
 SIM_HORIZONS = [2, 3, 4]   # larvae take 1-2 weeks to become biting adults, so the payoff lands 2-4 weeks out
 BREEDING_FEATURES = ["rainfall_mm", "rain_lag1", "rain_lag2", "rain_lag3", "rain_lag4", "rain_sum_lag2_4",
                      "rain_sum_4w", "heavy_rain_weeks_4w", "water_logging_risk_index", "vulnerability_index"]
+
+# ---------------------------------------------------------------- Smart early warning (alerts)
+# Every threshold can be overridden with an environment variable of the same name, e.g. ALERT_SURGE_PCT=80.
+import os as _os
+
+
+def _env(name: str, default):
+    raw = _os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    return type(default)(raw)
+
+
+ALERTS = {
+    # A. risk-level increase: this week's forecast tier vs last week's forecast tier, at this horizon
+    "ALERT_HORIZON": _env("ALERT_HORIZON", 2),
+    "ALERT_MIN_LEVEL": _env("ALERT_MIN_LEVEL", "Medium"),     # ignore anything below this level
+    # B. sudden case increase: forecast at SURGE_HORIZON vs the ward's last-4-week average of reported cases
+    "ALERT_SURGE_HORIZON": _env("ALERT_SURGE_HORIZON", 2),
+    "ALERT_SURGE_PCT": _env("ALERT_SURGE_PCT", 50.0),         # % rise needed
+    "ALERT_SURGE_MIN_CASES": _env("ALERT_SURGE_MIN_CASES", 3.0),  # and at least this many extra cases a week
+    # C. rainfall: last 4 weeks' rain above the ward's usual (percentile for that month, 2016-2023) or above an
+    #    absolute amount, AND the model forecasting at least RAIN_MIN_LEVEL within 2-4 weeks
+    "ALERT_RAIN_PERCENTILE": _env("ALERT_RAIN_PERCENTILE", 0.90),
+    "ALERT_RAIN_ABS_MM": _env("ALERT_RAIN_ABS_MM", 450.0),       # this much in 4 weeks is heavy in any month
+    "ALERT_RAIN_MIN_MM": _env("ALERT_RAIN_MIN_MM", 100.0),       # never call less than this "heavy" (dry season)
+    "ALERT_RAIN_MIN_LEVEL": _env("ALERT_RAIN_MIN_LEVEL", "Medium"),
+    # D. upcoming high risk: forecast reaches this level within 4 weeks while reported cases are still below it
+    "ALERT_UPCOMING_LEVEL": _env("ALERT_UPCOMING_LEVEL", "High"),
+    # duplicate prevention: after an alert, the same ward + type stays quiet this many weeks unless the level rises
+    "ALERT_COOLDOWN_WEEKS": _env("ALERT_COOLDOWN_WEEKS", 3),
+    # background job: rescan (and reload the data if the file changed) every this many minutes
+    "ALERT_SCAN_MINUTES": _env("ALERT_SCAN_MINUTES", 15.0),
+}
+ALERTS_DB = Path(_os.environ.get("ALERTS_DB") or ROOT / "data" / "alerts.sqlite3")

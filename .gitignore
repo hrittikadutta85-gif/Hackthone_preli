@@ -15,3 +15,7 @@ hackathon_preli_dataset*.csv
 frontend/.next-*.log
 bangladesh_dengue_large_dataset_onsite*.csv
 !exports/*.pdf
+
+# alerts database and secrets
+data/alerts.sqlite3*
+.env
