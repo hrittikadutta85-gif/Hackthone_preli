@@ -1,24 +1,32 @@
 @import "tailwindcss";
 
-/* Command-centre theme: deep navy and charcoal, restrained teal light, orange and red reserved for risk. */
+/* Public-health theme: white and very light grey surfaces, muted teal and medical green, soft risk colours. */
 :root {
-  --paper: #070d17;
-  --card: #0e1a2b;
-  --raise: rgb(140 188 212 / 0.08);
-  --ink: #e6eef7;
-  --muted: #8ea3ba;
-  --line: rgb(140 188 212 / 0.16);
-  --accent: #2dd4bf;
-  --accent-soft: rgb(45 212 191 / 0.12);
-  --on-accent: #032420;
-  --low: #34bd72;
-  --medium: #f4ce45;
-  --high: #f8871c;
-  --critical: #e02a3c;
-  --critical-ink: #ff7b84;
-  --forecast: #62b6ff;
-  --series-quiet: #3c5470;
-  color-scheme: dark;
+  --paper: #f5f8f7;
+  --card: #ffffff;
+  --raise: #f0f5f3;
+  --ink: #193b38;
+  --muted: #647571;
+  --line: #e1eae6;
+  --accent: #287f75;
+  --accent-strong: #1f6a61;
+  --accent-2: #75b8a5;
+  --accent-soft: #e8f5f1;
+  --on-accent: #ffffff;
+  --low: #4caf7d;
+  --medium: #e2b33c;
+  --high: #e8843b;
+  --critical: #d44c4c;
+  --low-ink: #2e7d55;
+  --medium-ink: #8a6410;
+  --high-ink: #a85418;
+  --critical-ink: #b23a3a;
+  --forecast: #3f7fc0;
+  --series-quiet: #b9c9c4;
+  --shadow-sm: 0 1px 2px rgb(25 59 56 / 0.05);
+  --shadow: 0 1px 2px rgb(25 59 56 / 0.04), 0 10px 28px -16px rgb(25 59 56 / 0.16);
+  --shadow-lg: 0 2px 4px rgb(25 59 56 / 0.04), 0 24px 48px -24px rgb(25 59 56 / 0.24);
+  color-scheme: light;
 }
 
 @theme inline {
@@ -29,6 +37,8 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-2: var(--accent-2);
   --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
   --color-low: var(--low);
@@ -37,7 +47,7 @@
   --color-critical: var(--critical);
   --color-critical-ink: var(--critical-ink);
   --font-sans: var(--font-inter), var(--font-bengali), system-ui, sans-serif;
-  --font-display: var(--font-space), var(--font-bengali), system-ui, sans-serif;
+  --font-display: var(--font-poppins), var(--font-bengali), system-ui, sans-serif;
   --font-mono: var(--font-plex), var(--font-bengali), ui-monospace, monospace;
 }
 
@@ -49,45 +59,48 @@ body {
 }
 
 ::selection {
-  background: rgb(45 212 191 / 0.32);
+  background: rgb(40 127 117 / 0.2);
 }
 
 .font-display {
-  font-family: var(--font-space), var(--font-bengali), system-ui, sans-serif;
-  letter-spacing: -0.018em;
+  font-family: var(--font-poppins), var(--font-bengali), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Risk colours are soft fills; as text on white they need a darker shade to stay readable. */
+.text-low {
+  color: var(--low-ink);
+}
+.text-medium {
+  color: var(--medium-ink);
+}
+.text-high {
+  color: var(--high-ink);
 }
 
 @layer components {
-  /* glass surface used by every card */
+  /* the card surface used everywhere */
   .panel {
     position: relative;
     border: 1px solid var(--line);
     border-radius: 1rem;
-    background: linear-gradient(180deg, rgb(19 35 56 / 0.74), rgb(10 20 34 / 0.78));
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.035),
-      0 24px 48px -32px rgb(0 0 0 / 0.85);
+    background: var(--card);
+    box-shadow: var(--shadow);
   }
-  /* a short teal edge that marks the top-left of a panel */
+  /* kept for existing markup; the light theme needs no edge decoration */
   .panel-edge::before {
-    content: "";
-    position: absolute;
-    top: -1px;
-    left: 1.25rem;
-    width: 3.5rem;
-    height: 1px;
-    background: linear-gradient(90deg, var(--accent), transparent);
+    content: none;
   }
   .panel-hover {
     transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
   .panel-hover:hover {
     transform: translateY(-2px);
-    border-color: rgb(45 212 191 / 0.45);
-    box-shadow: 0 0 32px -14px rgb(45 212 191 / 0.55);
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+    box-shadow: var(--shadow-lg);
   }
 
   .btn {
@@ -96,12 +109,14 @@ body {
     justify-content: center;
     gap: 0.45rem;
     border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--raise);
-    padding: 0.4rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--card);
+    color: var(--ink);
+    padding: 0.45rem 1rem;
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
+    box-shadow: var(--shadow-sm);
     transition:
       border-color 0.2s ease,
       background-color 0.2s ease,
@@ -111,79 +126,87 @@ body {
   }
   .btn:hover:enabled,
   a.btn:hover {
-    border-color: rgb(45 212 191 / 0.55);
-    box-shadow: 0 0 18px -8px rgb(45 212 191 / 0.7);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: var(--accent-soft);
   }
   .btn:disabled {
     cursor: default;
-    opacity: 0.4;
+    opacity: 0.45;
   }
-  /* filter chips: pressed state glows teal */
+  /* filter chips: the pressed one is filled with light teal */
   .btn[aria-pressed="true"] {
-    border-color: rgb(45 212 191 / 0.7);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
     background: var(--accent-soft);
     color: var(--accent);
-    box-shadow: 0 0 20px -8px rgb(45 212 191 / 0.75);
+    font-weight: 600;
   }
   .btn-primary {
     border-color: transparent;
-    background: linear-gradient(180deg, #4ae3cf, #22bfac);
+    background: var(--accent);
     color: var(--on-accent);
     font-weight: 600;
-    box-shadow: 0 0 24px -8px rgb(45 212 191 / 0.8);
+    box-shadow: 0 1px 2px rgb(25 59 56 / 0.12), 0 6px 16px -8px rgb(40 127 117 / 0.55);
   }
   .btn-primary:hover:enabled,
   a.btn-primary:hover {
+    border-color: transparent;
+    background: var(--accent-strong);
+    color: var(--on-accent);
     transform: translateY(-1px);
-    box-shadow: 0 0 30px -6px rgb(45 212 191 / 0.9);
+    box-shadow: 0 2px 4px rgb(25 59 56 / 0.12), 0 10px 22px -10px rgb(40 127 117 / 0.6);
+  }
+  .btn-primary[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
   .field {
     border: 1px solid var(--line);
-    background-color: rgb(5 11 20 / 0.7);
+    background-color: var(--card);
     color: var(--ink);
     outline: none;
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease;
   }
+  .field::placeholder {
+    color: #94a5a0;
+  }
   .field:focus {
-    border-color: rgb(45 212 191 / 0.75);
-    box-shadow: 0 0 0 3px rgb(45 212 191 / 0.16);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgb(40 127 117 / 0.15);
   }
 
-  /* small monospace section label with a travelling data pulse */
+  /* small section label */
   .eyebrow {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    font-family: var(--font-plex), var(--font-bengali), ui-monospace, monospace;
+    gap: 0.6rem;
     font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
   }
   .eyebrow::before {
     content: "";
-    width: 2.25rem;
-    height: 1px;
+    width: 1.5rem;
+    height: 2px;
     flex: none;
-    background: linear-gradient(90deg, rgb(45 212 191 / 0.2) 0 35%, var(--accent) 50%, rgb(45 212 191 / 0.2) 65%);
-    background-size: 250% 100%;
-    animation: travel 3.2s linear infinite;
+    border-radius: 2px;
+    background: var(--accent-2);
   }
 
   .kicker {
-    font-family: var(--font-plex), var(--font-bengali), ui-monospace, monospace;
-    font-size: 0.66rem;
-    letter-spacing: 0.14em;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
   }
   .kicker.brand-tagline {
-    margin-top: 0.25rem;
-    font-size: 0.56rem;
+    margin-top: 0.15rem;
+    font-size: 0.6rem;
   }
 
   /* the map fills most of a phone screen while leaving room to scroll past it */
@@ -209,9 +232,10 @@ body {
     padding: 0;
     overflow-y: auto;
     border: 0;
-    border-right: 1px solid rgb(45 212 191 / 0.35);
-    background: linear-gradient(180deg, #0f2036, #081120);
+    border-right: 1px solid var(--line);
+    background: var(--card);
     color: var(--ink);
+    box-shadow: var(--shadow-lg);
     translate: -100% 0;
     transition:
       translate 0.28s ease,
@@ -225,7 +249,7 @@ body {
     }
   }
   .drawer::backdrop {
-    background: rgb(2 6 12 / 0.65);
+    background: rgb(25 59 56 / 0.35);
   }
 
   /* selected ward: pinned to the bottom of phones and tablets */
@@ -238,9 +262,9 @@ body {
       overflow-y: auto;
       overscroll-behavior: contain;
       border-radius: 1.25rem 1.25rem 0 0;
-      border-color: rgb(45 212 191 / 0.5);
-      background: rgb(11 23 40 / 0.98);
-      box-shadow: 0 -18px 44px rgb(0 0 0 / 0.65);
+      border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+      background: var(--card);
+      box-shadow: 0 -18px 44px rgb(25 59 56 / 0.18);
       padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
     }
   }
@@ -252,8 +276,8 @@ html:has(.drawer[open]) {
 
 select option,
 select optgroup {
-  background: #0e1a2b;
-  color: #e6eef7;
+  background: #ffffff;
+  color: var(--ink);
 }
 
 /* sliders */
@@ -262,7 +286,7 @@ input[type="range"] {
   appearance: none;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgb(45 212 191 / 0.3), rgb(140 188 212 / 0.18));
+  background: linear-gradient(90deg, var(--accent-2), #d7e5e0);
   outline: none;
   cursor: pointer;
 }
@@ -272,22 +296,20 @@ input[type="range"]::-webkit-slider-thumb {
   height: 18px;
   border-radius: 50%;
   background: var(--accent);
-  border: 4px solid #0b1626;
-  box-shadow:
-    0 0 0 1px rgb(45 212 191 / 0.8),
-    0 0 16px rgb(45 212 191 / 0.65);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--accent), 0 2px 6px rgb(25 59 56 / 0.25);
   transition: transform 0.15s;
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--accent);
-  border: 4px solid #0b1626;
-  box-shadow: 0 0 14px rgb(45 212 191 / 0.65);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px var(--accent);
 }
 input[type="range"]:focus-visible {
   outline: 2px solid var(--accent);
@@ -341,17 +363,17 @@ html[data-lang-pending] body {
   input[type="range"] {
     height: 2.75rem;
     border-radius: 0;
-    background: linear-gradient(90deg, rgb(45 212 191 / 0.45), rgb(140 188 212 / 0.25)) center / 100% 5px no-repeat;
+    background: linear-gradient(90deg, var(--accent-2), #d7e5e0) center / 100% 5px no-repeat;
   }
   input[type="range"]::-webkit-slider-thumb {
-    width: 28px;
-    height: 28px;
-    border-width: 7px;
+    width: 26px;
+    height: 26px;
+    border-width: 5px;
   }
   input[type="range"]::-moz-range-thumb {
     width: 18px;
     height: 18px;
-    border-width: 6px;
+    border-width: 5px;
   }
   .leaflet-container .leaflet-bar a {
     width: 44px;
@@ -367,30 +389,11 @@ html[data-lang-pending] body {
   }
 }
 
-.backdrop-radar {
-  position: absolute;
-  top: -230px;
-  right: -230px;
-  width: 560px;
-  height: 560px;
-  border-radius: 50%;
-  background: repeating-radial-gradient(circle, transparent 0 54px, rgb(95 216 201 / 0.09) 54px 55px);
-  mask-image: radial-gradient(circle, #000 35%, transparent 70%);
-}
-.backdrop-radar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(transparent 0 320deg, rgb(45 212 191 / 0.1) 359deg, transparent 360deg);
-  animation: sweep 16s linear infinite;
-}
-
-/* ------------------------------------------------------------------ motion */
+/* ------------------------------------------------------------------ motion (kept subtle) */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -398,15 +401,7 @@ html[data-lang-pending] body {
   }
 }
 .rise {
-  animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-@keyframes travel {
-  from {
-    background-position: 100% 0;
-  }
-  to {
-    background-position: -50% 0;
-  }
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 @keyframes shimmer {
   from {
@@ -417,23 +412,9 @@ html[data-lang-pending] body {
   }
 }
 .skeleton {
-  background: linear-gradient(100deg, rgb(140 188 212 / 0.06) 30%, rgb(45 212 191 / 0.14) 50%, rgb(140 188 212 / 0.06) 70%);
+  background: linear-gradient(100deg, #ebf1ef 30%, #f6faf8 50%, #ebf1ef 70%);
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
-}
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translate(10px, -18px);
-    opacity: 0.75;
-  }
-}
-.drift {
-  animation: drift 14s ease-in-out infinite;
 }
 @keyframes hover-float {
   0%,
@@ -444,11 +425,9 @@ html[data-lang-pending] body {
     transform: translateY(-4px);
   }
 }
-/* wide screens: the map's information cards drift gently */
-@media (min-width: 48rem) {
-  .float-wide {
-    animation: hover-float 6s ease-in-out infinite;
-  }
+/* the map's information cards stay still on the light theme */
+.float-wide {
+  animation: none;
 }
 /* data-flow: dashes travelling along a connection */
 @keyframes flow {
@@ -461,12 +440,15 @@ html[data-lang-pending] body {
   stroke-linecap: round;
   animation: flow 1.8s linear infinite;
 }
+.drift {
+  animation: none;
+}
 
-/* map: a gentle ring that ripples out from Critical wards, and a slow breathing halo around High and Critical */
+/* map: a gentle ring that ripples out from Critical wards, and a slow halo around High and Critical */
 @keyframes pulse-ring {
   from {
     transform: scale(1);
-    opacity: 0.8;
+    opacity: 0.7;
   }
   to {
     transform: scale(1.8);
@@ -485,45 +467,21 @@ html[data-lang-pending] body {
     opacity: 0.45;
   }
   50% {
-    opacity: 1;
+    opacity: 0.9;
   }
 }
 .halo {
   animation: breathe 3.6s ease-in-out infinite;
   pointer-events: none;
 }
-
-/* map: radar sweep laid over the canvas */
 @keyframes sweep {
   to {
     transform: rotate(360deg);
   }
 }
+/* the radar overlay of the dark theme is switched off; the element stays for existing markup */
 .radar {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  border-radius: 1rem;
-}
-.radar::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 160%;
-  aspect-ratio: 1;
-  margin: -80% 0 0 -80%;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg 300deg, rgb(45 212 191 / 0.02) 310deg, rgb(45 212 191 / 0.13) 359deg, transparent 360deg);
-  animation: sweep 9s linear infinite;
-}
-.radar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-radial-gradient(circle at 50% 50%, transparent 0 89px, rgb(45 212 191 / 0.07) 89px 90px);
-  mask-image: radial-gradient(circle at 50% 50%, #000 10%, transparent 72%);
+  display: none;
 }
 
 /* ------------------------------------------------------------------ map elements */
@@ -532,20 +490,12 @@ html[data-lang-pending] body {
     fill 0.35s ease,
     fill-opacity 0.35s ease,
     stroke 0.2s ease,
-    stroke-width 0.2s ease,
-    filter 0.2s ease;
+    stroke-width 0.2s ease;
 }
 path.ward-marker:hover {
-  stroke: #d9fff8;
-  stroke-width: 3;
+  stroke: var(--ink);
+  stroke-width: 2.5;
   stroke-opacity: 1;
-  filter: drop-shadow(0 0 7px rgb(45 212 191 / 0.95));
-}
-.map-node {
-  filter: drop-shadow(0 0 5px rgb(45 212 191 / 0.95));
-}
-.city-ring {
-  filter: drop-shadow(0 0 4px rgb(45 212 191 / 0.55));
 }
 .hex:focus,
 .hex:focus-visible {
@@ -555,62 +505,52 @@ path.ward-marker:hover {
   transition:
     fill 0.35s ease,
     stroke 0.2s ease,
-    stroke-width 0.2s ease,
-    filter 0.2s ease;
+    stroke-width 0.2s ease;
 }
 .hex:hover polygon {
-  stroke: #d9fff8;
+  stroke: var(--ink);
   stroke-width: 2.5;
-  filter: drop-shadow(0 0 7px rgb(45 212 191 / 0.9));
 }
 .hex:focus-visible polygon:first-child {
-  stroke: #fff;
+  stroke: var(--ink);
   stroke-width: 3;
 }
 
 /* Leaflet street map */
 .leaflet-container {
   font-family: var(--font-inter), var(--font-bengali), system-ui, sans-serif;
-  background: #08111f;
+  background: #eef3f1;
 }
-/* turn the standard OpenStreetMap style into a quiet dark base map, so the risk colours stand out */
+/* calm the standard OpenStreetMap style so the risk colours stand out */
 .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(180deg) saturate(0.35) brightness(0.82) contrast(0.92);
-}
-/* teal wash over the tiles only */
-.leaflet-tile-pane::after {
-  content: "";
-  position: absolute;
-  inset: -4000px;
-  background: rgb(45 212 191 / 0.05);
-  pointer-events: none;
+  filter: saturate(0.45) brightness(1.04) contrast(0.92);
 }
 .leaflet-container .leaflet-bar {
   border: 1px solid var(--line);
-  box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.8);
+  box-shadow: var(--shadow);
 }
 .leaflet-container .leaflet-bar a {
-  background: rgb(11 22 38 / 0.92);
+  background: #fff;
   border-bottom-color: var(--line);
   color: var(--ink);
 }
 .leaflet-container .leaflet-bar a:hover {
-  background: #12304a;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 .leaflet-container .leaflet-bar a.leaflet-disabled {
-  color: #4a5d73;
+  color: #a9b8b3;
 }
 .leaflet-container .leaflet-control-attribution {
-  background: rgb(7 13 23 / 0.8);
+  background: rgb(255 255 255 / 0.85);
   color: var(--muted);
 }
 .leaflet-container .leaflet-control-attribution a {
-  color: #7fd9cd;
+  color: var(--accent);
 }
 .leaflet-container .leaflet-control-scale-line {
   border-color: var(--muted);
-  background: rgb(7 13 23 / 0.65);
+  background: rgb(255 255 255 / 0.8);
   color: var(--ink);
   text-shadow: none;
 }
@@ -622,19 +562,17 @@ path.ward-marker:hover {
 }
 .leaflet-tooltip.map-tip {
   min-width: 13rem;
-  border: 1px solid rgb(45 212 191 / 0.4);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 8px 10px;
-  background: rgb(9 19 33 / 0.95);
+  background: #fff;
   color: var(--ink);
   font-size: 13px;
   line-height: 1.45;
-  box-shadow:
-    0 12px 32px rgb(0 0 0 / 0.55),
-    0 0 24px -10px rgb(45 212 191 / 0.7);
+  box-shadow: var(--shadow-lg);
 }
 .leaflet-tooltip.map-tip::before {
-  border-top-color: rgb(45 212 191 / 0.4);
+  border-top-color: var(--line);
 }
 .map-tip .tip-head {
   display: flex;
@@ -665,15 +603,14 @@ path.ward-marker:hover {
   box-shadow: none;
   padding: 0;
   color: var(--ink);
-  font-family: var(--font-space), var(--font-bengali), system-ui, sans-serif;
+  font-family: var(--font-poppins), var(--font-bengali), system-ui, sans-serif;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.02em;
   text-align: center;
   text-shadow:
-    0 0 3px #050b14,
-    0 0 3px #050b14,
-    0 0 8px #050b14;
+    0 0 3px #fff,
+    0 0 3px #fff,
+    0 0 8px #fff;
 }
 .leaflet-tooltip.city-label span {
   display: block;
@@ -696,15 +633,14 @@ path.ward-marker:hover {
 }
 .recharts-cartesian-axis-tick-value {
   fill: var(--muted);
-  font-family: var(--font-plex), var(--font-bengali), ui-monospace, monospace;
   font-size: 11px;
 }
 .recharts-wrapper .recharts-default-tooltip {
-  border: 1px solid rgb(45 212 191 / 0.35) !important;
+  border: 1px solid var(--line) !important;
   border-radius: 12px;
-  background: rgb(9 19 33 / 0.95) !important;
+  background: #fff !important;
   font-size: 13px;
-  box-shadow: 0 12px 32px rgb(0 0 0 / 0.5);
+  box-shadow: var(--shadow-lg);
 }
 .recharts-wrapper .recharts-tooltip-label {
   color: var(--muted);
@@ -716,26 +652,83 @@ path.ward-marker:hover {
   color: var(--muted) !important;
 }
 .recharts-rectangle.recharts-tooltip-cursor {
-  fill: rgb(45 212 191 / 0.07);
+  fill: rgb(40 127 117 / 0.06);
 }
 .recharts-curve.recharts-tooltip-cursor {
-  stroke: rgb(45 212 191 / 0.55);
+  stroke: rgb(40 127 117 / 0.45);
 }
 
-/* low-cost phones: blur and continuous decoration are expensive, so they are switched off.
-   Keep this after the animation rules it overrides. */
+/* ------------------------------------------------------------------ sign-in and account screens */
+.auth-glass {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--card);
+  box-shadow: 0 2px 4px rgb(25 59 56 / 0.03), 0 28px 60px -32px rgb(25 59 56 / 0.28);
+}
+.otp-cell {
+  width: 100%;
+  aspect-ratio: 5 / 6;
+  max-width: 3.25rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  font-family: var(--font-plex), ui-monospace, monospace;
+  font-size: 1.35rem;
+  font-weight: 500;
+  caret-color: var(--accent);
+}
+.otp-cell:not(:placeholder-shown) {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+}
+.switch {
+  position: relative;
+  display: inline-flex;
+  width: 2.75rem;
+  height: 1.5rem;
+  flex: none;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #e4ece9;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(25 59 56 / 0.3);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.switch[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.switch[aria-checked="true"]::after {
+  transform: translateX(1.25rem);
+}
+.switch:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.switch:focus-visible,
+.otp-cell:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-width: 63.99rem), (pointer: coarse) {
+  .switch {
+    margin-block: 0.6rem; /* 44px touch row without a bigger control */
+  }
+}
+
+/* low-cost phones: continuous decoration is switched off. Keep this after the animation rules it overrides. */
 @media (max-width: 47.99rem) {
-  .panel,
-  .backdrop-blur {
-    backdrop-filter: none;
-  }
-  .backdrop-detail,
-  .backdrop-radar {
-    display: none;
-  }
-  .drift,
-  .halo,
-  .eyebrow::before {
+  .halo {
     animation: none;
   }
 }
@@ -744,18 +737,11 @@ path.ward-marker:hover {
   .rise,
   .pulse,
   .halo,
-  .drift,
-  .float-wide,
   .flow,
-  .skeleton,
-  .eyebrow::before,
-  .radar::before,
-  .backdrop-radar::after {
+  .skeleton {
     animation: none;
   }
-  .pulse,
-  .radar::before,
-  .backdrop-radar::after {
+  .pulse {
     display: none;
   }
   * {
@@ -763,20 +749,14 @@ path.ward-marker:hover {
   }
 }
 
-/* printable ward report and action plan: back to ink on white */
+/* printable ward report and action plan: ink on white */
 @media print {
   :root {
     --paper: #ffffff;
-    --card: #ffffff;
-    --raise: #f2f5f7;
-    --ink: #101c2b;
-    --muted: #4d5f73;
-    --line: #d5dee6;
-    --accent: #0b6f65;
-    --accent-soft: #e0f2ef;
-    --critical-ink: #b01e3d;
-    --series-quiet: #a9b9c9;
-    color-scheme: light;
+    --raise: #f2f5f4;
+    --line: #d5dfdb;
+    --shadow: none;
+    --shadow-lg: none;
   }
   body {
     background: #fff;
@@ -785,8 +765,12 @@ path.ward-marker:hover {
     max-width: none;
     padding: 0;
   }
-  .drawer {
+  .drawer,
+  .app-sidebar {
     display: none;
+  }
+  .app-content {
+    padding-left: 0 !important;
   }
   .panel {
     background: #fff;

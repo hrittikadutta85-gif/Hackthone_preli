@@ -10,12 +10,12 @@ export function TierPill({ tier, className = "" }: { tier: Tier; className?: str
     <span
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${className}`}
       style={{
-        color: `color-mix(in srgb, ${c} 55%, var(--ink))`,
-        background: `color-mix(in srgb, ${c} 15%, transparent)`,
-        borderColor: `color-mix(in srgb, ${c} 55%, transparent)`,
+        color: `color-mix(in srgb, ${c} 50%, var(--ink))`,
+        background: `color-mix(in srgb, ${c} 14%, white)`,
+        borderColor: `color-mix(in srgb, ${c} 40%, white)`,
       }}
     >
-      <span className="h-1.5 w-1.5 rounded-full" style={{ background: c, boxShadow: `0 0 8px ${c}` }} aria-hidden />
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: c }} aria-hidden />
       {t.common.tier[tier]}
     </span>
   );
@@ -23,7 +23,7 @@ export function TierPill({ tier, className = "" }: { tier: Tier; className?: str
 
 /** Border and glow for the selected card in a set of risk cards. */
 export const tierGlow = (tier: Tier, on: boolean) =>
-  on ? { borderColor: TIER_COLOR[tier], boxShadow: `0 0 0 1px ${TIER_COLOR[tier]}, 0 0 34px -10px ${TIER_COLOR[tier]}` } : undefined;
+  on ? { borderColor: TIER_COLOR[tier], boxShadow: `0 0 0 1px ${TIER_COLOR[tier]}, 0 12px 28px -18px ${TIER_COLOR[tier]}` } : undefined;
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <section className={`panel panel-edge min-w-0 p-4 sm:p-5 ${className}`}>{children}</section>;
@@ -89,7 +89,7 @@ export function Segmented<T extends string | number>({
   className?: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className={`inline-flex rounded-full border border-line bg-[rgb(5_11_20/0.6)] p-1 ${className}`}>
+    <div role="radiogroup" aria-label={label} className={`inline-flex rounded-full border border-line bg-raise p-1 ${className}`}>
       {options.map((o) => (
         <button
           key={String(o.value)}
@@ -98,7 +98,7 @@ export function Segmented<T extends string | number>({
           onClick={() => onChange(o.value)}
           className={`flex-1 cursor-pointer rounded-full px-3.5 py-1 text-sm font-medium whitespace-nowrap transition-all duration-300 max-md:px-2 ${
             o.value === value
-              ? "bg-accent text-on-accent shadow-[0_0_18px_-4px_rgb(45_212_191/0.85)]"
+              ? "bg-accent text-on-accent shadow-sm"
               : "text-muted hover:text-ink"
           }`}
         >

@@ -50,17 +50,78 @@ export function Icon({ name, className = "h-4 w-4" }: { name: IconName; classNam
   );
 }
 
-/** Brand mark: a monitoring radar with one live signal. */
-export function BrandMark() {
+/**
+ * Brand mark: a protection shield holding a simple Aedes mosquito silhouette. `tone="light"` is for dark teal
+ * backgrounds (white tile, teal drawing); the default is a teal tile with a white drawing.
+ */
+export function BrandMark({ className = "h-10 w-10", tone = "teal" }: { className?: string; tone?: "teal" | "light" }) {
+  const tile = tone === "light" ? "#ffffff" : "var(--accent)";
+  const ink = tone === "light" ? "var(--accent)" : "#ffffff";
   return (
-    <span className="relative grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-accent/40 bg-accent-soft shadow-[0_0_22px_-6px_rgb(45_212_191/0.8)]" aria-hidden>
-      <svg viewBox="0 0 32 32" className="h-7 w-7" fill="none">
-        <circle cx="16" cy="16" r="13" stroke="var(--accent)" strokeOpacity="0.35" />
-        <circle cx="16" cy="16" r="7.5" stroke="var(--accent)" strokeOpacity="0.6" />
-        <path d="M16 16 25.2 6.8" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" />
-        <circle cx="16" cy="16" r="2.2" fill="var(--accent)" />
-        <circle cx="22" cy="20.5" r="2" fill="var(--high)" />
+    <span className={`relative grid shrink-0 place-items-center ${className}`} aria-hidden>
+      <svg viewBox="0 0 40 40" className="h-full w-full" fill="none">
+        <rect width="40" height="40" rx="11" fill={tile} />
+        <path d="M20 6.5 30.5 10.6v7.9c0 7-4.4 12.2-10.5 14.9C13.9 30.7 9.5 25.5 9.5 18.5v-7.9z" fill={ink} fillOpacity="0.14" stroke={ink} strokeWidth="1.7" strokeLinejoin="round" />
+        {/* wings */}
+        <ellipse cx="16.6" cy="19.6" rx="2.1" ry="4.4" transform="rotate(-28 16.6 19.6)" fill={ink} fillOpacity="0.55" />
+        <ellipse cx="23.4" cy="19.6" rx="2.1" ry="4.4" transform="rotate(28 23.4 19.6)" fill={ink} fillOpacity="0.55" />
+        {/* legs */}
+        <path d="M19 19.5 14.6 23.4M21 19.5l4.4 3.9M19.2 21.6l-3.4 5M20.8 21.6l3.4 5M19.2 18.2l-3.6-2.6M20.8 18.2l3.6-2.6" stroke={ink} strokeWidth="1" strokeLinecap="round" />
+        {/* body, head and proboscis */}
+        <path d="M20 16.4v10.4" stroke={ink} strokeWidth="2.3" strokeLinecap="round" />
+        <circle cx="20" cy="14.6" r="1.7" fill={ink} />
+        <path d="M20 12.9v-2.6" stroke={ink} strokeWidth="1" strokeLinecap="round" />
       </svg>
     </span>
+  );
+}
+
+/* Educational Aedes aegypti illustration (seen from above): banded legs, a lyre-shaped mark on the thorax and a
+   striped abdomen, the features used to tell this dengue vector apart. Friendly line art, not a photograph. */
+const LEGS = [
+  "M110 92 84 76 58 48",
+  "M130 92l26-16 26-28",
+  "M108 102 74 104 42 124",
+  "M132 102l34 2 32 20",
+  "M110 112 86 146 66 204",
+  "M130 112l24 34 20 58",
+];
+
+export function MosquitoArt({ className = "", tone = "default" }: { className?: string; tone?: "default" | "light" }) {
+  const dark = tone === "light";
+  const body = dark ? "#e8f5f1" : "#193b38";
+  const band = dark ? "#287f75" : "#ffffff";
+  const wing = dark ? "rgb(232 245 241 / 0.18)" : "rgb(117 184 165 / 0.28)";
+  const wingLine = dark ? "rgb(232 245 241 / 0.55)" : "#75b8a5";
+  return (
+    <svg viewBox="0 0 240 240" className={className} fill="none" aria-hidden>
+      {/* wings */}
+      <ellipse cx="98" cy="138" rx="15" ry="50" transform="rotate(22 98 138)" fill={wing} stroke={wingLine} strokeWidth="1.5" />
+      <ellipse cx="142" cy="138" rx="15" ry="50" transform="rotate(-22 142 138)" fill={wing} stroke={wingLine} strokeWidth="1.5" />
+      <path d="M100 100 88 176M140 100l12 76" stroke={wingLine} strokeWidth="1" strokeOpacity="0.7" />
+      {/* banded legs: a solid stroke with a dashed light stroke on top */}
+      {LEGS.map((d) => (
+        <g key={d} strokeLinecap="round" strokeLinejoin="round">
+          <path d={d} stroke={body} strokeWidth="3.2" />
+          <path d={d} stroke={band} strokeWidth="1.8" strokeDasharray="4 7" />
+        </g>
+      ))}
+      {/* antennae and proboscis */}
+      <path d="M116 64c-6-8-10-14-16-22M124 64c6-8 10-14 16-22" stroke={body} strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M103 46l-5 1M106 51l-5 1M137 46l5 1M134 51l5 1" stroke={body} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M120 64V30" stroke={body} strokeWidth="2.2" strokeLinecap="round" />
+      {/* head */}
+      <circle cx="120" cy="71" r="9" fill={body} />
+      <circle cx="115.5" cy="69.5" r="2.4" fill={band} fillOpacity="0.85" />
+      <circle cx="124.5" cy="69.5" r="2.4" fill={band} fillOpacity="0.85" />
+      {/* thorax with the lyre mark */}
+      <ellipse cx="120" cy="96" rx="15" ry="18" fill={body} />
+      <path d="M113 86c-4 6-3 14 2 20M127 86c4 6 3 14-2 20M118 88v14M122 88v14" stroke={band} strokeWidth="1.6" strokeLinecap="round" />
+      {/* striped abdomen */}
+      <ellipse cx="120" cy="150" rx="10.5" ry="38" fill={body} />
+      {[124, 136, 148, 160, 172].map((y) => (
+        <path key={y} d={`M${111 + (y > 165 ? 2 : 0)} ${y}h${18 - (y > 165 ? 4 : 0)}`} stroke={band} strokeWidth="2" strokeLinecap="round" />
+      ))}
+    </svg>
   );
 }
