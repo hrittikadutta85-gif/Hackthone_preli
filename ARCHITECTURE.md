@@ -79,9 +79,11 @@ points.
 
 ## 5. Compute and API cost controls
 
-* **Zero external API and LLM calls.** All inference is local; there are no per-request costs, no API keys, and no
-  LLM tokens are spent. The final round did not add an LLM: the Phase 2 dispatch notices are deterministic
-  templates (section 6.5), so they work with no internet and always give the same text for the same plan.
+* **Zero external API and LLM calls for forecasting and planning.** All inference is local; there are no per-request
+  costs and no LLM tokens are spent. The final round did not add an LLM: the Phase 2 dispatch notices are
+  deterministic templates (section 6.5), so they work with no internet and always give the same text for the same
+  plan. The only outbound calls the backend can make are messages to an SMS, WhatsApp or email provider, and only
+  when one is configured in `.env` (sign-in codes, security alerts and, on request, ward dispatch notices).
 * **Serialized models** (`joblib`, compressed, 8 MB) are loaded once per server process with
   `st.cache_resource`. No training happens at app start.
 * **Caching:** cleaning and the lag features are computed once per data version (`st.cache_data`, keyed by an MD5
@@ -195,6 +197,37 @@ for beds). If an uploaded file lacks the supply columns, `data.clean()` fills th
 
 Samples for one scenario are in [`exports/`](exports/).
 
+**Getting a notice to the field team.** Each notice lists its recipients: the active Field Officer accounts assigned to
+that ward that have a mobile number (`AuthService.ward_contacts`). Only roles with `ops.dispatch` see them.
+
+```mermaid
+flowchart LR
+    P["Plan settings<br/>(same query as /api/ops/plan)"] --> N["dispatch.notices()<br/>SMS + WhatsApp text"]
+    U[("users<br/>role = field · active · phone<br/>assigned_wards")] --> R["Recipients per ward"]
+    N & R --> UI["Dispatch tab"]
+    UI -->|"always available"| L["Phone links<br/>wa.me/&lt;number&gt;?text=… · sms:&lt;number&gt;?body=…<br/>sent from the officer's own phone"]
+    UI -->|"POST /api/ops/dispatch/send<br/>after a confirmation"| S["Server rebuilds the text from the plan<br/>duplicate guard · 300-message cap"]
+    S --> Q["Notifier (section 8)<br/>event = dispatch · ref = dispatch:&lt;week&gt;:&lt;ward&gt;"]
+    Q --> SMS["SMS provider"] & WA["WhatsApp provider<br/>needs an approved dispatch template"]
+    Q --> D[("notifications<br/>status per message")] --> UI
+    S --> AU[("audit_log<br/>dispatch_sent")]
+```
+
+* **From the officer's own phone (no provider needed).** Per-recipient buttons open WhatsApp (or WhatsApp Web) or
+  the phone's messaging app with the number and the text filled in. The app does not see or track these messages.
+* **Automatic sending (when a provider is configured).** The browser sends only the plan settings, the channel and the
+  ward ids; the server rebuilds every notice itself, so the text cannot be altered in transit. A request sends at most
+  300 messages, and the same week's notice is not sent to a ward twice on the same channel within an hour unless
+  `resend` is set (`already_sent` otherwise). Each message is a row in `notifications` with `event = 'dispatch'` and a
+  `ref` of `dispatch:<week>:<ward>`, so the Dispatch tab shows the latest batch per ward with its delivery counts, and
+  provider callbacks move them to *Delivered* or *Failed* as for any other message. The batch is written to the audit
+  log (`dispatch_sent`).
+* **Channel readiness** comes from `Notifier.ready_for(channel, "dispatch")`: SMS needs only a configured provider;
+  WhatsApp also needs an approved Utility template (`WHATSAPP_TEMPLATE_DISPATCH` for Meta,
+  `TWILIO_WHATSAPP_CONTENT_SID_DISPATCH` for Twilio) because WhatsApp does not allow business-initiated free text.
+  The template carries two variables: the ward and the notice flattened to one line. When a channel is not ready the
+  endpoint answers `409 provider_not_configured` or `template_not_configured`, and the page says what is missing.
+
 ### 6.6 Offline resilience (requirement 5)
 
 * There is **no LLM or external API in any code path**. Forecasting, allocation, routing, simulation and dispatch
@@ -205,6 +238,8 @@ Samples for one scenario are in [`exports/`](exports/).
 * The browser talks only to the local Next.js server. The production build bundles its fonts. The only internet
   resource is the OpenStreetMap background, and when it fails the map offers its offline view. A banner appears
   whenever the browser goes offline.
+* Delivering a notice needs a phone network or the internet by nature: the phone links hand the text to the officer's
+  own phone, and automatic sending needs a provider. Writing the notices, the brief and every plan stays offline.
 
 ### 6.7 Phase 2 API
 
@@ -212,7 +247,8 @@ Samples for one scenario are in [`exports/`](exports/).
 |---|---|
 | `GET /api/ops/plan` | Allocation, crews, bed routing and deficits. Parameters: `origin, horizon, stock, crews, basis, city`, optional `saline_pct, kits_pct, beds_pct` |
 | `POST /api/ops/simulate` | Vector-control counterfactual: `{origin, city, crews}` for automatic placement or `{deployments: {ward: crews}}` |
-| `GET /api/ops/dispatch` | SMS and WhatsApp notices (`lang=en|bn`) for the same plan parameters |
+| `GET /api/ops/dispatch` | SMS and WhatsApp notices (`lang=en|bn`) for the same plan parameters, each with its `recipients` and `last_sent`, plus `sending` (whether SMS and WhatsApp can send automatically) |
+| `POST /api/ops/dispatch/send` | Send notices to the assigned field officers: plan parameters plus `{lang, channel: sms|whatsapp, wards[], resend}`; returns counts per ward |
 | `GET /api/ops/brief` | Printable HTML commissioner brief |
 | `GET /api/ops/selftest` | Offline self-test with outbound network blocked |
 
@@ -284,6 +320,9 @@ flowchart LR
   before the error is raised.
 * **Delivery status** never moves backwards and *Delivered* comes only from a verified provider callback.
 * Alert acknowledgements and push subscriptions now belong to the signed-in user instead of an anonymous browser id.
+* **Migrations** run at start-up in order (`PRAGMA user_version`): 1 creates the schema, 2 makes email optional for
+  mobile-number sign-up, 3 adds `notifications.ref` so Operations messages record what they were about. Each one is
+  additive or a checked table rebuild, so an existing database upgrades in place.
 
 ## 9. Area Intelligence
 
@@ -302,9 +341,59 @@ The hospital directory is a separate database, so hospital information changes w
 retraining the models. Coverage is decided once, in `coverage()`, and the dengue and environment sections only ever
 read the wards it returns.
 
-## 10. AI disclosure
+**Beds left.** Two numbers are kept apart on purpose. *Reported* free beds come only from verified hospital updates in
+the directory; with none, the page says live availability is unavailable. The *estimate* (`intel.bed_outlook`) uses
+the planner's dengue bed capacity per ward (median annual peak of beds required, 2016–2023) minus the beds this week's
+cases need, and for each of the next 4 weeks the beds the expected and the upper-80% forecasts would need (the
+dataset's own supply rule). It lists the wards that run short first and, for a single ward, the spare beds the rest of
+its city should have. `GET /api/locations/{id}/beds?as_of=` returns both; the dashboard's bed card reuses the same
+estimate.
+
+## 10. Web interface
+
+* **One design system** in `frontend/app/globals.css`: colour tokens on `:root` (background `#F5F8F7`, cards white,
+  primary teal `#287F75`, secondary green `#75B8A5`, headings `#193B38`, body `#647571`, light teal `#E8F5F1`, soft
+  green / amber / orange / red for the four risk levels) mapped into Tailwind with `@theme`, so every page, chart and
+  map reads the same values. Inter for text, Poppins for headings. Risk colours are soft fills; as text they switch to
+  darker shades for contrast.
+* **Shell** (`components/Shell.tsx`): a fixed sidebar with the brand and the menu on wide screens, a drawer on phones
+  and tablets, and a top bar with the page name, the current date and time, alerts, language and the user menu. The
+  menu is filtered by the role's permissions; the API enforces the same rules.
+* **Dashboard** (`app/page.tsx`): hero, four indicator cards (cases this week with the change from last week, current
+  risk level, predicted cases, estimated bed availability), the street risk map, recent alerts, an actual-versus-
+  predicted forecast chart (1, 2 or 4 weeks ahead, labelled 7, 14 and 28 days), and the earlier overview sections.
+  Every number comes from existing endpoints (`/api/city`, `/api/map`, `/api/alerts/summary`, the beds estimate); the
+  forecast series are sums of the stored ward forecasts, plotted at the week each forecast was for.
+* **Sign-in screens** share one split layout (`components/auth/AuthLayout.tsx`): a brand panel with figures taken
+  from the project's own data and model metrics, and the form card.
+
+## 11. Deployment
+
+```mermaid
+flowchart LR
+    U["Browser"] -->|"https"| V["Vercel<br/>Next.js (frontend/)<br/>rewrites /api/* → API_URL"]
+    V -->|"server-side proxy"| R["Render web service<br/>uvicorn backend.main:app<br/>models + data from the repo"]
+    R --> DB[("SQLite files on the instance<br/>auth · alerts · area")]
+    R -.->|"only if configured"| M["SMS / WhatsApp / email providers"]
+```
+
+* **One origin for the browser.** The browser only talks to the Vercel site; Next.js forwards `/api/*` to the Render
+  service (`API_URL`), so the session cookie is first-party and no CORS is needed. The backend accepts state-changing
+  requests from the Vercel addresses (`AUTH_ALLOWED_ORIGINS`), reads the client address behind two proxies
+  (`AUTH_TRUSTED_PROXIES=2`) and signs sessions with a fixed `AUTH_SECRET_KEY`.
+* **Builds:** Vercel builds `frontend/` with Node 22; Render runs `pip install -r requirements.txt` and starts
+  `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`. The trained model and the dataset are in the repository, so
+  nothing is trained at deploy time; the backend needs about 230 MB of memory with everything loaded. A push to `main`
+  redeploys both.
+* **State:** accounts, alert statuses and the hospital directory are SQLite files. On a free Render instance the disk
+  is not persistent, so they reset when the service restarts or redeploys; a persistent disk (with `AUTH_DB`,
+  `AREA_DB` and the alerts database pointed at it) keeps them. Free instances also sleep after 15 idle minutes, so the
+  first request afterwards waits for the model to load.
+
+## 12. AI disclosure
 
 We used **Claude Code** (Anthropic), an AI coding assistant, in both phases. It helped with data analysis, deriving
 the supply rule from the onsite dataset, the pipeline and model code, the FastAPI backend, the Next.js app, the
-Phase 2 allocation, routing, simulator, dispatch and offline modules, the early-warning and push notification system, the prediction-portal upgrade, the accounts and sign-in system, Area Intelligence, the tests, and these documents. The team
+Phase 2 allocation, routing, simulator, dispatch and offline modules, the early-warning and push notification system, the prediction-portal upgrade, the accounts and sign-in system, Area Intelligence and the beds-left estimate, the
+interface redesign, sending dispatch notices, the Vercel and Render deployment, the tests, and these documents. The team
 reviewed, ran and tested everything. The running system makes **no** AI or LLM calls.
