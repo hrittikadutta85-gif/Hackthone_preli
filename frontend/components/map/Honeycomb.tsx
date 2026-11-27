@@ -190,14 +190,14 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
   // Text is drawn in map units, so it is enlarged on small screens (less so once zoomed in).
   const textScale = narrow ? Math.max(1, Math.min(1.9, (vb.w / FULL.w) * 1.9)) : 1;
   const hoverWard = hover ? data.wards[hover.i] : null;
-  const displayFont = { fontFamily: "var(--font-space), var(--font-bengali), system-ui, sans-serif" };
+  const displayFont = { fontFamily: "var(--font-poppins), var(--font-bengali), system-ui, sans-serif" };
 
   return (
     <div
       ref={wrapRef}
-      className="relative overflow-hidden rounded-2xl border border-accent/25 bg-[#08111f] shadow-[0_0_48px_-24px_rgb(45_212_191/0.6)]"
+      className="relative overflow-hidden rounded-2xl border border-line bg-[#fbfdfc] shadow-[var(--shadow)]"
       style={{
-        backgroundImage: "linear-gradient(rgb(140 188 212 / 0.06) 1px, transparent 1px), linear-gradient(90deg, rgb(140 188 212 / 0.06) 1px, transparent 1px)",
+        backgroundImage: "linear-gradient(rgb(25 59 56 / 0.04) 1px, transparent 1px), linear-gradient(90deg, rgb(25 59 56 / 0.04) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
       }}
     >
@@ -221,9 +221,9 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
         aria-label={t.map.honeycombLabel}
       >
         <g transform="translate(955 48)" aria-hidden>
-          <circle r="20" fill="#0e1a2b" stroke="#2dd4bf" strokeOpacity="0.45" />
-          <path d="M0 -13 L6 6 L0 2 L-6 6 Z" fill="#2dd4bf" />
-          <text y="-25" textAnchor="middle" fontSize="12" fontWeight="600" fill="#e6eef7">{t.map.north}</text>
+          <circle r="20" fill="#ffffff" stroke="#287f75" strokeOpacity="0.45" />
+          <path d="M0 -13 L6 6 L0 2 L-6 6 Z" fill="#287f75" />
+          <text y="-25" textAnchor="middle" fontSize="12" fontWeight="600" fill="#193b38">{t.map.north}</text>
         </g>
 
         {/* orientation links between neighbouring regions, drawn from outline to outline */}
@@ -238,10 +238,10 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
           const line = { x1: a.cx + ux * a.radius, y1: a.cy + uy * a.radius, x2: b.cx - ux * b.radius, y2: b.cy - uy * b.radius };
           return (
             <g key={`${from}-${to}`} aria-hidden>
-              <line {...line} stroke="#2dd4bf" strokeOpacity={0.25} />
-              <line {...line} className="flow" stroke="#2dd4bf" strokeWidth={2} />
-              <circle className="map-node" cx={line.x1} cy={line.y1} r={3.5} fill="#a8fff0" />
-              <circle className="map-node" cx={line.x2} cy={line.y2} r={3.5} fill="#a8fff0" />
+              <line {...line} stroke="#287f75" strokeOpacity={0.2} />
+              <line {...line} className="flow" stroke="#75b8a5" strokeWidth={2} />
+              <circle className="map-node" cx={line.x1} cy={line.y1} r={3.5} fill="#75b8a5" />
+              <circle className="map-node" cx={line.x2} cy={line.y2} r={3.5} fill="#75b8a5" />
             </g>
           );
         })}
@@ -258,18 +258,18 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
           const anchor = edge || conf.label === "left" ? "end" : conf.label === "right" ? "start" : "middle";
           return (
             <g key={c.name}>
-              <circle className="city-ring" cx={c.cx} cy={c.cy} r={c.radius} fill="#0d2233" stroke="#2dd4bf" strokeOpacity={0.65} strokeWidth={1.3} />
-              <circle cx={c.cx} cy={c.cy} r={c.radius - 7} fill="none" stroke="#2dd4bf" strokeOpacity={0.2} strokeDasharray="2 6" />
+              <circle className="city-ring" cx={c.cx} cy={c.cy} r={c.radius} fill="#e8f5f1" fillOpacity={0.55} stroke="#287f75" strokeOpacity={0.45} strokeWidth={1.3} />
+              <circle cx={c.cx} cy={c.cy} r={c.radius - 7} fill="none" stroke="#287f75" strokeOpacity={0.18} strokeDasharray="2 6" />
               <g className="cursor-pointer" onClick={() => zoomCity(c.name)}>
-                <text x={lx} y={ly} textAnchor={anchor} fontSize={17 * textScale} fontWeight="600" fill="#e6eef7" style={displayFont}>
+                <text x={lx} y={ly} textAnchor={anchor} fontSize={17 * textScale} fontWeight="600" fill="#193b38" style={displayFont}>
                   {b(c.name)}
                 </text>
                 {note && (
-                  <text x={lx} y={ly + 16} textAnchor={anchor} fontSize="11" fill="#8ea3ba">
+                  <text x={lx} y={ly + 16} textAnchor={anchor} fontSize="11" fill="#647571">
                     {note}
                   </text>
                 )}
-                <text x={lx} y={ly + (note ? 32 : 18 * textScale)} textAnchor={anchor} fontSize={12 * textScale} fontWeight="600" fill={sum.worst >= 2 ? TIER_COLOR[TIERS[sum.worst]] : "#8ea3ba"}>
+                <text x={lx} y={ly + (note ? 32 : 18 * textScale)} textAnchor={anchor} fontSize={12 * textScale} fontWeight="600" fill={sum.worst >= 2 ? TIER_COLOR[TIERS[sum.worst]] : "#647571"}>
                   {t.map.summary(sum.critical, sum.high)}
                 </text>
               </g>
@@ -315,8 +315,8 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
               }}
               onPointerLeave={() => setHover((h) => (h?.i === i ? null : h))}
             >
-              <polygon points={HEX_POINTS} fill={colorAt(data, i, k)} stroke={isSel ? "#fff" : "#06101c"} strokeWidth={isSel ? 3.5 : 1.5} />
-              <text textAnchor="middle" dy="4" fontSize="11" fontWeight="700" fill={level === 3 || level == null ? "#fff" : "#06101c"} pointerEvents="none">
+              <polygon points={HEX_POINTS} fill={colorAt(data, i, k)} stroke={isSel ? "#193b38" : "#ffffff"} strokeWidth={isSel ? 3.5 : 1.5} />
+              <text textAnchor="middle" dy="4" fontSize="11" fontWeight="700" fill={level === 3 ? "#fff" : "#193b38"} pointerEvents="none">
                 {f.digits(w.num)}
               </text>
             </g>
@@ -332,7 +332,7 @@ export default function Honeycomb({ data, k, tiersOn, selected, onSelect, focus 
 
       {hover && hoverWard && (
         <div
-          className="pointer-events-none absolute z-[880] w-56 rounded-xl border border-accent/40 bg-card/95 px-3 py-2 text-sm shadow-[0_12px_32px_rgb(0_0_0/0.55)]"
+          className="pointer-events-none absolute z-[880] w-56 rounded-xl border border-line bg-card px-3 py-2 text-sm shadow-[var(--shadow-lg)]"
           style={{ left: Math.max(8, Math.min(hover.x + 14, (wrapRef.current?.clientWidth ?? 600) - 236)), top: Math.max(hover.y - 90, 8) }}
         >
           <div className="flex items-center justify-between gap-2">

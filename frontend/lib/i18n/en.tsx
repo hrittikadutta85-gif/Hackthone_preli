@@ -5,6 +5,8 @@
 import type { ReactNode } from "react";
 import type { Tier } from "../api";
 import { makeFormat } from "./format";
+import { authEn } from "./auth.en";
+import { areaEn } from "./area.en";
 
 const f = makeFormat("en");
 const s = (n: number) => (n === 1 ? "" : "s");
@@ -31,12 +33,14 @@ export const en = {
     nav: {
       overview: "City overview",
       map: "Risk map",
+      forecast: "Forecast",
       plan: "Action plan",
       ward: "Ward forecast",
       predict: "Prediction portal",
       accuracy: "Can I trust it?",
       how: "How it works",
       ops: "Operations",
+      area: "Area search",
     },
     notFoundTitle: "Page not found",
     openMenu: "Open menu",
@@ -81,6 +85,76 @@ export const en = {
       `likely ${low}–${high} · ${now != null ? `${now} now, ` : ""}${trend}`,
     riskScore: (score: string) => `Risk score ${score} out of 100`,
     forecastAhead: (h: number) => `Forecast ${h} week${s(h)} ahead`,
+  },
+
+  dash: {
+    title: "Dengue Watch",
+    tagline: "Monitor • Predict • Prevent",
+    text: "Smart dengue surveillance, risk prediction, and early warning for safer communities.",
+    weekChip: (date: string) => `Data week of ${date}`,
+    wardsChip: (n: number) => `${n} wards monitored`,
+    windowChip: (h: number) => `Warning window: ${h} week${s(h)}`,
+    artLabel: "Illustration of an Aedes aegypti mosquito, the species that spreads dengue",
+    stats: {
+      cases: "Total dengue cases",
+      casesNote: (date: string) => `Recorded in the week of ${date}`,
+      risk: "Current risk level",
+      riskNote: (n: number) => (n === 0 ? "No ward at High or Critical" : `${n} ward${s(n)} at High or Critical`),
+      predicted: "Predicted cases",
+      predictedNote: (date: string) => `Expected in the week of ${date}`,
+      beds: "Hospital bed availability",
+      bedsOf: (cap: string) => `of ${cap} dengue beds free`,
+      bedsNote: "Planning estimate from the forecast, not live hospital data",
+      bedsNone: "No bed estimate for this area",
+      up: (pct: string) => `Up ${pct}`,
+      down: (pct: string) => `Down ${pct}`,
+      same: "No change",
+      vsLastWeek: "vs last week",
+      vsThisWeek: "vs this week",
+    },
+    map: {
+      title: "Dengue risk map",
+      desc: (date: string, h: number) => `Forecast risk for the week of ${date} (${h} week${s(h)} ahead). Hover a ward for numbers, click one for details.`,
+      legend: "Risk level",
+      open: "Open the full risk map",
+      selected: "Selected ward",
+      openWard: "Open ward forecast",
+      clear: "Clear",
+      tilesFailed: "The street map could not load, so the offline map is shown.",
+    },
+    forecast: {
+      title: "Dengue forecast",
+      desc: "Recorded weekly cases beside what the model predicted for the same weeks. The line past this week is the forecast.",
+      actual: "Recorded cases",
+      predicted: "Predicted cases",
+      windowLabel: "Forecast window",
+      days: (d: number) => `${d} days`,
+      note: "Forecasts are made per week, so 7, 14 and 28 days mean 1, 2 and 4 weeks ahead. A 30-day forecast is not available.",
+      now: "This week",
+      chartLabel: (area: string) => `Recorded and predicted weekly dengue cases, ${area}`,
+      empty: "No forecast for this selection.",
+    },
+    alerts: {
+      title: "Recent alerts",
+      viewAll: "View all alerts",
+      none: "No active alerts for this week.",
+      raised: (date: string) => `Raised ${date}`,
+    },
+    prevention: {
+      eyebrow: "Prevention",
+      title: "Stop dengue before it starts",
+      intro: "Dengue spreads through the bite of Aedes mosquitoes, which breed in clean standing water around homes. These steps protect families and neighbourhoods.",
+      tips: [
+        { title: "Empty standing water", text: "Once a week, empty, scrub or cover buckets, tyres, flower pots and AC trays where mosquitoes breed." },
+        { title: "Avoid daytime bites", text: "Aedes mosquitoes bite mostly in the early morning and late afternoon. Use repellent and wear long sleeves." },
+        { title: "Screens and nets", text: "Use window screens, and bed nets for anyone resting in the day, especially young children and patients." },
+        { title: "Know the warning signs", text: "High fever with severe stomach pain, vomiting, bleeding gums or extreme tiredness needs a doctor straight away." },
+      ],
+      ctaTitle: "Plan the response for high-risk wards",
+      ctaText: "The action plan turns this week's forecast into ward-by-ward tasks: clean-up drives, larviciding and hospital readiness.",
+      ctaPlan: "Open the action plan",
+      ctaHow: "How the forecast works",
+    },
   },
 
   outlook: {
@@ -757,6 +831,8 @@ export const en = {
     home: "Go to the city overview",
     map: "Open the risk map",
   },
+  auth: authEn,
+  area: areaEn,
   number: f.n,
 };
 

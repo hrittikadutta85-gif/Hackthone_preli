@@ -161,7 +161,7 @@ export function MapExplorer({
               </span>
               {[3, 2].map((level) => (
                 <span key={level} className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 self-center rounded-full" style={{ background: TIER_COLOR[TIERS[level]], boxShadow: `0 0 8px ${TIER_COLOR[TIERS[level]]}` }} />
+                  <span className="h-2 w-2 self-center rounded-full" style={{ background: TIER_COLOR[TIERS[level]] }} />
                   <b className="tabular-nums">{f.n(counts[level])}</b>
                   <span className="text-[11px] text-muted">{level === 3 ? t.map.critical : t.map.high}</span>
                 </span>
@@ -193,7 +193,7 @@ export function MapExplorer({
                     className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-transparent px-2 py-1.5 text-left transition hover:border-accent/35 hover:bg-accent-soft tap"
                   >
                     <span className="w-5 font-mono text-xs text-muted tabular-nums">{f.digits(String(rank + 1).padStart(2, "0"))}</span>
-                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: TIER_COLOR[TIERS[h.level]], boxShadow: `0 0 8px ${TIER_COLOR[TIERS[h.level]]}` }} title={t.common.tier[TIERS[h.level]]} />
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: TIER_COLOR[TIERS[h.level]] }} title={t.common.tier[TIERS[h.level]]} />
                     <span className="min-w-0 flex-1 text-sm font-medium">{b(h.w.label)}</span>
                     <span className="text-sm tabular-nums">{f.n(h.p, 0)}</span>
                   </button>
@@ -280,7 +280,7 @@ function WardPanel({ data, i, k, horizon, target, onClose, onCity }: { data: Map
       <div className="mt-3 lg:mt-4">
         <p className="mb-1 text-xs text-muted">{t.map.lastWeeks(series.length)}</p>
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-lg:h-14" role="img" aria-label={t.map.trendLabel}>
-          <polyline fill="none" stroke="#3c5470" strokeWidth={2} points={series.map((s, j) => xy(j, s.v).join(",")).join(" ")} />
+          <polyline fill="none" stroke="#b9c9c4" strokeWidth={2} points={series.map((s, j) => xy(j, s.v).join(",")).join(" ")} />
           {series.map((s, j) => {
             const [x, y] = xy(j, s.v);
             return <circle key={j} cx={x} cy={y} r={j === series.length - 1 ? 5 : 3} fill={TIER_COLOR[TIERS[s.level]]} />;

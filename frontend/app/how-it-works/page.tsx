@@ -65,7 +65,7 @@ export default function HowItWorks() {
           {t.how.steps.map((step, i) => (
             <li key={step.title} className="rise panel panel-edge min-w-0 p-4" style={{ animationDelay: `${i * 60}ms` }}>
               <div className="flex items-center gap-2">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-accent text-xs font-bold text-on-accent shadow-[0_0_14px_-3px_rgb(45_212_191/0.9)]">{f.n(i + 1)}</span>
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-accent text-xs font-bold text-on-accent shadow-sm">{f.n(i + 1)}</span>
                 <Icon name={STEP_ICONS[i]} className="h-5 w-5 text-accent" />
               </div>
               <h3 className="mt-2 font-semibold">{step.title}</h3>

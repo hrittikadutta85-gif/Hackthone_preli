@@ -105,15 +105,15 @@ export default function Accuracy() {
                     <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} />
                     <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => f.n(v)} />
                     <Tooltip formatter={(v) => t.common.cases(f.n(Number(v), 2))} />
-                    <Bar dataKey="naive" name={t.accuracy.naive} fill="#526d8c" radius={[4, 4, 0, 0]} animationDuration={700} />
-                    <Bar dataKey="model" name={t.accuracy.model} fill="#22bfac" radius={[4, 4, 0, 0]} animationDuration={700} />
+                    <Bar dataKey="naive" name={t.accuracy.naive} fill="#a9bcb6" radius={[4, 4, 0, 0]} animationDuration={700} />
+                    <Bar dataKey="model" name={t.accuracy.model} fill="#287f75" radius={[4, 4, 0, 0]} animationDuration={700} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
                 {[
-                  { name: t.accuracy.naive, color: "#526d8c" },
-                  { name: t.accuracy.model, color: "#22bfac" },
+                  { name: t.accuracy.naive, color: "#a9bcb6" },
+                  { name: t.accuracy.model, color: "#287f75" },
                 ].map((item) => (
                   <li key={item.name} className="flex items-center gap-1.5">
                     <span aria-hidden className="h-2.5 w-2.5 rounded-[3px]" style={{ background: item.color }} />
@@ -159,7 +159,7 @@ export default function Accuracy() {
 function Stat({ big, title, note }: { big: string; title: string; note: string }) {
   return (
     <Card className="rise">
-      <div className="font-display text-3xl font-semibold text-accent tabular-nums [text-shadow:0_0_24px_rgb(45_212_191/0.35)] sm:text-4xl">{big}</div>
+      <div className="font-display text-3xl font-semibold text-accent tabular-nums sm:text-4xl">{big}</div>
       <div className="mt-1 text-sm font-medium">{title}</div>
       <div className="mt-1 text-xs text-muted">{note}</div>
     </Card>

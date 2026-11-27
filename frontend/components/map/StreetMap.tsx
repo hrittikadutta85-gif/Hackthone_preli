@@ -38,8 +38,8 @@ const EVERYTHING = L.latLngBounds(Object.keys(CITY_GEO).map((c) => CITY_GEO[c].c
 const wardRadiusM = (pred: number) => 240 + Math.min(pred, 18) * 25;
 /** On narrow maps the area is shifted right so the names beside the Dhaka circles are not cut off. */
 const fitOptions = (m: L.Map): L.FitBoundsOptions => (m.getSize().x < 520 ? { paddingTopLeft: [96, 24], paddingBottomRight: [8, 8] } : {});
-const TEAL = "#2dd4bf";
-const EDGE = "#06101c"; // dark ring that separates neighbouring bubbles
+const TEAL = "#287f75";
+const EDGE = "#ffffff"; // white ring that separates neighbouring bubbles
 
 /** The point on a city's circle that faces another city, so links start at the outline instead of under the wards. */
 function edgeToward(from: string, to: string): L.LatLngTuple {
@@ -125,7 +125,7 @@ export default function StreetMap({ data, k, tiersOn, selected, onSelect, focus,
       L.polyline(ends, { color: TEAL, weight: 1, opacity: 0.25, interactive: false }).addTo(m);
       L.polyline(ends, { color: TEAL, weight: 1.6, opacity: 0.85, className: "flow", interactive: false }).addTo(m);
       for (const end of ends)
-        L.circleMarker(end, { radius: 2.5, stroke: false, fillColor: "#a8fff0", fillOpacity: 1, className: "map-node", interactive: false }).addTo(m);
+        L.circleMarker(end, { radius: 2.5, stroke: false, fillColor: "#75b8a5", fillOpacity: 1, className: "map-node", interactive: false }).addTo(m);
     }
     // live cursor position
     m.on("mousemove", (e: L.LeafletMouseEvent) => {
@@ -148,7 +148,7 @@ export default function StreetMap({ data, k, tiersOn, selected, onSelect, focus,
         .setLatLng(edge)
         .addTo(wardGroup);
       // one summary bubble per city (zoomed out)
-      bubbles[name] = L.circleMarker(center, { radius: 14, color: "#d9fff8", weight: 1.5, fillOpacity: 0.9, className: "ward-marker" })
+      bubbles[name] = L.circleMarker(center, { radius: 14, color: "#ffffff", weight: 2, fillOpacity: 0.9, className: "ward-marker" })
         .bindTooltip("", { permanent: true, direction: "right", className: "city-label", offset: [10, 0] })
         .on("click", () => m.flyToBounds(cityBounds(name), { duration: reduce ? 0 : 0.8 }))
         .addTo(cityGroup);
@@ -224,7 +224,7 @@ export default function StreetMap({ data, k, tiersOn, selected, onSelect, focus,
       const c = ly.wards[i];
       const isSel = selected === i;
       c.setRadius(wardRadiusM(data.predicted[i][k] ?? 0));
-      c.setStyle({ fillColor: colorAt(data, i, k), fillOpacity: on ? 0.9 : 0.1, opacity: on ? 1 : 0.2, color: isSel ? "#ffffff" : EDGE, weight: isSel ? 3.5 : 1.5 });
+      c.setStyle({ fillColor: colorAt(data, i, k), fillOpacity: on ? 0.9 : 0.1, opacity: on ? 1 : 0.2, color: isSel ? "#193b38" : EDGE, weight: isSel ? 3.5 : 1.5 });
       c.setTooltipContent(tipHtml(i18n, data, i, k));
       if (isSel) c.bringToFront();
 
@@ -254,7 +254,7 @@ export default function StreetMap({ data, k, tiersOn, selected, onSelect, focus,
     });
     for (const { name, idx } of groups) {
       const s = citySummary(data, idx, k);
-      const color = s.worst >= 2 ? TIER_COLOR[TIERS[s.worst]] : "#8ea3ba";
+      const color = s.worst >= 2 ? TIER_COLOR[TIERS[s.worst]] : "#647571";
       const html = `${b(name)}<span style="color:${color}">${t.map.summary(s.critical, s.high)}</span>`;
       ly.labels[name].setContent(html);
       ly.bubbles[name]
@@ -273,7 +273,7 @@ export default function StreetMap({ data, k, tiersOn, selected, onSelect, focus,
   }, [focus]);
 
   return (
-    <div className="relative isolate z-0 overflow-hidden rounded-2xl border border-accent/25 shadow-[0_0_48px_-24px_rgb(45_212_191/0.6)]">
+    <div className="relative isolate z-0 overflow-hidden rounded-2xl border border-line shadow-[var(--shadow)]">
       <div ref={el} className="map-canvas w-full" role="region" aria-label={t.map.streetLabel} />
       <div className="pointer-events-none absolute top-3 right-3 z-[800] flex flex-col items-end gap-2">
         <button onClick={() => map.current?.flyToBounds(DHAKA_AREA, { ...fitOptions(map.current), duration: 0.8 })} className="btn pointer-events-auto !bg-card/90 !px-3 !py-1.5 !text-xs">

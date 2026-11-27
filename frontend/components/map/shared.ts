@@ -36,7 +36,7 @@ export const CITY_LINKS: [string, string][] = [
   ["Dhaka South", "Chattogram"],
 ];
 
-export const NO_DATA_COLOR = "#3c5470";
+export const NO_DATA_COLOR = "#c9d6d1";
 
 export const colorAt = (data: MapData, i: number, k: number) => {
   const t = data.tier[i][k];
