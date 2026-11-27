@@ -37,6 +37,7 @@ const PATHS = {
   copy: "M9 9h11v11H9zM5 15H4V4h11v1",
   check: "M5 12.500l4.500 4.500L19 7",
   arrow: "M5 12h14M13 6l6 6-6 6",
+  bell: "M6 16.500V11a6 6 0 0 1 12 0v5.500l1.500 2h-15L6 16.500zM10 20.500a2 2 0 0 0 4 0",
 } as const;
 
 export type IconName = keyof typeof PATHS;

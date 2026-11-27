@@ -7,6 +7,7 @@ import { useI18n, useTitle, type Dict } from "@/lib/i18n";
 import { Segmented } from "./ui";
 import { BrandMark, Icon, type IconName } from "./icons";
 import { LanguageSwitch } from "./LanguageSwitch";
+import { Bell } from "./alerts/Bell";
 
 // Pages where the "week of" slider has no effect
 const NO_WEEK = ["/predict", "/how-it-works"];
@@ -34,7 +35,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   // Ward pages name themselves after the ward; every other page takes its menu label.
   const page = NAV.find((n) => isActive(n, path));
-  useTitle(path.startsWith("/ward") ? null : page ? t.shell.nav[page.key] : t.shell.notFoundTitle);
+  useTitle(path.startsWith("/ward") ? null : path.startsWith("/alerts") ? t.alerts.title : page ? t.shell.nav[page.key] : t.shell.notFoundTitle);
   const online = useOnline();
 
   return (
@@ -61,7 +62,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="kicker brand-tagline block max-[379px]:hidden">{t.shell.tagline}</span>
               </span>
             </Link>
-            <div className="order-2 lg:ml-auto xl:order-3 xl:ml-0">
+            <div className="order-2 flex items-center gap-2 lg:ml-auto xl:order-3 xl:ml-0">
+              <Bell />
               <LanguageSwitch />
             </div>
             <MobileNav path={path} />
