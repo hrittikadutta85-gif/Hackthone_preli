@@ -1,0 +1,1900 @@
+{
+ "source": "Names and hierarchy: Bangladesh administrative divisions (8 divisions, 64 districts, 12 city corporations). Coordinates: OpenStreetMap Nominatim, © OpenStreetMap contributors (ODbL).",
+ "retrieved": "2026-11-27",
+ "note": "Coordinates are approximate centres, for search and map placement only.",
+ "places": [
+  {
+   "id": "div:barishal",
+   "kind": "division",
+   "name": "Barishal",
+   "name_bn": "বরিশাল",
+   "aliases": [
+    "Barisal"
+   ],
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.4934,
+    90.3548
+   ]
+  },
+  {
+   "id": "div:chattogram",
+   "kind": "division",
+   "name": "Chattogram",
+   "name_bn": "চট্টগ্রাম",
+   "aliases": [
+    "Chittagong",
+    "Chottogram"
+   ],
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.68005,
+    91.88399
+   ]
+  },
+  {
+   "id": "div:dhaka",
+   "kind": "division",
+   "name": "Dhaka",
+   "name_bn": "ঢাকা",
+   "aliases": [
+    "Dacca"
+   ],
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.94562,
+    90.25264
+   ]
+  },
+  {
+   "id": "div:khulna",
+   "kind": "division",
+   "name": "Khulna",
+   "name_bn": "খুলনা",
+   "aliases": [],
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    22.93721,
+    89.28527
+   ]
+  },
+  {
+   "id": "div:mymensingh",
+   "kind": "division",
+   "name": "Mymensingh",
+   "name_bn": "ময়মনসিংহ",
+   "aliases": [
+    "Moymonsingh"
+   ],
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    24.88893,
+    90.38452
+   ]
+  },
+  {
+   "id": "div:rajshahi",
+   "kind": "division",
+   "name": "Rajshahi",
+   "name_bn": "রাজশাহী",
+   "aliases": [],
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.62854,
+    89.03769
+   ]
+  },
+  {
+   "id": "div:rangpur",
+   "kind": "division",
+   "name": "Rangpur",
+   "name_bn": "রংপুর",
+   "aliases": [],
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.63761,
+    89.08264
+   ]
+  },
+  {
+   "id": "div:sylhet",
+   "kind": "division",
+   "name": "Sylhet",
+   "name_bn": "সিলেট",
+   "aliases": [
+    "Silet"
+   ],
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.73589,
+    91.68525
+   ]
+  },
+  {
+   "id": "dist:dhaka",
+   "kind": "district",
+   "name": "Dhaka",
+   "name_bn": "ঢাকা",
+   "aliases": [
+    "Dacca"
+   ],
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.78049,
+    90.3583
+   ]
+  },
+  {
+   "id": "dist:faridpur",
+   "kind": "district",
+   "name": "Faridpur",
+   "name_bn": "ফরিদপুর",
+   "aliases": [],
+   "district": "Faridpur",
+   "district_bn": "ফরিদপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.46492,
+    89.86195
+   ]
+  },
+  {
+   "id": "dist:gazipur",
+   "kind": "district",
+   "name": "Gazipur",
+   "name_bn": "গাজীপুর",
+   "aliases": [],
+   "district": "Gazipur",
+   "district_bn": "গাজীপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    24.09302,
+    90.41042
+   ]
+  },
+  {
+   "id": "dist:gopalganj",
+   "kind": "district",
+   "name": "Gopalganj",
+   "name_bn": "গোপালগঞ্জ",
+   "aliases": [],
+   "district": "Gopalganj",
+   "district_bn": "গোপালগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.10342,
+    89.90785
+   ]
+  },
+  {
+   "id": "dist:kishoreganj",
+   "kind": "district",
+   "name": "Kishoreganj",
+   "name_bn": "কিশোরগঞ্জ",
+   "aliases": [
+    "Kishorganj"
+   ],
+   "district": "Kishoreganj",
+   "district_bn": "কিশোরগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    24.34081,
+    90.92768
+   ]
+  },
+  {
+   "id": "dist:madaripur",
+   "kind": "district",
+   "name": "Madaripur",
+   "name_bn": "মাদারীপুর",
+   "aliases": [],
+   "district": "Madaripur",
+   "district_bn": "মাদারীপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.23401,
+    90.14461
+   ]
+  },
+  {
+   "id": "dist:manikganj",
+   "kind": "district",
+   "name": "Manikganj",
+   "name_bn": "মানিকগঞ্জ",
+   "aliases": [],
+   "district": "Manikganj",
+   "district_bn": "মানিকগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.83298,
+    89.96669
+   ]
+  },
+  {
+   "id": "dist:munshiganj",
+   "kind": "district",
+   "name": "Munshiganj",
+   "name_bn": "মুন্সীগঞ্জ",
+   "aliases": [
+    "Munshigonj"
+   ],
+   "district": "Munshiganj",
+   "district_bn": "মুন্সীগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.52555,
+    90.44143
+   ]
+  },
+  {
+   "id": "dist:narayanganj",
+   "kind": "district",
+   "name": "Narayanganj",
+   "name_bn": "নারায়ণগঞ্জ",
+   "aliases": [
+    "Narayangonj"
+   ],
+   "district": "Narayanganj",
+   "district_bn": "নারায়ণগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.7203,
+    90.61262
+   ]
+  },
+  {
+   "id": "dist:narsingdi",
+   "kind": "district",
+   "name": "Narsingdi",
+   "name_bn": "নরসিংদী",
+   "aliases": [
+    "Narsingdhi"
+   ],
+   "district": "Narsingdi",
+   "district_bn": "নরসিংদী",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    24.02383,
+    90.81635
+   ]
+  },
+  {
+   "id": "dist:rajbari",
+   "kind": "district",
+   "name": "Rajbari",
+   "name_bn": "রাজবাড়ী",
+   "aliases": [],
+   "district": "Rajbari",
+   "district_bn": "রাজবাড়ী",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.73984,
+    89.57041
+   ]
+  },
+  {
+   "id": "dist:shariatpur",
+   "kind": "district",
+   "name": "Shariatpur",
+   "name_bn": "শরীয়তপুর",
+   "aliases": [],
+   "district": "Shariatpur",
+   "district_bn": "শরীয়তপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.23554,
+    90.43344
+   ]
+  },
+  {
+   "id": "dist:tangail",
+   "kind": "district",
+   "name": "Tangail",
+   "name_bn": "টাঙ্গাইল",
+   "aliases": [],
+   "district": "Tangail",
+   "district_bn": "টাঙ্গাইল",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    24.3764,
+    90.00787
+   ]
+  },
+  {
+   "id": "dist:bandarban",
+   "kind": "district",
+   "name": "Bandarban",
+   "name_bn": "বান্দরবান",
+   "aliases": [],
+   "district": "Bandarban",
+   "district_bn": "বান্দরবান",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    21.77698,
+    92.19478
+   ]
+  },
+  {
+   "id": "dist:brahmanbaria",
+   "kind": "district",
+   "name": "Brahmanbaria",
+   "name_bn": "ব্রাহ্মণবাড়িয়া",
+   "aliases": [
+    "B. Baria",
+    "Brahmonbaria"
+   ],
+   "district": "Brahmanbaria",
+   "district_bn": "ব্রাহ্মণবাড়িয়া",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    23.9606,
+    91.11909
+   ]
+  },
+  {
+   "id": "dist:chandpur",
+   "kind": "district",
+   "name": "Chandpur",
+   "name_bn": "চাঁদপুর",
+   "aliases": [],
+   "district": "Chandpur",
+   "district_bn": "চাঁদপুর",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    23.24821,
+    90.80517
+   ]
+  },
+  {
+   "id": "dist:chattogram",
+   "kind": "district",
+   "name": "Chattogram",
+   "name_bn": "চট্টগ্রাম",
+   "aliases": [
+    "Chittagong",
+    "Chottogram",
+    "Ctg"
+   ],
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.42254,
+    91.73129
+   ]
+  },
+  {
+   "id": "dist:cumilla",
+   "kind": "district",
+   "name": "Cumilla",
+   "name_bn": "কুমিল্লা",
+   "aliases": [
+    "Comilla"
+   ],
+   "district": "Cumilla",
+   "district_bn": "কুমিল্লা",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    23.4208,
+    91.07946
+   ]
+  },
+  {
+   "id": "dist:cox-s-bazar",
+   "kind": "district",
+   "name": "Cox's Bazar",
+   "name_bn": "কক্সবাজার",
+   "aliases": [
+    "Coxs Bazar",
+    "Cox Bazar"
+   ],
+   "district": "Cox's Bazar",
+   "district_bn": "কক্সবাজার",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    21.442,
+    91.98125
+   ]
+  },
+  {
+   "id": "dist:feni",
+   "kind": "district",
+   "name": "Feni",
+   "name_bn": "ফেনী",
+   "aliases": [],
+   "district": "Feni",
+   "district_bn": "ফেনী",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    23.01276,
+    91.40492
+   ]
+  },
+  {
+   "id": "dist:khagrachhari",
+   "kind": "district",
+   "name": "Khagrachhari",
+   "name_bn": "খাগড়াছড়ি",
+   "aliases": [
+    "Khagrachari"
+   ],
+   "district": "Khagrachhari",
+   "district_bn": "খাগড়াছড়ি",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.84983,
+    91.8407
+   ]
+  },
+  {
+   "id": "dist:lakshmipur",
+   "kind": "district",
+   "name": "Lakshmipur",
+   "name_bn": "লক্ষ্মীপুর",
+   "aliases": [
+    "Laxmipur"
+   ],
+   "district": "Lakshmipur",
+   "district_bn": "লক্ষ্মীপুর",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.82986,
+    90.83719
+   ]
+  },
+  {
+   "id": "dist:noakhali",
+   "kind": "district",
+   "name": "Noakhali",
+   "name_bn": "নোয়াখালী",
+   "aliases": [],
+   "district": "Noakhali",
+   "district_bn": "নোয়াখালী",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.25408,
+    91.17144
+   ]
+  },
+  {
+   "id": "dist:rangamati",
+   "kind": "district",
+   "name": "Rangamati",
+   "name_bn": "রাঙ্গামাটি",
+   "aliases": [
+    "Rangamati Hill"
+   ],
+   "district": "Rangamati",
+   "district_bn": "রাঙ্গামাটি",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.65099,
+    92.14471
+   ]
+  },
+  {
+   "id": "dist:bogura",
+   "kind": "district",
+   "name": "Bogura",
+   "name_bn": "বগুড়া",
+   "aliases": [
+    "Bogra"
+   ],
+   "district": "Bogura",
+   "district_bn": "বগুড়া",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.83467,
+    89.33416
+   ]
+  },
+  {
+   "id": "dist:joypurhat",
+   "kind": "district",
+   "name": "Joypurhat",
+   "name_bn": "জয়পুরহাট",
+   "aliases": [
+    "Jaipurhat"
+   ],
+   "district": "Joypurhat",
+   "district_bn": "জয়পুরহাট",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    25.06605,
+    89.09226
+   ]
+  },
+  {
+   "id": "dist:naogaon",
+   "kind": "district",
+   "name": "Naogaon",
+   "name_bn": "নওগাঁ",
+   "aliases": [],
+   "district": "Naogaon",
+   "district_bn": "নওগাঁ",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.87347,
+    88.73758
+   ]
+  },
+  {
+   "id": "dist:natore",
+   "kind": "district",
+   "name": "Natore",
+   "name_bn": "নাটোর",
+   "aliases": [],
+   "district": "Natore",
+   "district_bn": "নাটোর",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.39516,
+    89.09136
+   ]
+  },
+  {
+   "id": "dist:chapai-nawabganj",
+   "kind": "district",
+   "name": "Chapai Nawabganj",
+   "name_bn": "চাঁপাইনবাবগঞ্জ",
+   "aliases": [
+    "Nawabganj",
+    "Chapainawabganj"
+   ],
+   "district": "Chapai Nawabganj",
+   "district_bn": "চাঁপাইনবাবগঞ্জ",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.69272,
+    88.26109
+   ]
+  },
+  {
+   "id": "dist:pabna",
+   "kind": "district",
+   "name": "Pabna",
+   "name_bn": "পাবনা",
+   "aliases": [],
+   "district": "Pabna",
+   "district_bn": "পাবনা",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.08425,
+    89.34446
+   ]
+  },
+  {
+   "id": "dist:rajshahi",
+   "kind": "district",
+   "name": "Rajshahi",
+   "name_bn": "রাজশাহী",
+   "aliases": [],
+   "district": "Rajshahi",
+   "district_bn": "রাজশাহী",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.4175,
+    88.62804
+   ]
+  },
+  {
+   "id": "dist:sirajganj",
+   "kind": "district",
+   "name": "Sirajganj",
+   "name_bn": "সিরাজগঞ্জ",
+   "aliases": [
+    "Sirajgonj"
+   ],
+   "district": "Sirajganj",
+   "district_bn": "সিরাজগঞ্জ",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.39936,
+    89.53158
+   ]
+  },
+  {
+   "id": "dist:bagerhat",
+   "kind": "district",
+   "name": "Bagerhat",
+   "name_bn": "বাগেরহাট",
+   "aliases": [],
+   "district": "Bagerhat",
+   "district_bn": "বাগেরহাট",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    22.19672,
+    89.71176
+   ]
+  },
+  {
+   "id": "dist:chuadanga",
+   "kind": "district",
+   "name": "Chuadanga",
+   "name_bn": "চুয়াডাঙ্গা",
+   "aliases": [],
+   "district": "Chuadanga",
+   "district_bn": "চুয়াডাঙ্গা",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.60331,
+    88.8244
+   ]
+  },
+  {
+   "id": "dist:jashore",
+   "kind": "district",
+   "name": "Jashore",
+   "name_bn": "যশোর",
+   "aliases": [
+    "Jessore"
+   ],
+   "district": "Jashore",
+   "district_bn": "যশোর",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.08424,
+    89.12469
+   ]
+  },
+  {
+   "id": "dist:jhenaidah",
+   "kind": "district",
+   "name": "Jhenaidah",
+   "name_bn": "ঝিনাইদহ",
+   "aliases": [
+    "Jhenaidaha"
+   ],
+   "district": "Jhenaidah",
+   "district_bn": "ঝিনাইদহ",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.49471,
+    89.12547
+   ]
+  },
+  {
+   "id": "dist:khulna",
+   "kind": "district",
+   "name": "Khulna",
+   "name_bn": "খুলনা",
+   "aliases": [],
+   "district": "Khulna",
+   "district_bn": "খুলনা",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    22.20712,
+    89.43017
+   ]
+  },
+  {
+   "id": "dist:kushtia",
+   "kind": "district",
+   "name": "Kushtia",
+   "name_bn": "কুষ্টিয়া",
+   "aliases": [],
+   "district": "Kushtia",
+   "district_bn": "কুষ্টিয়া",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.94791,
+    88.97638
+   ]
+  },
+  {
+   "id": "dist:magura",
+   "kind": "district",
+   "name": "Magura",
+   "name_bn": "মাগুরা",
+   "aliases": [],
+   "district": "Magura",
+   "district_bn": "মাগুরা",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.46748,
+    89.45879
+   ]
+  },
+  {
+   "id": "dist:meherpur",
+   "kind": "district",
+   "name": "Meherpur",
+   "name_bn": "মেহেরপুর",
+   "aliases": [],
+   "district": "Meherpur",
+   "district_bn": "মেহেরপুর",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.78874,
+    88.70199
+   ]
+  },
+  {
+   "id": "dist:narail",
+   "kind": "district",
+   "name": "Narail",
+   "name_bn": "নড়াইল",
+   "aliases": [],
+   "district": "Narail",
+   "district_bn": "নড়াইল",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    23.13626,
+    89.5474
+   ]
+  },
+  {
+   "id": "dist:satkhira",
+   "kind": "district",
+   "name": "Satkhira",
+   "name_bn": "সাতক্ষীরা",
+   "aliases": [],
+   "district": "Satkhira",
+   "district_bn": "সাতক্ষীরা",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    22.15658,
+    89.19199
+   ]
+  },
+  {
+   "id": "dist:barguna",
+   "kind": "district",
+   "name": "Barguna",
+   "name_bn": "বরগুনা",
+   "aliases": [],
+   "district": "Barguna",
+   "district_bn": "বরগুনা",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.13134,
+    90.11724
+   ]
+  },
+  {
+   "id": "dist:barishal",
+   "kind": "district",
+   "name": "Barishal",
+   "name_bn": "বরিশাল",
+   "aliases": [
+    "Barisal"
+   ],
+   "district": "Barishal",
+   "district_bn": "বরিশাল",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.47876,
+    90.70895
+   ]
+  },
+  {
+   "id": "dist:bhola",
+   "kind": "district",
+   "name": "Bhola",
+   "name_bn": "ভোলা",
+   "aliases": [],
+   "district": "Bhola",
+   "district_bn": "ভোলা",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.14357,
+    90.79041
+   ]
+  },
+  {
+   "id": "dist:jhalokati",
+   "kind": "district",
+   "name": "Jhalokati",
+   "name_bn": "ঝালকাঠি",
+   "aliases": [
+    "Jhalakathi",
+    "Jhalokathi"
+   ],
+   "district": "Jhalokati",
+   "district_bn": "ঝালকাঠি",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.64262,
+    90.19903
+   ]
+  },
+  {
+   "id": "dist:patuakhali",
+   "kind": "district",
+   "name": "Patuakhali",
+   "name_bn": "পটুয়াখালী",
+   "aliases": [],
+   "district": "Patuakhali",
+   "district_bn": "পটুয়াখালী",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.00842,
+    90.38268
+   ]
+  },
+  {
+   "id": "dist:pirojpur",
+   "kind": "district",
+   "name": "Pirojpur",
+   "name_bn": "পিরোজপুর",
+   "aliases": [],
+   "district": "Pirojpur",
+   "district_bn": "পিরোজপুর",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.50956,
+    90.00725
+   ]
+  },
+  {
+   "id": "dist:habiganj",
+   "kind": "district",
+   "name": "Habiganj",
+   "name_bn": "হবিগঞ্জ",
+   "aliases": [],
+   "district": "Habiganj",
+   "district_bn": "হবিগঞ্জ",
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.33458,
+    91.42121
+   ]
+  },
+  {
+   "id": "dist:moulvibazar",
+   "kind": "district",
+   "name": "Moulvibazar",
+   "name_bn": "মৌলভীবাজার",
+   "aliases": [
+    "Maulvibazar"
+   ],
+   "district": "Moulvibazar",
+   "district_bn": "মৌলভীবাজার",
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.48515,
+    91.88021
+   ]
+  },
+  {
+   "id": "dist:sunamganj",
+   "kind": "district",
+   "name": "Sunamganj",
+   "name_bn": "সুনামগঞ্জ",
+   "aliases": [],
+   "district": "Sunamganj",
+   "district_bn": "সুনামগঞ্জ",
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.88681,
+    91.39325
+   ]
+  },
+  {
+   "id": "dist:sylhet",
+   "kind": "district",
+   "name": "Sylhet",
+   "name_bn": "সিলেট",
+   "aliases": [
+    "Silet"
+   ],
+   "district": "Sylhet",
+   "district_bn": "সিলেট",
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.88974,
+    91.96722
+   ]
+  },
+  {
+   "id": "dist:dinajpur",
+   "kind": "district",
+   "name": "Dinajpur",
+   "name_bn": "দিনাজপুর",
+   "aliases": [],
+   "district": "Dinajpur",
+   "district_bn": "দিনাজপুর",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.63756,
+    88.725
+   ]
+  },
+  {
+   "id": "dist:gaibandha",
+   "kind": "district",
+   "name": "Gaibandha",
+   "name_bn": "গাইবান্ধা",
+   "aliases": [],
+   "district": "Gaibandha",
+   "district_bn": "গাইবান্ধা",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.33984,
+    89.53926
+   ]
+  },
+  {
+   "id": "dist:kurigram",
+   "kind": "district",
+   "name": "Kurigram",
+   "name_bn": "কুড়িগ্রাম",
+   "aliases": [],
+   "district": "Kurigram",
+   "district_bn": "কুড়িগ্রাম",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.80597,
+    89.64343
+   ]
+  },
+  {
+   "id": "dist:lalmonirhat",
+   "kind": "district",
+   "name": "Lalmonirhat",
+   "name_bn": "লালমনিরহাট",
+   "aliases": [],
+   "district": "Lalmonirhat",
+   "district_bn": "লালমনিরহাট",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    26.12276,
+    89.16211
+   ]
+  },
+  {
+   "id": "dist:nilphamari",
+   "kind": "district",
+   "name": "Nilphamari",
+   "name_bn": "নীলফামারী",
+   "aliases": [],
+   "district": "Nilphamari",
+   "district_bn": "নীলফামারী",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    26.02447,
+    88.93266
+   ]
+  },
+  {
+   "id": "dist:panchagarh",
+   "kind": "district",
+   "name": "Panchagarh",
+   "name_bn": "পঞ্চগড়",
+   "aliases": [],
+   "district": "Panchagarh",
+   "district_bn": "পঞ্চগড়",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    26.32094,
+    88.54711
+   ]
+  },
+  {
+   "id": "dist:rangpur",
+   "kind": "district",
+   "name": "Rangpur",
+   "name_bn": "রংপুর",
+   "aliases": [],
+   "district": "Rangpur",
+   "district_bn": "রংপুর",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.63472,
+    89.26145
+   ]
+  },
+  {
+   "id": "dist:thakurgaon",
+   "kind": "district",
+   "name": "Thakurgaon",
+   "name_bn": "ঠাকুরগাঁও",
+   "aliases": [],
+   "district": "Thakurgaon",
+   "district_bn": "ঠাকুরগাঁও",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.93633,
+    88.31169
+   ]
+  },
+  {
+   "id": "dist:jamalpur",
+   "kind": "district",
+   "name": "Jamalpur",
+   "name_bn": "জামালপুর",
+   "aliases": [],
+   "district": "Jamalpur",
+   "district_bn": "জামালপুর",
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    25.00052,
+    89.7782
+   ]
+  },
+  {
+   "id": "dist:mymensingh",
+   "kind": "district",
+   "name": "Mymensingh",
+   "name_bn": "ময়মনসিংহ",
+   "aliases": [],
+   "district": "Mymensingh",
+   "district_bn": "ময়মনসিংহ",
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    24.72263,
+    90.41868
+   ]
+  },
+  {
+   "id": "dist:netrokona",
+   "kind": "district",
+   "name": "Netrokona",
+   "name_bn": "নেত্রকোণা",
+   "aliases": [
+    "Netrakona"
+   ],
+   "district": "Netrokona",
+   "district_bn": "নেত্রকোণা",
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    24.88614,
+    90.77939
+   ]
+  },
+  {
+   "id": "dist:sherpur",
+   "kind": "district",
+   "name": "Sherpur",
+   "name_bn": "শেরপুর",
+   "aliases": [],
+   "district": "Sherpur",
+   "district_bn": "শেরপুর",
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    25.09348,
+    90.09783
+   ]
+  },
+  {
+   "id": "cc:DNCC",
+   "kind": "city_corporation",
+   "name": "Dhaka North City Corporation",
+   "name_bn": "ঢাকা উত্তর সিটি কর্পোরেশন",
+   "aliases": [
+    "Dhaka North",
+    "DNCC"
+   ],
+   "city_corporation": "DNCC",
+   "dataset_city": "Dhaka North",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.79585,
+    90.41486
+   ]
+  },
+  {
+   "id": "cc:DSCC",
+   "kind": "city_corporation",
+   "name": "Dhaka South City Corporation",
+   "name_bn": "ঢাকা দক্ষিণ সিটি কর্পোরেশন",
+   "aliases": [
+    "Dhaka South",
+    "DSCC"
+   ],
+   "city_corporation": "DSCC",
+   "dataset_city": "Dhaka South",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.72396,
+    90.4085
+   ]
+  },
+  {
+   "id": "cc:CCC",
+   "kind": "city_corporation",
+   "name": "Chattogram City Corporation",
+   "name_bn": "চট্টগ্রাম সিটি কর্পোরেশন",
+   "aliases": [
+    "Chittagong City",
+    "CCC",
+    "Chattogram City"
+   ],
+   "city_corporation": "CCC",
+   "dataset_city": "Chattogram",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.33378,
+    91.83443
+   ]
+  },
+  {
+   "id": "cc:GCC",
+   "kind": "city_corporation",
+   "name": "Gazipur City Corporation",
+   "name_bn": "গাজীপুর সিটি কর্পোরেশন",
+   "aliases": [
+    "Gazipur City"
+   ],
+   "city_corporation": "GCC",
+   "dataset_city": "Gazipur",
+   "district": "Gazipur",
+   "district_bn": "গাজীপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.99972,
+    90.4184
+   ]
+  },
+  {
+   "id": "cc:NCC",
+   "kind": "city_corporation",
+   "name": "Narayanganj City Corporation",
+   "name_bn": "নারায়ণগঞ্জ সিটি কর্পোরেশন",
+   "aliases": [
+    "Narayanganj City"
+   ],
+   "city_corporation": "NCC",
+   "dataset_city": "Narayanganj",
+   "district": "Narayanganj",
+   "district_bn": "নারায়ণগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.62367,
+    90.49881
+   ]
+  },
+  {
+   "id": "cc:KCC",
+   "kind": "city_corporation",
+   "name": "Khulna City Corporation",
+   "name_bn": "খুলনা সিটি কর্পোরেশন",
+   "aliases": [
+    "Khulna City"
+   ],
+   "city_corporation": "KCC",
+   "dataset_city": null,
+   "district": "Khulna",
+   "district_bn": "খুলনা",
+   "division": "Khulna",
+   "division_bn": "খুলনা",
+   "point": [
+    22.81717,
+    89.56376
+   ]
+  },
+  {
+   "id": "cc:RCC",
+   "kind": "city_corporation",
+   "name": "Rajshahi City Corporation",
+   "name_bn": "রাজশাহী সিটি কর্পোরেশন",
+   "aliases": [
+    "Rajshahi City"
+   ],
+   "city_corporation": "RCC",
+   "dataset_city": null,
+   "district": "Rajshahi",
+   "district_bn": "রাজশাহী",
+   "division": "Rajshahi",
+   "division_bn": "রাজশাহী",
+   "point": [
+    24.37155,
+    88.5921
+   ]
+  },
+  {
+   "id": "cc:SCC",
+   "kind": "city_corporation",
+   "name": "Sylhet City Corporation",
+   "name_bn": "সিলেট সিটি কর্পোরেশন",
+   "aliases": [
+    "Sylhet City"
+   ],
+   "city_corporation": "SCC",
+   "dataset_city": null,
+   "district": "Sylhet",
+   "district_bn": "সিলেট",
+   "division": "Sylhet",
+   "division_bn": "সিলেট",
+   "point": [
+    24.89922,
+    91.86853
+   ]
+  },
+  {
+   "id": "cc:BCC",
+   "kind": "city_corporation",
+   "name": "Barishal City Corporation",
+   "name_bn": "বরিশাল সিটি কর্পোরেশন",
+   "aliases": [
+    "Barisal City",
+    "Barishal City"
+   ],
+   "city_corporation": "BCC",
+   "dataset_city": null,
+   "district": "Barishal",
+   "district_bn": "বরিশাল",
+   "division": "Barishal",
+   "division_bn": "বরিশাল",
+   "point": [
+    22.70475,
+    90.37073
+   ]
+  },
+  {
+   "id": "cc:RpCC",
+   "kind": "city_corporation",
+   "name": "Rangpur City Corporation",
+   "name_bn": "রংপুর সিটি কর্পোরেশন",
+   "aliases": [
+    "Rangpur City"
+   ],
+   "city_corporation": "RpCC",
+   "dataset_city": null,
+   "district": "Rangpur",
+   "district_bn": "রংপুর",
+   "division": "Rangpur",
+   "division_bn": "রংপুর",
+   "point": [
+    25.76009,
+    89.26736
+   ]
+  },
+  {
+   "id": "cc:CuCC",
+   "kind": "city_corporation",
+   "name": "Cumilla City Corporation",
+   "name_bn": "কুমিল্লা সিটি কর্পোরেশন",
+   "aliases": [
+    "Comilla City",
+    "Cumilla City"
+   ],
+   "city_corporation": "CuCC",
+   "dataset_city": null,
+   "district": "Cumilla",
+   "district_bn": "কুমিল্লা",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    23.46098,
+    91.18122
+   ]
+  },
+  {
+   "id": "cc:MCC",
+   "kind": "city_corporation",
+   "name": "Mymensingh City Corporation",
+   "name_bn": "ময়মনসিংহ সিটি কর্পোরেশন",
+   "aliases": [
+    "Mymensingh City"
+   ],
+   "city_corporation": "MCC",
+   "dataset_city": null,
+   "district": "Mymensingh",
+   "district_bn": "ময়মনসিংহ",
+   "division": "Mymensingh",
+   "division_bn": "ময়মনসিংহ",
+   "point": [
+    24.74821,
+    90.40992
+   ]
+  },
+  {
+   "id": "nb:agrabad",
+   "kind": "neighbourhood",
+   "name": "Agrabad",
+   "name_bn": "আগ্রাবাদ",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.32478,
+    91.81136
+   ]
+  },
+  {
+   "id": "nb:panchlaish",
+   "kind": "neighbourhood",
+   "name": "Panchlaish",
+   "name_bn": "পাঁচলাইশ",
+   "aliases": [
+    "Panchlais"
+   ],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.36254,
+    91.83436
+   ]
+  },
+  {
+   "id": "nb:halishahar",
+   "kind": "neighbourhood",
+   "name": "Halishahar",
+   "name_bn": "হালিশহর",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.32324,
+    91.77559
+   ]
+  },
+  {
+   "id": "nb:nasirabad",
+   "kind": "neighbourhood",
+   "name": "Nasirabad",
+   "name_bn": "নাসিরাবাদ",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.3624,
+    91.82417
+   ]
+  },
+  {
+   "id": "nb:khulshi",
+   "kind": "neighbourhood",
+   "name": "Khulshi",
+   "name_bn": "খুলশী",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.36211,
+    91.8076
+   ]
+  },
+  {
+   "id": "nb:chawkbazar-ctg",
+   "kind": "neighbourhood",
+   "name": "Chawkbazar",
+   "name_bn": "চকবাজার",
+   "aliases": [
+    "Chakbazar"
+   ],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.35718,
+    91.83735
+   ]
+  },
+  {
+   "id": "nb:bahaddarhat",
+   "kind": "neighbourhood",
+   "name": "Bahaddarhat",
+   "name_bn": "বহদ্দারহাট",
+   "aliases": [
+    "Bohoddarhat"
+   ],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.36503,
+    91.82154
+   ]
+  },
+  {
+   "id": "nb:pahartali",
+   "kind": "neighbourhood",
+   "name": "Pahartali",
+   "name_bn": "পাহাড়তলী",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.36183,
+    91.78755
+   ]
+  },
+  {
+   "id": "nb:patenga",
+   "kind": "neighbourhood",
+   "name": "Patenga",
+   "name_bn": "পতেঙ্গা",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.2385,
+    91.81318
+   ]
+  },
+  {
+   "id": "nb:muradpur",
+   "kind": "neighbourhood",
+   "name": "Muradpur",
+   "name_bn": "মুরাদপুর",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.36694,
+    91.82948
+   ]
+  },
+  {
+   "id": "nb:bakalia",
+   "kind": "neighbourhood",
+   "name": "Bakalia",
+   "name_bn": "বাকলিয়া",
+   "aliases": [
+    "Baklia"
+   ],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.34991,
+    91.84068
+   ]
+  },
+  {
+   "id": "nb:chandgaon",
+   "kind": "neighbourhood",
+   "name": "Chandgaon",
+   "name_bn": "চান্দগাঁও",
+   "aliases": [],
+   "city_corporation": "CCC",
+   "district": "Chattogram",
+   "district_bn": "চট্টগ্রাম",
+   "division": "Chattogram",
+   "division_bn": "চট্টগ্রাম",
+   "point": [
+    22.37866,
+    91.84679
+   ]
+  },
+  {
+   "id": "nb:gulshan",
+   "kind": "neighbourhood",
+   "name": "Gulshan",
+   "name_bn": "গুলশান",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.79218,
+    90.41555
+   ]
+  },
+  {
+   "id": "nb:banani",
+   "kind": "neighbourhood",
+   "name": "Banani",
+   "name_bn": "বনানী",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.79032,
+    90.4077
+   ]
+  },
+  {
+   "id": "nb:uttara",
+   "kind": "neighbourhood",
+   "name": "Uttara",
+   "name_bn": "উত্তরা",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.86933,
+    90.39269
+   ]
+  },
+  {
+   "id": "nb:mirpur",
+   "kind": "neighbourhood",
+   "name": "Mirpur",
+   "name_bn": "মিরপুর",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.82029,
+    90.37104
+   ]
+  },
+  {
+   "id": "nb:mohakhali",
+   "kind": "neighbourhood",
+   "name": "Mohakhali",
+   "name_bn": "মহাখালী",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.77991,
+    90.40832
+   ]
+  },
+  {
+   "id": "nb:badda",
+   "kind": "neighbourhood",
+   "name": "Badda",
+   "name_bn": "বাড্ডা",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.77654,
+    90.4463
+   ]
+  },
+  {
+   "id": "nb:tejgaon",
+   "kind": "neighbourhood",
+   "name": "Tejgaon",
+   "name_bn": "তেজগাঁও",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.76282,
+    90.3913
+   ]
+  },
+  {
+   "id": "nb:pallabi",
+   "kind": "neighbourhood",
+   "name": "Pallabi",
+   "name_bn": "পল্লবী",
+   "aliases": [],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.82616,
+    90.36419
+   ]
+  },
+  {
+   "id": "nb:mohammadpur",
+   "kind": "neighbourhood",
+   "name": "Mohammadpur",
+   "name_bn": "মোহাম্মদপুর",
+   "aliases": [
+    "Muhammadpur"
+   ],
+   "city_corporation": "DNCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.75939,
+    90.36633
+   ]
+  },
+  {
+   "id": "nb:dhanmondi",
+   "kind": "neighbourhood",
+   "name": "Dhanmondi",
+   "name_bn": "ধানমন্ডি",
+   "aliases": [
+    "Dhanmondhi"
+   ],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.75354,
+    90.37031
+   ]
+  },
+  {
+   "id": "nb:motijheel",
+   "kind": "neighbourhood",
+   "name": "Motijheel",
+   "name_bn": "মতিঝিল",
+   "aliases": [
+    "Motijhil"
+   ],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.72726,
+    90.4212
+   ]
+  },
+  {
+   "id": "nb:lalbagh",
+   "kind": "neighbourhood",
+   "name": "Lalbagh",
+   "name_bn": "লালবাগ",
+   "aliases": [],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.71884,
+    90.38815
+   ]
+  },
+  {
+   "id": "nb:jatrabari",
+   "kind": "neighbourhood",
+   "name": "Jatrabari",
+   "name_bn": "যাত্রাবাড়ী",
+   "aliases": [],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.7094,
+    90.43381
+   ]
+  },
+  {
+   "id": "nb:khilgaon",
+   "kind": "neighbourhood",
+   "name": "Khilgaon",
+   "name_bn": "খিলগাঁও",
+   "aliases": [],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.75065,
+    90.42328
+   ]
+  },
+  {
+   "id": "nb:shahbagh",
+   "kind": "neighbourhood",
+   "name": "Shahbagh",
+   "name_bn": "শাহবাগ",
+   "aliases": [
+    "Shahbag"
+   ],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.73946,
+    90.39598
+   ]
+  },
+  {
+   "id": "nb:kamrangirchar",
+   "kind": "neighbourhood",
+   "name": "Kamrangirchar",
+   "name_bn": "কামরাঙ্গীরচর",
+   "aliases": [],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.71774,
+    90.37704
+   ]
+  },
+  {
+   "id": "nb:sadarghat",
+   "kind": "neighbourhood",
+   "name": "Sadarghat",
+   "name_bn": "সদরঘাট",
+   "aliases": [],
+   "city_corporation": "DSCC",
+   "district": "Dhaka",
+   "district_bn": "ঢাকা",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.70589,
+    90.40929
+   ]
+  },
+  {
+   "id": "nb:tongi",
+   "kind": "neighbourhood",
+   "name": "Tongi",
+   "name_bn": "টঙ্গী",
+   "aliases": [],
+   "city_corporation": "GCC",
+   "district": "Gazipur",
+   "district_bn": "গাজীপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.97883,
+    90.38023
+   ]
+  },
+  {
+   "id": "nb:joydebpur",
+   "kind": "neighbourhood",
+   "name": "Joydebpur",
+   "name_bn": "জয়দেবপুর",
+   "aliases": [
+    "Jaydebpur"
+   ],
+   "city_corporation": "GCC",
+   "district": "Gazipur",
+   "district_bn": "গাজীপুর",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    24.00012,
+    90.42353
+   ]
+  },
+  {
+   "id": "nb:siddhirganj",
+   "kind": "neighbourhood",
+   "name": "Siddhirganj",
+   "name_bn": "সিদ্ধিরগঞ্জ",
+   "aliases": [
+    "Siddirganj"
+   ],
+   "city_corporation": "NCC",
+   "district": "Narayanganj",
+   "district_bn": "নারায়ণগঞ্জ",
+   "division": "Dhaka",
+   "division_bn": "ঢাকা",
+   "point": [
+    23.68497,
+    90.516
+   ]
+  }
+ ]
+}

@@ -418,6 +418,14 @@ class AlertDB:
                 n += 1
             return n
 
+    def wards_of(self, ids: list[int]) -> dict[int, str]:
+        """Alert id -> ward id, for checking a field officer may change these alerts."""
+        if not ids:
+            return {}
+        with self.connect() as c:
+            rows = c.execute(f"SELECT id, ward_id FROM alerts WHERE id IN ({','.join('?' * len(ids))})", ids).fetchall()
+        return {r["id"]: r["ward_id"] for r in rows}
+
     def delete_from(self, week: str) -> int:
         """Remove alerts raised in `week` or later (used to replay data weeks for testing)."""
         with self.lock, self.connect() as c:

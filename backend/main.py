@@ -4,13 +4,16 @@
 
 Models and data are loaded once at startup, so requests are cheap lookups (or a single-ward re-score for what-if).
 No external API or LLM calls: forecasting, allocation, routing, simulation and dispatch all run in this process.
+
+Every route except /api/health and the sign-in routes needs a signed-in user whose role has the route's permission
+(backend/auth/rbac.py). The checks run here, on the server; the frontend only hides what a role cannot open.
 """
 import threading
 from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
@@ -19,6 +22,10 @@ from dengue_ews.config import ALERTS, DATA_PATH
 
 from . import alerts as al
 from . import dispatch, push
+from .area import routes as area_routes
+from .auth import routes as auth_routes
+from .auth.deps import require, ward_allowed
+from .auth.service import AuthError, Principal, get_service
 from .offline import self_test
 from .planner import Planner
 from .service import Store
@@ -52,8 +59,10 @@ def scanner(stop: threading.Event):
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    get_service()  # opens (and migrates) the accounts database before the first request
     state["store"] = Store()
     state["planner"] = Planner(state["store"])
+    auth_routes.known_wards["ids"] = set(state["store"].city_of)
     state["db"] = al.AlertDB()
     stop = threading.Event()
     threading.Thread(target=scanner, args=(stop,), name="alert-scanner", daemon=True).start()
@@ -65,6 +74,40 @@ app = FastAPI(title="Dengue Early-Warning API", version="2.0", lifespan=lifespan
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
                    allow_methods=["*"], allow_headers=["*"])
 app.add_middleware(GZipMiddleware, minimum_size=2000)
+app.include_router(auth_routes.router)
+app.include_router(area_routes.router)
+area_routes.store_ref["get"] = lambda: state["store"]
+area_routes.store_ref["planner"] = lambda: state.get("planner")
+
+UNSAFE = {"POST", "PUT", "PATCH", "DELETE"}
+PRIVATE = ("/api/auth/", "/api/account/", "/api/admin/")
+
+
+@app.exception_handler(AuthError)
+async def auth_error(_: Request, e: AuthError):
+    return auth_routes.error_response(e)
+
+
+@app.middleware("http")
+async def same_site_only(request: Request, call_next):
+    """Refuse state-changing requests that a browser sent from another site (CSRF defence in depth), and keep
+    account responses out of every cache, so the back button cannot show them after logout."""
+    path = request.url.path
+    if request.method in UNSAFE and path.startswith("/api/") and not path.startswith("/api/auth/hooks/"):
+        origin = request.headers.get("origin")
+        host = (request.headers.get("x-forwarded-host") or request.headers.get("host") or "").split(",")[0].strip()
+        same_host = origin is not None and origin.split("://", 1)[-1] == host
+        allowed = origin is None or same_host or origin in get_service().s.allowed_origins
+        if not allowed or request.headers.get("sec-fetch-site") == "cross-site":
+            return JSONResponse({"detail": {"code": "bad_origin", "message": "Cross-site request refused."}}, 403)
+    response = await call_next(request)
+    if path.startswith(PRIVATE):
+        response.headers["Cache-Control"] = "no-store"
+    return response
+
+
+def can(perm: str):
+    return [Depends(require(perm))]
 
 Horizon = Annotated[int, Query(ge=1, le=4, description="Weeks ahead")]
 
@@ -96,30 +139,32 @@ def health():
             "rows": int(len(store().df)) if ready else 0, "wards": len(store().city_of) if ready else 0}
 
 
-@app.get("/api/meta")
+@app.get("/api/meta", dependencies=can("dashboard.view"))
 def meta():
     return store().meta()
 
 
-@app.get("/api/city")
+@app.get("/api/city", dependencies=can("dashboard.view"))
 def city(origin: str | None = None, horizon: Horizon = 2, city: str | None = None):
     if city and city not in store().meta()["cities"]:
         raise HTTPException(404, f"No city corporation called '{city}'.")
     return store().city(origin, horizon, city)
 
 
-@app.get("/api/outlook")
+@app.get("/api/outlook", dependencies=can("dashboard.view"))
 def outlook(origin: str | None = None):
     return store().outlook(origin)
 
 
-@app.get("/api/map")
+@app.get("/api/map", dependencies=can("dashboard.view"))
 def risk_map(horizon: Horizon = 2):
     return store().map_view(horizon)
 
 
 @app.get("/api/ward/{ward}")
-def ward_forecast(ward: str, origin: str | None = None, horizon: Horizon = 2):
+def ward_forecast(ward: str, origin: str | None = None, horizon: Horizon = 2,
+                  p: Principal = Depends(require("ward.view"))):
+    ward_allowed(p, ward)  # before the lookup, so an unassigned user can't probe which wards exist
     return store().forecast(known_ward(ward), origin, horizon)
 
 
@@ -133,12 +178,13 @@ class WhatIf(BaseModel):
 
 
 @app.post("/api/ward/{ward}/whatif")
-def ward_whatif(ward: str, body: WhatIf):
+def ward_whatif(ward: str, body: WhatIf, p: Principal = Depends(require("ward.view", "forecast.whatif"))):
+    ward_allowed(p, ward)
     return store().whatif(known_ward(ward), body.origin, body.rain_pct, body.temp_shift, body.humidity_shift,
                           body.rain_mm, body.horizon)
 
 
-@app.get("/api/performance")
+@app.get("/api/performance", dependencies=can("model.view"))
 def performance(ward: str, horizon: Horizon = 2):
     return store().performance(known_ward(ward), horizon)
 
@@ -156,12 +202,12 @@ class PredictBody(BaseModel):
     weeks: list[Observation] = Field(min_length=1, max_length=26)
 
 
-@app.get("/api/predict/template")
+@app.get("/api/predict/template", dependencies=can("predict.use"))
 def predict_template(ward: str, weeks: Annotated[int, Query(ge=4, le=26)] = 8):
     return store().template(known_ward(ward), weeks)
 
 
-@app.post("/api/predict/{ward}")
+@app.post("/api/predict/{ward}", dependencies=can("predict.use"))
 def predict(ward: str, body: PredictBody):
     weeks = [w.model_dump() for w in body.weeks]
     try:
@@ -185,7 +231,7 @@ def plan_args(origin, horizon, stock, crews, basis, city, saline_pct, kits_pct, 
                 saline_pct=saline_pct, kits_pct=kits_pct, beds_pct=beds_pct)
 
 
-@app.get("/api/ops/plan")
+@app.get("/api/ops/plan", dependencies=can("ops.view"))
 def ops_plan(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 70, crews: Crews = 20,
              basis: Basis = "upper", city: str | None = None, saline_pct: OptPct = None, kits_pct: OptPct = None,
              beds_pct: OptPct = None):
@@ -200,7 +246,7 @@ class Simulation(BaseModel):
     deployments: dict[str, int] | None = Field(None, description="Ward id -> crews (0-8). Omit for automatic placement.")
 
 
-@app.post("/api/ops/simulate")
+@app.post("/api/ops/simulate", dependencies=can("ops.view"))
 def ops_simulate(body: Simulation):
     """Model-driven counterfactual: weeks 2-4 with and without vector-control crews, ranked by cases prevented per crew."""
     if body.deployments:
@@ -209,7 +255,7 @@ def ops_simulate(body: Simulation):
     return planner().simulate(body.origin, body.deployments, body.crews, known_city(body.city))
 
 
-@app.get("/api/ops/dispatch")
+@app.get("/api/ops/dispatch", dependencies=can("ops.dispatch"))
 def ops_dispatch(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 70, crews: Crews = 20,
                  basis: Basis = "upper", city: str | None = None, saline_pct: OptPct = None, kits_pct: OptPct = None,
                  beds_pct: OptPct = None, lang: Literal["en", "bn"] = "en", everyone: bool = False):
@@ -219,7 +265,7 @@ def ops_dispatch(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 7
             "notices": dispatch.notices(plan, lang, only_actionable=not everyone)}
 
 
-@app.get("/api/ops/brief", response_class=HTMLResponse)
+@app.get("/api/ops/brief", response_class=HTMLResponse, dependencies=can("ops.dispatch"))
 def ops_brief(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 70, crews: Crews = 20,
               basis: Basis = "upper", city: str | None = None, saline_pct: OptPct = None, kits_pct: OptPct = None,
               beds_pct: OptPct = None, lang: Literal["en", "bn"] = "en"):
@@ -228,14 +274,30 @@ def ops_brief(origin: str | None = None, horizon: Horizon = 2, stock: Pct = 70, 
     return HTMLResponse(dispatch.brief_html(plan, lang))
 
 
-@app.get("/api/ops/selftest")
+@app.get("/api/ops/selftest", dependencies=can("ops.selftest"))
 def ops_selftest(origin: str | None = None):
     """Offline kill-switch: run every module with all outbound network access blocked."""
     return self_test(store(), planner(), origin)
 
 
 # ---------------------------------------------------------------------------- Smart early warning
-Client = Annotated[str, Query(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$", description="Anonymous browser id")]
+# Statuses and push subscriptions belong to the signed-in user. The old `client` field (an anonymous browser id) is
+# still accepted from older pages but ignored.
+ClientParam = Annotated[str | None, Query(max_length=64, description="Ignored; kept for older pages")]
+Viewer = Annotated[Principal, Depends(require("alerts.view"))]
+Manager = Annotated[Principal, Depends(require("alerts.manage"))]
+
+
+def who(p: Principal) -> str:
+    return f"user-{p.id:06d}"
+
+
+def check_alert_wards(p: Principal, ids: list[int]) -> list[int]:
+    """Field officers may change only alerts in their assigned wards."""
+    wards = p.wards()
+    if wards is None:
+        return ids
+    return [i for i, w in db().wards_of(ids).items() if w in wards]
 Level = Literal["Medium", "High", "Critical"]
 AlertType = Literal["risk_increase", "case_surge", "rainfall", "upcoming_high"]
 
@@ -255,21 +317,21 @@ def counts(rows: list[dict]) -> dict:
 
 
 @app.get("/api/alerts")
-def alerts_list(client: Client, as_of: str | None = None, scope: Literal["active", "history"] = "active",
+def alerts_list(p: Viewer, client: ClientParam = None, as_of: str | None = None, scope: Literal["active", "history"] = "active",
                 city: str | None = None, ward: str | None = None, level: Level | None = None,
                 type: AlertType | None = None, date_from: str | None = None, date_to: str | None = None):
     """Alerts as of a forecast week: `active` (still in their expected period, not resolved) or the full `history`."""
     week = as_of_week(as_of)
-    rows = db().query(client, week, scope, known_city(city), ward, level, type, date_from, date_to)
+    rows = db().query(who(p), week, scope, known_city(city), ward, level, type, date_from, date_to)
     return {"as_of": week, "scope": scope, "alerts": [al.view(r, store()) for r in rows], "counts": counts(rows),
             "scanning": db().meta("backfill_done") is None}
 
 
 @app.get("/api/alerts/summary")
-def alerts_summary(client: Client, as_of: str | None = None, limit: Annotated[int, Query(ge=1, le=50)] = 8):
+def alerts_summary(p: Viewer, client: ClientParam = None, as_of: str | None = None, limit: Annotated[int, Query(ge=1, le=50)] = 8):
     """What the notification bell shows: active alerts as of the week, unread first."""
     week = as_of_week(as_of)
-    rows = db().query(client, week, "active")
+    rows = db().query(who(p), week, "active")
     rank = {"Critical": 0, "High": 1, "Medium": 2}
     rows.sort(key=lambda r: (r["status"] != "new", rank[r["level"]], r["alert_week"] < week, r["ward_id"]))
     return {"as_of": week, "counts": counts(rows), "latest": [al.view(r, store()) for r in rows[:limit]],
@@ -277,35 +339,39 @@ def alerts_summary(client: Client, as_of: str | None = None, limit: Annotated[in
 
 
 class StatusBody(BaseModel):
-    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    client: str | None = Field(None, max_length=64)
     status: Literal["new", "acknowledged", "resolved"]
 
 
 @app.post("/api/alerts/{alert_id}/status")
-def alert_status(alert_id: int, body: StatusBody):
+def alert_status(alert_id: int, body: StatusBody, p: Manager):
+    if not db().wards_of([alert_id]):
+        raise HTTPException(404, "No such alert.")
+    if not check_alert_wards(p, [alert_id]):
+        raise AuthError(403, "ward_not_assigned", "This alert is for a ward not assigned to you.")
     try:
-        return db().set_status(alert_id, body.client, body.status)
+        return db().set_status(alert_id, who(p), body.status)
     except KeyError:
         raise HTTPException(404, "No such alert.")
 
 
 class AckAll(BaseModel):
-    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    client: str | None = Field(None, max_length=64)
     ids: list[int] = Field(max_length=1000)
 
 
 @app.post("/api/alerts/acknowledge")
-def alerts_ack_all(body: AckAll):
-    return {"acknowledged": db().acknowledge_all(body.ids, body.client)}
+def alerts_ack_all(body: AckAll, p: Manager):
+    return {"acknowledged": db().acknowledge_all(check_alert_wards(p, body.ids), who(p))}
 
 
-@app.post("/api/alerts/scan")
+@app.post("/api/alerts/scan", dependencies=can("alerts.admin"))
 def alerts_scan():
     """Run the detector now (it also runs in the background). Safe to repeat: nothing is stored twice."""
     return run_scan()
 
 
-@app.get("/api/alerts/config")
+@app.get("/api/alerts/config", dependencies=can("alerts.view"))
 def alerts_config():
     return {"thresholds": ALERTS, "last_scan": state.get("last_scan"), "last_scan_at": db().meta("last_scan"),
             "last_data_week": db().meta("last_data_week"), "push_enabled": push.keys() is not None}
@@ -313,24 +379,24 @@ def alerts_config():
 
 # ---------------------------------------------------------------------------- browser push
 class Subscription(BaseModel):
-    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    client: str | None = Field(None, max_length=64)
     lang: Literal["en", "bn"] = "en"
     subscription: dict
 
 
-@app.get("/api/push/key")
+@app.get("/api/push/key", dependencies=can("alerts.view"))
 def push_key():
     k = push.keys()
     return {"public_key": k["public"] if k else None}
 
 
 @app.post("/api/push/subscribe")
-def push_subscribe(body: Subscription):
+def push_subscribe(body: Subscription, p: Viewer):
     sub = body.subscription
     if not isinstance(sub.get("endpoint"), str) or not sub["endpoint"].startswith("https://") \
             or not isinstance(sub.get("keys"), dict) or not {"p256dh", "auth"} <= set(sub["keys"]):
         raise HTTPException(422, "That is not a valid push subscription.")
-    db().add_subscription(body.client, sub, body.lang)
+    db().add_subscription(who(p), sub, body.lang)
     return {"ok": True}
 
 
@@ -339,28 +405,30 @@ class Unsubscribe(BaseModel):
 
 
 @app.post("/api/push/unsubscribe")
-def push_unsubscribe(body: Unsubscribe):
-    db().remove_subscription(body.endpoint)
+def push_unsubscribe(body: Unsubscribe, p: Viewer):
+    if any(x["endpoint"] == body.endpoint for x in db().subscriptions(who(p))):
+        db().remove_subscription(body.endpoint)
     return {"ok": True}
 
 
 class PushTest(BaseModel):
-    client: str = Field(min_length=8, max_length=64, pattern=r"^[A-Za-z0-9-]+$")
+    client: str | None = Field(None, max_length=64)
     as_of: str | None = None
 
 
 @app.post("/api/push/test")
-def push_test(body: PushTest):
+def push_test(body: PushTest, p: Viewer):
+    client = who(p)
     """Send this browser the most urgent real alert of the week, marked [Test], to check notifications work."""
     if push.keys() is None:
         raise HTTPException(503, "Push is not configured on the server (VAPID keys missing).")
-    if not db().subscriptions(body.client):
+    if not db().subscriptions(client):
         raise HTTPException(409, "This browser has not enabled notifications yet.")
-    rows = db().query(body.client, as_of_week(body.as_of), "active")
+    rows = db().query(client, as_of_week(body.as_of), "active")
     if not rows:
-        rows = db().query(body.client, as_of_week(body.as_of), "history", limit=1)
+        rows = db().query(client, as_of_week(body.as_of), "history", limit=1)
     if not rows:
         raise HTTPException(404, "There is no alert to send yet.")
     rank = {"Critical": 0, "High": 1, "Medium": 2}
     top = min(rows, key=lambda r: rank[r["level"]])
-    return {"delivered": push.send(db(), [top], client=body.client, test=True)}
+    return {"delivered": push.send(db(), [top], client=client, test=True)}

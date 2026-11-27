@@ -20,18 +20,7 @@ import threading
 from dengue_ews.config import ROOT
 
 from .alerts import TITLE, AlertDB, message
-
-
-def load_env_file(path=ROOT / ".env"):
-    """Minimal KEY=VALUE reader so Windows users don't need extra tooling. Real environment variables win."""
-    try:
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
-    except FileNotFoundError:
-        pass
+from .envfile import load_env_file
 
 
 def keys() -> dict | None:
