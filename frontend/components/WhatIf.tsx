@@ -132,7 +132,7 @@ export function WhatIf({ ward, data, horizon }: { ward: string; data: WardForeca
                   <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => f.n(v)} />
                   <Tooltip formatter={(v) => t.common.cases(f.n(Number(v), 1))} />
-                  <Bar dataKey="recorded" name={t.whatif.recorded} fill="#526d8c" radius={[4, 4, 0, 0]} animationDuration={600} />
+                  <Bar dataKey="recorded" name={t.whatif.recorded} fill="#a9bcb6" radius={[4, 4, 0, 0]} animationDuration={600} />
                   <Bar dataKey="scenario" name={t.whatif.scenario} fill="var(--ink)" radius={[4, 4, 0, 0]} animationDuration={600}>
                     {chart?.map((c) => (
                       <Cell key={c.h} fill={TIER_COLOR[c.tier]} />
@@ -143,7 +143,7 @@ export function WhatIf({ ward, data, horizon }: { ward: string; data: WardForeca
               </div>
               <ul className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted">
                 <li className="flex items-center gap-1.5">
-                  <span aria-hidden className="h-2.5 w-2.5 rounded-[3px] bg-[#526d8c]" />
+                  <span aria-hidden className="h-2.5 w-2.5 rounded-[3px] bg-[#a9bcb6]" />
                   {t.whatif.recorded}
                 </li>
                 <li className="flex items-center gap-1.5">
@@ -163,7 +163,7 @@ export function WhatIf({ ward, data, horizon }: { ward: string; data: WardForeca
 
       {/* phones: the result and Reset stay in view while the sliders are being moved */}
       {dirty && comparison && (
-        <div data-testid="whatif-bar" className="sticky bottom-2 z-10 flex items-center justify-between gap-2 rounded-xl border border-accent/45 bg-card/95 px-3 py-2 shadow-[0_8px_28px_rgb(0_0_0/0.6)] md:hidden">
+        <div data-testid="whatif-bar" className="sticky bottom-2 z-10 flex items-center justify-between gap-2 rounded-xl border border-accent/45 bg-card/95 px-3 py-2 shadow-[0_8px_28px_rgb(25_59_56/0.2)] md:hidden">
           {comparison}
           <button onClick={reset} className="btn shrink-0">
             {t.whatif.reset}

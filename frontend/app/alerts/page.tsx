@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
+import { getJson } from "@/lib/http";
 import { acknowledgeAll, disablePush, enablePush, pushState, sendTestPush, useAlerts, useClientId, type Alert, type AlertLevel, type PushState } from "@/lib/alerts";
 import { useControls } from "@/lib/controls";
 import { useI18n, type Dict } from "@/lib/i18n";
@@ -57,7 +58,7 @@ function Alerts() {
   const wards = (meta?.wards ?? []).filter((w) => !city || w.city === city);
   const fresh = rows.filter((a) => a.status === "new");
 
-  const { data: cfg } = useSWR<{ thresholds: Record<string, number> }>("/api/alerts/config", (u: string) => fetch(u).then((r) => r.json()), { revalidateOnFocus: false });
+  const { data: cfg } = useSWR<{ thresholds: Record<string, number> }>("/api/alerts/config", (u: string) => getJson<{ thresholds: Record<string, number> }>(u), { revalidateOnFocus: false });
   const c = cfg?.thresholds;
 
   return (

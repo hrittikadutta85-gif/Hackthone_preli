@@ -4,6 +4,7 @@
  * Every browser gets a random id (kept in localStorage); the server stores alert statuses per id. No login.
  */
 import useSWR, { mutate } from "swr";
+import { getJson, sendJson } from "./http";
 import { useSyncExternalStore } from "react";
 import type { Dict } from "./i18n";
 import type { Format } from "./i18n/format";
@@ -82,16 +83,8 @@ function readClient(): string {
 export const useClientId = () => useSyncExternalStore(() => () => {}, readClient, () => null);
 
 // ------------------------------------------------------------------ data
-async function get<T>(url: string): Promise<T> {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `Request failed (${r.status})`);
-  return r.json();
-}
-async function post<T>(url: string, body: unknown): Promise<T> {
-  const r = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
-  if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `Request failed (${r.status})`);
-  return r.json();
-}
+const get = getJson;
+const post = <T,>(url: string, body: unknown) => sendJson<T>(url, body);
 
 const live = { revalidateOnFocus: true, keepPreviousData: true, refreshInterval: 60_000 } as const;
 

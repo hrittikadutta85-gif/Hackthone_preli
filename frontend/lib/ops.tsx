@@ -4,6 +4,7 @@
  * Every Operations tab reads the same settings, so the supplies, beds and dispatch notices always describe one plan.
  */
 import useSWR from "swr";
+import { getJson, sendJson } from "./http";
 import { createContext, useCallback, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import type { Tier } from "./api";
 import { useControls } from "./controls";
@@ -251,11 +252,7 @@ export function useOps() {
 }
 
 // ------------------------------------------------------------------ data
-async function get<T>(url: string): Promise<T> {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `Request failed (${r.status})`);
-  return r.json();
-}
+const get = getJson;
 const opts = { revalidateOnFocus: false, keepPreviousData: true } as const;
 
 export const useOpsPlan = (query: string | null) => useSWR<OpsPlan>(query ? `/api/ops/plan?${query}` : null, get, opts);
@@ -277,11 +274,7 @@ export interface SimRequest {
 export const useSimulation = (req: SimRequest | null) =>
   useSWR<Simulation>(
     req ? ["simulate", JSON.stringify(req)] : null,
-    async ([, payload]: [string, string]) => {
-      const r = await fetch("/api/ops/simulate", { method: "POST", headers: { "content-type": "application/json" }, body: payload });
-      if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `Request failed (${r.status})`);
-      return r.json();
-    },
+    ([, payload]: [string, string]) => sendJson<Simulation>("/api/ops/simulate", JSON.parse(payload)),
     opts,
   );
 

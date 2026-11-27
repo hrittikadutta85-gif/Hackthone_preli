@@ -1,15 +1,16 @@
 "use client";
 import useSWR from "swr";
+import { apiFetch, getJson, toError } from "./http";
 
 export const TIERS = ["Low", "Medium", "High", "Critical"] as const;
 export type Tier = (typeof TIERS)[number];
 
 // One meaning per colour everywhere: green, amber, orange, red.
 export const TIER_COLOR: Record<Tier, string> = {
-  Low: "#34bd72",
-  Medium: "#f4ce45",
-  High: "#f8871c",
-  Critical: "#e02a3c",
+  Low: "#4caf7d",
+  Medium: "#e2b33c",
+  High: "#e8843b",
+  Critical: "#d44c4c",
 };
 
 export interface Meta {
@@ -133,11 +134,7 @@ export interface Performance {
   top_features: { name: string; share: number }[];
 }
 
-async function get<T>(url: string): Promise<T> {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error((await r.json().catch(() => null))?.detail ?? `Request failed (${r.status})`);
-  return r.json();
-}
+const get = getJson;
 
 const opts = { revalidateOnFocus: false, keepPreviousData: true } as const;
 
@@ -160,12 +157,8 @@ export const useWhatIf = (id: string, body: WhatIfBody | null) =>
   useSWR<WhatIfResult>(
     body ? ["whatif", id, JSON.stringify(body)] : null,
     async ([, ward, payload]: [string, string, string]) => {
-      const r = await fetch(`/api/ward/${ward}/whatif`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: payload,
-      });
-      if (!r.ok) throw new Error("The what-if run failed.");
+      const r = await apiFetch(`/api/ward/${ward}/whatif`, { method: "POST", body: payload });
+      if (!r.ok) throw r.status === 401 || r.status === 403 ? await toError(r) : new Error("The what-if run failed.");
       return r.json();
     },
     opts,
@@ -231,11 +224,8 @@ export const useTemplate = (ward: string) =>
   useSWR<Template>(`/api/predict/template?ward=${ward}&weeks=8`, get, { revalidateOnFocus: false });
 
 export async function runPrediction(ward: string, horizon: number, weeks: Observation[]): Promise<PredictResult> {
-  const r = await fetch(`/api/predict/${ward}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ horizon, weeks }),
-  });
+  const r = await apiFetch(`/api/predict/${ward}`, { method: "POST", body: JSON.stringify({ horizon, weeks }) });
+  if (r.status === 401 || r.status === 403) throw await toError(r);
   if (!r.ok) {
     const j = await r.json().catch(() => null);
     const d = j?.detail;

@@ -110,7 +110,7 @@ function Bar({ value, max, alerts, muted }: { value: number; max: number; alerts
   return (
     <span className="block">
       <span className="mx-auto flex h-10 w-8 max-w-full items-end">
-        <span className="block w-full rounded-t-[4px] transition-all duration-700" style={{ height: `${Math.max((value / max) * 100, 4)}%`, background: muted ? "var(--series-quiet)" : "linear-gradient(180deg, var(--accent), rgb(45 212 191 / 0.28))" }} />
+        <span className="block w-full rounded-t-[4px] transition-all duration-700" style={{ height: `${Math.max((value / max) * 100, 4)}%`, background: muted ? "var(--series-quiet)" : "linear-gradient(180deg, var(--accent), var(--accent-2))" }} />
       </span>
       <span className="mt-1 block font-mono text-sm font-medium tabular-nums">{f.int(value)}</span>
       {alerts != null && (

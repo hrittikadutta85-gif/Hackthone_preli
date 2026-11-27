@@ -49,12 +49,12 @@ export function Bell() {
         aria-haspopup="dialog"
         aria-label={t.alerts.bellLabel(fresh)}
         className={`relative grid h-10 w-10 cursor-pointer place-items-center rounded-xl border transition ${
-          urgent ? "border-critical/60 bg-critical/10 text-critical-ink shadow-[0_0_22px_-6px_var(--critical)]" : "border-line bg-raise text-ink hover:border-accent/60"
+          urgent ? "border-critical/30 bg-card text-critical-ink hover:bg-critical/5" : "border-line bg-card text-ink hover:border-accent/50 hover:text-accent"
         }`}
       >
-        <Icon name="bell" className={`h-5 w-5 ${urgent ? "halo" : ""}`} />
+        <Icon name="bell" className="h-5 w-5" />
         {fresh > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-critical px-1 font-mono text-[10.5px] font-bold text-white shadow-[0_0_10px_var(--critical)]">
+          <span className="absolute -top-1.5 -right-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-critical px-1 text-[10.5px] font-bold text-white ring-2 ring-white">
             {fresh > 99 ? "99+" : f.n(fresh)}
           </span>
         )}
@@ -64,7 +64,7 @@ export function Bell() {
         <div
           role="dialog"
           aria-label={t.alerts.bell}
-          className="panel fixed inset-x-3 top-[4.5rem] z-[1100] flex max-h-[calc(100dvh-6rem)] flex-col overflow-hidden shadow-[0_30px_60px_-20px_rgb(0_0_0/0.9)] sm:absolute sm:inset-x-auto sm:top-12 sm:right-0 sm:w-[26rem]"
+          className="panel fixed inset-x-3 top-[4.5rem] z-[1100] flex max-h-[calc(100dvh-6rem)] flex-col overflow-hidden shadow-[0_24px_48px_-20px_rgb(25_59_56/0.3)] sm:absolute sm:inset-x-auto sm:top-12 sm:right-0 sm:w-[26rem]"
         >
           <div className="border-b border-line p-4">
             <div className="flex items-center justify-between gap-2">

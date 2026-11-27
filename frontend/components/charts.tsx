@@ -34,7 +34,7 @@ function ForecastTip({ active, payload, label }: { active?: boolean; payload?: {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="max-w-[14rem] rounded-xl border border-accent/35 bg-card/95 px-3 py-2 text-sm shadow-[0_12px_32px_rgb(0_0_0/0.5)]">
+    <div className="max-w-[14rem] rounded-xl border border-accent/35 bg-card/95 px-3 py-2 text-sm shadow-[0_12px_32px_rgb(25_59_56/0.18)]">
       <div className="font-semibold">{t.common.weekOf(f.date(label!, true))}</div>
       {p.cases != null && <div>{t.charts.reported(p.cases)}</div>}
       {p.predicted != null && p.cases == null && (
@@ -84,7 +84,7 @@ export function ForecastChart({ data, meta, activeH }: { data: WardForecast; met
           ))}
           <ReferenceLine x={data.origin} stroke="var(--accent)" strokeDasharray="2 3" label={{ value: t.charts.now, position: "top", fontSize: 11, fill: "var(--accent)" }} />
           {focus && <ReferenceLine x={focus.target_date} stroke={TIER_COLOR[focus.tier]} strokeWidth={2} strokeOpacity={0.35} />}
-          <Bar dataKey="cases" fill="#526d8c" radius={[4, 4, 0, 0]} {...DRAW} />
+          <Bar dataKey="cases" fill="#a9bcb6" radius={[4, 4, 0, 0]} {...DRAW} />
           <Area dataKey="range" stroke="none" fill="var(--forecast)" fillOpacity={0.17} {...DRAW} />
           <Line
             dataKey="predicted"

@@ -149,7 +149,7 @@ function NoticeCard({ n, channel, lang: l }: { n: Notice; channel: "sms" | "what
       <div
         lang={l}
         className={`rounded-xl border px-3 py-2 text-[13px] leading-relaxed break-words whitespace-pre-wrap select-text ${
-          channel === "sms" ? "border-accent/25 bg-[rgb(5_11_20/0.55)] font-mono" : "border-[#25d366]/30 bg-[#0b2a1e]/70"
+          channel === "sms" ? "border-accent/25 bg-raise font-mono" : "border-[#25d366]/40 bg-[#e9f8ee]"
         }`}
       >
         {channel === "sms" ? text : <WhatsAppText text={text} />}
